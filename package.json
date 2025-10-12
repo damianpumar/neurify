@@ -26,16 +26,26 @@
     "@builder.io/qwik": "^1.17.0",
     "@builder.io/qwik-city": "^1.17.0",
     "@eslint/js": "latest",
+    "@qwikest/icons": "^0.0.13",
+    "@tailwindcss/vite": "^4.1.4",
     "@types/node": "20.19.0",
     "eslint": "9.32.0",
     "eslint-plugin-qwik": "^1.17.0",
     "globals": "16.3.0",
     "prettier": "3.6.2",
+    "prettier-plugin-tailwindcss": "^0.6.11",
+    "tailwindcss": "^4.1.4",
     "typescript": "5.4.5",
     "typescript-eslint": "8.38.0",
     "typescript-plugin-css-modules": "latest",
     "undici": "*",
     "vite": "7.1.7",
-    "vite-tsconfig-paths": "^4.2.1"
+    "vite-tsconfig-paths": "^4.2.1",
+    "@qwik-ui/utils": "^0.3.3"
+  },
+  "dependencies": {
+    "@huggingface/inference": "^4.11.1",
+    "@types/mustache": "^4.2.6",
+    "mustache": "^4.2.0"
   }
 }
