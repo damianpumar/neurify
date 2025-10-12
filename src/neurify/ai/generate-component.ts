@@ -1,14 +1,14 @@
 import { chatCompletion } from "@huggingface/inference"
 import { cache } from "~/neurify/cache/cache"
 import Mustache from "mustache"
-import { $, Signal, useComputed$, useSignal, useTask$, useVisibleTask$ } from "@builder.io/qwik";
+import { $, useSignal, useTask$ } from "@builder.io/qwik";
 import { useNeurifyConfig } from "~/neurify/config/use-neurify-config";
 import { useAIContext } from "~/neurify/context/context";
 import { hashString } from "~/neurify/cache/hash";
-import { wait } from "~/neurify/utils/wait";
+import { useAskToAI } from "~/neurify/ai/ask-to-ai";
 
 export const useGenerateComponent = (intent: string, data: any, cacheTTL?: number) => {
-  const config = useNeurifyConfig();
+  const ask = useAskToAI()
   const html = useSignal<string>();
   const error = useSignal<string>();
 
@@ -82,22 +82,9 @@ ${intent}
 Here is the data:
 ${JSON.stringify(data, null, 2)}
 
-Return only the HTML code. Do not include any explanations, markdown, or extra text.
-`
+Return only the HTML code. Do not include any explanations, markdown, or extra text.`
 
-    const response = await chatCompletion({
-      messages: [
-        {
-          role: "user",
-          content: prompt,
-        },
-      ],
-      model: config.model,
-      provider: "auto",
-      accessToken: config.token,
-    });
-
-    const responseText = response.choices[0].message.content || '';
+    const responseText = await ask(prompt)
 
     const sanitizedResponse = responseText.replace(/```html|```/g, '').trim();
 
@@ -108,19 +95,17 @@ Return only the HTML code. Do not include any explanations, markdown, or extra t
 
   useTask$(async () => {
     try {
-      const result = await generateComponent(intent, data);
-
-      html.value = result;
+      html.value = await generateComponent(intent, data);
     } catch (err) {
       error.value = (err as Error).message || 'Error generating component'
     }
   });
 
-  return [error, html]
+  return { error, html }
 }
 
 export const useGenerateText = (intent: string, data: any, cacheTTL?: number) => {
-  const config = useNeurifyConfig();
+  const ask = useAskToAI()
   const { language } = useAIContext()
 
   const text = useSignal<string>();
@@ -145,20 +130,7 @@ Data: ${JSON.stringify(data, null, 2)}
 
 Return only the text. Do not include any explanations, markdown, or extra text.
 `
-
-    const response = await chatCompletion({
-      messages: [
-        {
-          role: "user",
-          content: prompt,
-        },
-      ],
-      model: config.model,
-      provider: "auto",
-      accessToken: config.token,
-    });
-
-    const responseText = response.choices[0].message.content || '';
+    const responseText = await ask(prompt)
 
     cache.set(cacheHash, responseText, cacheTTL)
 
@@ -180,8 +152,8 @@ Return only the text. Do not include any explanations, markdown, or extra text.
     }
   });
 
-  return [
+  return {
     error,
     text
-  ]
+  }
 }

@@ -7,7 +7,7 @@ export const AIText = component$<{
   of: any;
   cacheTTL?: number;
 }>(({ intent, of, cacheTTL }) => {
-  const [error, text] = useGenerateText(intent, of, cacheTTL);
+  const { error, text } = useGenerateText(intent, of, cacheTTL);
 
   if (error.value) {
     return <span class="text-red-500">Error generating text</span>;

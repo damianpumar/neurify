@@ -8,7 +8,7 @@ type AIComponentProps = {
 
 export const AIComponent = component$<AIComponentProps>((props) => {
   const { intent, data, ...rest } = props;
-  const [error, html] = useGenerateComponent(intent, data);
+  const { error, html } = useGenerateComponent(intent, data);
 
   if (error.value) {
     return (
