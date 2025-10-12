@@ -1,65 +1,86 @@
-# Qwik City App ⚡️
-
-- [Qwik Docs](https://qwik.dev/)
-- [Discord](https://qwik.dev/chat)
-- [Qwik GitHub](https://github.com/QwikDev/qwik)
-- [@QwikDev](https://twitter.com/QwikDev)
-- [Vite](https://vitejs.dev/)
-
----
-
-## Project Structure
-
-This project is using Qwik with [QwikCity](https://qwik.dev/qwikcity/overview/). QwikCity is just an extra set of tools on top of Qwik to make it easier to build a full site, including directory-based routing, layouts, and more.
-
-Inside your project, you'll see the following directory structure:
+# Neurify
 
 ```
-├── public/
-│   └── ...
-└── src/
-    ├── components/
-    │   └── ...
-    └── routes/
-        └── ...
+const PRODUCTS = [
+  {
+    id: 1,
+    name: "Wireless Headphones",
+    description:
+      "High-quality wireless headphones with noise cancellation and long battery life.",
+    price: 99.99,
+    category: "Electronics",
+    stock: 150,
+    rating: 4.5,
+    reviews: [
+      { user: "Alice", comment: "Great sound quality!", rating: 5 },
+      { user: "Bob", comment: "Very comfortable to wear.", rating: 4 },
+    ],
+    features: [
+      "Bluetooth 5.0",
+      "Active Noise Cancellation",
+      "20-hour Battery Life",
+      "Built-in Microphone",
+    ],
+    images: ["https://picsum.photos/200/", "https://picsum.photos/201/"],
+    brand: "SoundMagic",
+    model: "SM-1000",
+    warranty: "2 years",
+    releaseDate: "2023-01-15",
+  },
+  {
+    id: 2,
+    name: "Microwave Oven",
+    description:
+      "Compact microwave oven with multiple power levels and a digital display.",
+    price: 79.99,
+    category: "Home Appliances",
+    stock: 80,
+    rating: 4.2,
+    reviews: [
+      { user: "Charlie", comment: "Heats food quickly.", rating: 4 },
+      { user: "Dana", comment: "Easy to use and clean.", rating: 5 },
+    ],
+    features: [
+      "700 Watts Power",
+      "10 Power Levels",
+      "Digital Display",
+      "Child Lock Feature",
+    ],
+    images: ["https://picsum.photos/202/", "https://picsum.photos/203/"],
+    brand: "KitchenPro",
+    model: "KP-700",
+    warranty: "1 year",
+    releaseDate: "2022-11-20",
+  },
+];
+
+export default component$(() => {
+  return (
+    <>
+      <AILayout>
+        <div class="flex w-full flex-row">
+          {PRODUCTS.map((product) => (
+            <div class="w-1/3 p-4">
+              <div class="flex flex-col gap-4">
+                <AIComponent
+                  class="w-full"
+                  intent="Show only title and images"
+                  data={product}
+                />
+                <AIText
+                  intent="summarize in one sentence, max 20 words, min 10 words"
+                  of={product}
+                />
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div class="m-4"></div>
+      </AILayout>
+    </>
+  );
+});
 ```
 
-- `src/routes`: Provides the directory-based routing, which can include a hierarchy of `layout.tsx` layout files, and an `index.tsx` file as the page. Additionally, `index.ts` files are endpoints. Please see the [routing docs](https://qwik.dev/qwikcity/routing/overview/) for more info.
-
-- `src/components`: Recommended directory for components.
-
-- `public`: Any static assets, like images, can be placed in the public directory. Please see the [Vite public directory](https://vitejs.dev/guide/assets.html#the-public-directory) for more info.
-
-## Add Integrations and deployment
-
-Use the `pnpm qwik add` command to add additional integrations. Some examples of integrations includes: Cloudflare, Netlify or Express Server, and the [Static Site Generator (SSG)](https://qwik.dev/qwikcity/guides/static-site-generation/).
-
-```shell
-pnpm qwik add # or `pnpm qwik add`
-```
-
-## Development
-
-Development mode uses [Vite's development server](https://vitejs.dev/). The `dev` command will server-side render (SSR) the output during development.
-
-```shell
-npm start # or `pnpm start`
-```
-
-> Note: during dev mode, Vite may request a significant number of `.js` files. This does not represent a Qwik production build.
-
-## Preview
-
-The preview command will create a production build of the client modules, a production build of `src/entry.preview.tsx`, and run a local server. The preview server is only for convenience to preview a production build locally and should not be used as a production server.
-
-```shell
-pnpm preview # or `pnpm preview`
-```
-
-## Production
-
-The production build will generate client and server modules by running both client and server build commands. The build command will use Typescript to run a type check on the source code.
-
-```shell
-pnpm build # or `pnpm build`
-```
+![](demo.png)
