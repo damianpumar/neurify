@@ -1,19 +1,19 @@
-import { chatCompletion } from "@huggingface/inference"
 import { cache } from "~/neurify/cache/cache"
 import Mustache from "mustache"
 import { $, useSignal, useTask$ } from "@builder.io/qwik";
-import { useNeurifyConfig } from "~/neurify/config/use-neurify-config";
 import { useAIContext } from "~/neurify/context/context";
 import { hashString } from "~/neurify/cache/hash";
 import { useAskToAI } from "~/neurify/ai/ask-to-ai";
+import { useSession } from "~/routes";
 
 export const useGenerateComponent = (intent: string, data: any, cacheTTL?: number) => {
   const ask = useAskToAI()
+  const session = useSession()
   const html = useSignal<string>();
   const error = useSignal<string>();
 
   const generateComponent = $(async (intent: string, data: any) => {
-    const cacheHash = await hashString(intent)
+    const cacheHash = await hashString(`SESSION:${session.value.sessionId}-INTENT:${intent}`)
     const component = cache.get(cacheHash)
 
     if (component) {
@@ -106,13 +106,14 @@ Return only the HTML code. Do not include any explanations, markdown, or extra t
 
 export const useGenerateText = (intent: string, data: any, cacheTTL?: number) => {
   const ask = useAskToAI()
+  const session = useSession()
   const { language } = useAIContext()
 
   const text = useSignal<string>();
   const error = useSignal<string>();
 
   const generateText = $(async (intent: string, data: any) => {
-    const cacheHash = await hashString(`${intent}-${language.value}-${JSON.stringify(data)}`)
+    const cacheHash = await hashString(`SESSION:${session.value.sessionId}-INTENT:${intent}-LANG:${language.value}-DATA:${JSON.stringify(data)}`)
 
     const cached = cache.get(cacheHash)
 

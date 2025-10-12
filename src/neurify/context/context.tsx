@@ -8,12 +8,12 @@ import {
   useContext,
   useContextProvider,
   useSignal,
-  useStore,
 } from "@builder.io/qwik";
 
 interface Context {
   /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Navigator/language) */
   language: string;
+  sessionId?: string;
 }
 
 const aiContext = createContextId<Signal<Context>>("ai-context");
