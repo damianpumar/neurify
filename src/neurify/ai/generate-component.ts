@@ -1,7 +1,7 @@
 import { cache } from "~/neurify/cache/cache"
 import Mustache from "mustache"
 import { $, useSignal, useTask$ } from "@builder.io/qwik";
-import { useAIContext } from "~/neurify/context/context";
+import { useAIContext, UserMood } from "~/neurify/context/context";
 import { hashString } from "~/neurify/cache/hash";
 import { useAskToAI } from "~/neurify/ai/ask-to-ai";
 import { useNeurifyConfig } from "~/neurify/config/use-neurify-config";
@@ -15,59 +15,80 @@ export const useGenerateComponent = (intent: string, data: any, cacheTTL?: numbe
 
   const generateComponent = $(async (intent: string, data: any) => {
     const cacheHash = await hashString(`MOOD:${userMood.value}-INTENT:${intent}`)
-    const component = cache.get(cacheHash)
 
-    if (component) {
-      return Mustache.render(component, data)
+    if (cache.has(cacheHash)) {
+      const template = await cache.getOrWait(cacheHash);
+
+      return Mustache.render(template, data);
     }
 
-    const prompt = `
-You are a world-class software engineer and UI/UX designer with expertise in creating modern, responsive web components. 
-You will be given an intent and some data.
+    const generationPromise = (async () => {
+      const prompt = `You are an expert frontend developer specializing in semantic HTML and modern CSS.
 
-Your task:
-- Generate a single HTML component that fulfills the intent using the data provided.
-- Use ${ui.theme} CSS for styling.
-- Follow a clean, minimalistic, and elegant design aesthetic with good spacing, readable typography, subtle color accents, rounded corners, and soft shadows.
-- Make sure the component is fully responsive (mobile-first, tablet, desktop).
-- Use semantic HTML elements.
-- The dynamic data must use Mustache syntax {{}}.
+TASK: Generate a single, production-ready HTML component.
 
-Important instructions for Mustache:
-- If the data contains arrays (like images, features, reviews), generate sections so that the template iterates over the arrays using {{#arrayName}} ... {{/arrayName}}.
-- Do NOT generate placeholders like images[0] or review.user directly.
-- Every field in the template should correspond to the data structure exactly, so Mustache can render it directly.
-- For nested arrays or objects (e.g., reviews), include all relevant fields inside the section.
-
-User mood: ${userMood.value}
-Adapt ui styles like background color, font size, and spacing based on the user's mood.
-Use bg attribute inline styles to set background color based on user mood:
-- happy: light yellow (#FFF9C4)
-- sad: light blue (#BBDEFB)
-- angry: light red (#FFCDD2)
-- excited: light orange (#FFE0B2)
-- bored: light gray (#E0E0E0)
-- neutral: white (#FFFFFF)
-- stressed: light purple (#E1BEE7)
-- tired: light gray (#F5F5F5)
-- focused: white (#FFFFFF)
-
-Make sure the HTML is valid, properly structured, and free of any syntax errors.
-
-Intent: ${intent}
-
-Here is the data:
+INPUT DATA:
 ${JSON.stringify(data, null, 2)}
 
-Return only the HTML code. Do not include any explanations, markdown, or extra text.`
+INTENT: ${intent}
 
-    const responseText = await ask(prompt)
+REQUIREMENTS:
 
-    const sanitizedResponse = responseText.replace(/```html|```/g, '').trim();
+1. TEMPLATING (CRITICAL):
+   - Use Mustache syntax {{variable}} for all dynamic data
+   - For arrays, use {{#arrayName}}...{{/arrayName}} sections
+   - For conditionals, use {{#field}}...{{/field}}
+   - Match the exact data structure provided - no placeholder keys
+   - Example: If data has "items" array, use {{#items}}{{name}}{{/items}}
 
-    cache.set(cacheHash, sanitizedResponse, cacheTTL)
+2. STYLING:
+   - Framework: ${ui.theme} CSS utility classes
+   - Design: Minimalist, clean, modern aesthetic
+   - Colors: Subtle accents, avoid harsh contrasts
+   - Spacing: Generous whitespace, consistent rhythm
+   - Effects: Soft shadows, rounded corners (4-8px)
+   - Typography: Clear hierarchy, readable font sizes (16px+ body)
 
-    return Mustache.render(sanitizedResponse, data)
+3. RESPONSIVE:
+   - Mobile-first approach
+   - Breakpoints: sm (640px), md (768px), lg (1024px)
+   - Flexible layouts, avoid fixed widths
+   - Touch-friendly targets (min 44px)
+
+4. SEMANTIC HTML:
+   - Use appropriate tags: <article>, <section>, <header>, <nav>, etc.
+   - Include aria-labels where needed
+   - Proper heading hierarchy (h1-h6)
+
+5. MOOD-BASED STYLING:
+   User mood: "${userMood.value}"
+   Apply inline style background-color based on mood:
+    - happy: #FFF9C4 (light yellow)
+    - sad: #BBDEFB (light blue)
+    - angry: #FFCDD2 (light red)
+    - excited: #E1BEE7 (light purple)
+    - bored: #E0E0E0 (light gray)
+    - neutral: #FFFFFF (white)
+    - stressed: #FFECB3 (light amber)
+    - tired: #D7CCC8 (light brown)
+    - focused: #C8E6C9 (light green)
+   - Use softer, calming colors for negative moods (sad, angry, stressed)
+   - Use brighter, more vibrant colors for positive moods (happy, excited)
+   - Adjust font styles: use italics or lighter weights for sad/tired moods; bold for excited/focused
+
+OUTPUT:
+- Valid HTML only
+- No markdown, no explanations, no comments
+- Minified whitespace where possible
+- Self-contained (no external dependencies beyond ${ui.theme})`;
+
+      const responseText = await ask(prompt);
+      return responseText.replace(/```html|```/g, '').trim();
+    })();
+
+    const template = await cache.setPromise(cacheHash, generationPromise, cacheTTL);
+
+    return Mustache.render(template, data);
   })
 
   useTask$(async ({ track }) => {
