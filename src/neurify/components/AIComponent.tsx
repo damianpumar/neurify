@@ -1,5 +1,6 @@
 import { component$, PropsOf } from "@builder.io/qwik";
 import { useGenerateComponent } from "~/neurify/ai/generate-component";
+import { AIGenerating } from "~/neurify/components/AIGenerating";
 
 type AIComponentProps = {
   intent: string;
@@ -8,7 +9,11 @@ type AIComponentProps = {
 
 export const AIComponent = component$<AIComponentProps>((props) => {
   const { intent, data, ...rest } = props;
-  const { error, html } = useGenerateComponent(intent, data);
+  const { generating, error, html } = useGenerateComponent(intent, data);
+
+  if (generating.value) {
+    return <AIGenerating />;
+  }
 
   if (error.value) {
     return (

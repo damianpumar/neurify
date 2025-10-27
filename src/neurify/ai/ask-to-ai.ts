@@ -1,11 +1,12 @@
-import { $ } from "@builder.io/qwik";
+import { $, isServer } from "@builder.io/qwik";
+import { server$ } from "@builder.io/qwik-city";
 import { chatCompletion } from "@huggingface/inference";
 import { useNeurifyConfig } from "~/neurify/config/use-neurify-config";
 
 export const useAskToAI = () => {
-  const config = useNeurifyConfig();
+  const ask = server$(async (prompt: string) => {
+    const config = useNeurifyConfig();
 
-  const ask = $(async (prompt: string) => {
     const response = await chatCompletion({
       messages: [
         {

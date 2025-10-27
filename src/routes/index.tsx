@@ -25,7 +25,7 @@ export default component$(() => {
         <div class="flex w-full flex-row gap-4 p-4">
           <div class="flex flex-row gap-4">
             {PRODUCTS.map((product) => (
-              <div class="flex max-w-xl flex-col gap-4 border p-2">
+              <div class="flex h-fit min-h-[400px] w-xl max-w-xl min-w-xl flex-col gap-4 border p-2">
                 <AIComponent
                   class="w-full"
                   intent="Show only title and images"

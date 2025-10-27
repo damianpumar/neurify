@@ -1,19 +1,24 @@
 import { cache } from "~/neurify/cache/cache"
 import Mustache from "mustache"
-import { $, useSignal, useTask$ } from "@builder.io/qwik";
+import { $, useSignal, useTask$, useVisibleTask$ } from "@builder.io/qwik";
 import { useAIContext, UserMood } from "~/neurify/context/context";
 import { hashString } from "~/neurify/cache/hash";
 import { useAskToAI } from "~/neurify/ai/ask-to-ai";
 import { useNeurifyConfig } from "~/neurify/config/use-neurify-config";
+import { server$ } from "@builder.io/qwik-city";
+import { nextTick } from "~/neurify/utils/tick";
 
 export const useGenerateComponent = (intent: string, data: any, cacheTTL?: number) => {
   const { userMood } = useAIContext()
-  const { ui } = useNeurifyConfig()
-  const ask = useAskToAI()
+
+  const generating = useSignal<boolean>(false);
   const html = useSignal<string>();
   const error = useSignal<string>();
 
-  const generateComponent = $(async (intent: string, data: any) => {
+  const generateComponent = server$(async (intent: string, data: any) => {
+    const ask = useAskToAI()
+    const { ui } = useNeurifyConfig()
+
     const cacheHash = await hashString(`MOOD:${userMood.value}-INTENT:${intent}`)
 
     if (cache.has(cacheHash)) {
@@ -23,7 +28,6 @@ export const useGenerateComponent = (intent: string, data: any, cacheTTL?: numbe
     }
 
     const generationPromise = (async () => {
-
       const prompt = `You are a senior UI/UX designer and frontend developer with expertise in creating beautiful, accessible, and highly polished web interfaces.
 
 TASK: Create a premium, self-contained HTML component (NOT a full page) with exceptional user experience.
@@ -104,7 +108,7 @@ ACCESSIBILITY:
 - Focus management and visible focus indicators
 
 MOOD-BASED THEMING & IMAGE LAYOUT:
-User mood: "${userMood.value}"
+User mood: "${userMood}"
 
 Apply sophisticated mood styling AND adapt image presentation:
 
@@ -255,29 +259,43 @@ Generate the component now:`;
     return Mustache.render(template, data);
   })
 
-  useTask$(async ({ track }) => {
-    track(userMood)
+  const onGenerate = $(async () => {
+    html.value = undefined;
+    error.value = undefined;
+    generating.value = true;
 
     try {
       html.value = await generateComponent(intent, data);
     } catch (err) {
       error.value = (err as Error).message || 'Error generating component'
+    } finally {
+      await nextTick(() => {
+        generating.value = false;
+      }, 300)
     }
+  })
+
+  useVisibleTask$(async ({ track }) => {
+    track(userMood)
+
+    await onGenerate()
   });
 
-  return { error, html }
+  return { generating, error, html }
 }
 
 export const useGenerateText = (intent: string, data: any, cacheTTL?: number) => {
-  const ask = useAskToAI()
   const { userMood } = useAIContext()
   const { language } = useAIContext()
 
+  const generating = useSignal<boolean>(false);
   const text = useSignal<string>();
   const error = useSignal<string>();
 
-  const generateText = $(async (intent: string, data: any) => {
-    const cacheHash = await hashString(`MOOD:${userMood.value}-INTENT:${intent}-LANG:${language.value}-DATA:${JSON.stringify(data)}`)
+  const generateText = server$(async (intent: string, data: any) => {
+    const ask = useAskToAI()
+
+    const cacheHash = await hashString(`MOOD:${userMood}-INTENT:${intent}-LANG:${language}-DATA:${JSON.stringify(data)}`)
 
     const cached = cache.get(cacheHash)
 
@@ -321,23 +339,31 @@ Return only the text. Do not include any explanations, markdown, or extra text.
     return responseText
   })
 
-  useTask$(async ({ track }) => {
+  const onGenerateText = $(async () => {
+    text.value = undefined;
+    error.value = undefined;
+    generating.value = true;
+
+    try {
+      text.value = await generateText(intent, data);
+    } catch (err) {
+      error.value = (err as Error).message || 'Error generating text'
+    } finally {
+      await nextTick(() => {
+        generating.value = false;
+      }, 300)
+    }
+  })
+
+  useVisibleTask$(async ({ track }) => {
     track(language)
     track(userMood)
 
-    text.value = undefined;
-    error.value = undefined;
-
-    try {
-      const result = await generateText(intent, data);
-
-      text.value = result;
-    } catch (err) {
-      error.value = (err as Error).message || 'Error generating text'
-    }
-  });
+    await onGenerateText()
+  })
 
   return {
+    generating,
     error,
     text
   }
