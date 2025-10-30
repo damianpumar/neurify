@@ -188,7 +188,7 @@ const PreviewComponent = component$<{ item: AIItem }>(({ item }) => {
     case "component":
       return <AIComponent key={key} intent={item.intent} data={PRODUCTS[0]} />;
     case "text":
-      return <AIText key={key} intent={item.intent} data={PRODUCTS[0]} />;
+      return <AIText key={key} intent={item.intent} of={PRODUCTS[0]} />;
     case "chart":
       return (
         <div class="rounded-lg border-2 border-dashed border-purple-300 bg-purple-50 p-8 text-center">
