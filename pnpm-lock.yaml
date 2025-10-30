@@ -10,7 +10,7 @@ importers:
     dependencies:
       '@huggingface/inference':
         specifier: ^4.11.1
-        version: 4.11.1
+        version: 4.13.0
       '@types/mustache':
         specifier: ^4.2.6
         version: 4.2.6
@@ -26,7 +26,7 @@ importers:
         version: 1.17.0(@types/node@20.19.0)(jiti@2.6.1)(less@4.4.2)(lightningcss@1.30.1)(rollup@4.52.4)(sass@1.93.2)(stylus@0.62.0)(typescript@5.4.5)
       '@eslint/js':
         specifier: latest
-        version: 9.37.0
+        version: 9.38.0
       '@qwik-ui/utils':
         specifier: ^0.3.3
         version: 0.3.3
@@ -281,8 +281,8 @@ packages:
     resolution: {integrity: sha512-BBpRFZK3eX6uMLKz8WxFOBIFFcGFJ/g8XuwjTHCqHROSIsopI+ddn/d5Cfh36+7+e5edVS8dbSHnBNhrLEX0zg==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
-  '@eslint/js@9.37.0':
-    resolution: {integrity: sha512-jaS+NJ+hximswBG6pjNX0uEJZkrT0zwpVi3BA3vX22aFGjJjmgSTSmPpZCRKmoBL5VY/M6p0xsSJx7rk7sy5gg==}
+  '@eslint/js@9.38.0':
+    resolution: {integrity: sha512-UZ1VpFvXf9J06YG9xQBdnzU+kthors6KjhMAl6f4gH4usHyh31rUf2DLGInT8RFYIReYXNSydgPY0V2LuWgl7A==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
   '@eslint/object-schema@2.1.6':
@@ -293,16 +293,16 @@ packages:
     resolution: {integrity: sha512-Z5kJ+wU3oA7MMIqVR9tyZRtjYPr4OC004Q4Rw7pgOKUOKkJfZ3O24nz3WYfGRpMDNmcOi3TwQOmgm7B7Tpii0w==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
-  '@huggingface/inference@4.11.1':
-    resolution: {integrity: sha512-otClcigc7KUQfvG5wav7oVTBEVLsdKelEMuuQGXwBdPqrsJ7WZknAGCXJcXJoO2zLw9v518jgylkQnFwEBpGvw==}
+  '@huggingface/inference@4.13.0':
+    resolution: {integrity: sha512-oqBHbYoLHpNlEUJp/MG28gCR0JOUmLi9iKKd0oJfTAgTqaDSLhoCsIdS1XfLHbT/CrzZch33cARTR3bO4q/2yQ==}
     engines: {node: '>=18'}
 
   '@huggingface/jinja@0.5.1':
     resolution: {integrity: sha512-yUZLld4lrM9iFxHCwFQ7D1HW2MWMwSbeB7WzWqFYDWK+rEb+WldkLdAJxUPOmgICMHZLzZGVcVjFh3w/YGubng==}
     engines: {node: '>=18'}
 
-  '@huggingface/tasks@0.19.50':
-    resolution: {integrity: sha512-kHrfiDsJttkuwpdp7PgFiFHaK9rj+COJTIZ+221gk9vdF4B5QySW7hQT4aOGkwwZP+4qbXGhjMNGg/bxOq+LwA==}
+  '@huggingface/tasks@0.19.60':
+    resolution: {integrity: sha512-oO3+s+u4bgJh3DjwIe7lE+4iyRzj//WE7V+Z0toQsj81IaGp5kBEK1uxtWz5U32PUF9by6yKAEtCCW1hprU3ug==}
 
   '@humanfs/core@0.19.1':
     resolution: {integrity: sha512-5DyQ4+1JEUzejeK1JGICcideyfUbGixgS9jNgex5nqkW+cY7WZhxBigmieN5Qnw9ZosSNVC9KQKyb+GUaGyKUA==}
@@ -2738,7 +2738,7 @@ snapshots:
 
   '@eslint/js@9.32.0': {}
 
-  '@eslint/js@9.37.0': {}
+  '@eslint/js@9.38.0': {}
 
   '@eslint/object-schema@2.1.6': {}
 
@@ -2747,14 +2747,14 @@ snapshots:
       '@eslint/core': 0.15.2
       levn: 0.4.1
 
-  '@huggingface/inference@4.11.1':
+  '@huggingface/inference@4.13.0':
     dependencies:
       '@huggingface/jinja': 0.5.1
-      '@huggingface/tasks': 0.19.50
+      '@huggingface/tasks': 0.19.60
 
   '@huggingface/jinja@0.5.1': {}
 
-  '@huggingface/tasks@0.19.50': {}
+  '@huggingface/tasks@0.19.60': {}
 
   '@humanfs/core@0.19.1': {}
 
