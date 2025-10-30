@@ -62,6 +62,12 @@ const ChangeLanguage = component$(() => {
       <option value="es-ES" selected={language.value === "es-ES"}>
         Spanish
       </option>
+      <option value="fr" selected={language.value === "fr"}>
+        French
+      </option>
+      <option value="de" selected={language.value === "de"}>
+        German
+      </option>
     </select>
   );
 });
