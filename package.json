@@ -40,7 +40,7 @@
     "typescript-plugin-css-modules": "latest",
     "undici": "*",
     "vite": "7.1.7",
-    "vite-tsconfig-paths": "^4.2.1",
+    "vite-tsconfig-paths": "^5.0.0",
     "@qwik-ui/utils": "^0.3.3"
   },
   "dependencies": {
