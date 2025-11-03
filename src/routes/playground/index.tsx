@@ -327,52 +327,54 @@ export default component$(() => {
       <aside class="bg-primary w-64 border-r border-gray-700 p-6">
         <h2 class="text-2xl font-bold text-white">Components</h2>
 
-        <div class="h-52 space-y-2">
-          <select
-            class="w-full cursor-pointer rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none"
-            onChange$={(_, element) => changeLanguage(element.value)}
-          >
-            <option value="en-US" selected={language.value === "en-US"}>
-              English
-            </option>
-            <option value="es-ES" selected={language.value === "es-ES"}>
-              Spanish
-            </option>
-            <option value="fr" selected={language.value === "fr"}>
-              French
-            </option>
-            <option value="de" selected={language.value === "de"}>
-              German
-            </option>
-          </select>
-
-          <select
-            class="w-full cursor-pointer rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none"
-            onChange$={(_, element) => setUserMood(element.value as UserMood)}
-          >
-            <option value="neutral">Neutral</option>
-            <option value="happy">Happy</option>
-            <option value="sad">Sad</option>
-            <option value="angry">Angry</option>
-            <option value="excited">cited</option>
-            <option value="bored">Bored</option>
-            <option value="curious">rious</option>
-            <option value="focused">cused</option>
-            <option value="tired">Tired</option>
-            <option value="stressed">essed</option>
-          </select>
-        </div>
-
-        <div class="space-y-2">
-          {components.map((component) => (
-            <button
-              key={component.id}
-              onClick$={() => addComponent(component.id)}
-              class="w-full rounded-lg border border-transparent bg-[#484848] p-3 text-left text-white transition-all duration-200 hover:border-green-300"
+        <div class="mt-6 flex flex-col gap-4">
+          <div class="space-y-2">
+            <select
+              class="w-full cursor-pointer rounded-lg border border-gray-700 bg-[#2A2A2A] px-4 py-2 text-sm text-gray-200 transition-all duration-200 hover:border-green-300 focus:border-green-400 focus:ring-2 focus:ring-green-300/30 focus:outline-none"
+              onChange$={(_, element) => changeLanguage(element.value)}
             >
-              <div class="font-semibold">{component.title}</div>
-            </button>
-          ))}
+              <option value="en-US" selected={language.value === "en-US"}>
+                English
+              </option>
+              <option value="es-ES" selected={language.value === "es-ES"}>
+                Spanish
+              </option>
+              <option value="fr" selected={language.value === "fr"}>
+                French
+              </option>
+              <option value="de" selected={language.value === "de"}>
+                German
+              </option>
+            </select>
+
+            <select
+              class="w-full cursor-pointer rounded-lg border border-gray-700 bg-[#2A2A2A] px-4 py-2 text-sm text-gray-200 transition-all duration-200 hover:border-green-300 focus:border-green-400 focus:ring-2 focus:ring-green-300/30 focus:outline-none"
+              onChange$={(_, element) => setUserMood(element.value as UserMood)}
+            >
+              <option value="neutral">Neutral</option>
+              <option value="happy">Happy</option>
+              <option value="sad">Sad</option>
+              <option value="angry">Angry</option>
+              <option value="excited">Excited</option>
+              <option value="bored">Bored</option>
+              <option value="curious">Curious</option>
+              <option value="focused">Focused</option>
+              <option value="tired">Tired</option>
+              <option value="stressed">Stressed</option>
+            </select>
+          </div>
+
+          <div class="space-y-2">
+            {components.map((component) => (
+              <button
+                key={component.id}
+                onClick$={() => addComponent(component.id)}
+                class="w-full rounded-lg border border-transparent bg-[#484848] p-3 text-left text-white transition-all duration-200 hover:border-green-300"
+              >
+                <div class="font-semibold">{component.title}</div>
+              </button>
+            ))}
+          </div>
         </div>
       </aside>
 
