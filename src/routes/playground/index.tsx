@@ -1,505 +1,417 @@
 import {
-  $,
   component$,
-  useStore,
   useSignal,
+  useStore,
   useVisibleTask$,
+  $,
 } from "@builder.io/qwik";
 import { AIComponent } from "~/neurify/components/AIComponent";
 import { AIText } from "~/neurify/components/AIText";
-import { useAIContext, UserMood } from "~/neurify/context/context";
-import { PRODUCTS } from "~/fake/data";
-
-import { useSession } from "~/neurify/session/session";
-
-const DEFAULT_INTENT = {
-  component: "Generate a product card component for the given product data.",
-  text: "Generate a product description",
-  chart: "Generate a sales chart",
-} as const;
-
-const COMPONENT_CONFIG = {
-  component: {
-    name: "AIComponent",
-    icon: "🧩",
-    label: "AI Component",
-    color: "blue",
-  },
-  text: {
-    name: "AIText",
-    icon: "📝",
-    label: "AI Text",
-    color: "green",
-  },
-  chart: {
-    name: "AIChart",
-    icon: "📊",
-    label: "AI Chart",
-    color: "purple",
-  },
-} as const;
-
-type ComponentType = keyof typeof DEFAULT_INTENT;
-
-interface AIItem {
-  id: string;
-  intent: string;
-  type: ComponentType;
-}
-
-interface Store {
-  items: AIItem[];
-}
-
-const IntentEditor = component$<{
-  item: AIItem;
-  onUpdate: (intent: string) => void;
-}>(({ item, onUpdate }) => {
-  const isEditing = useSignal(false);
-  const editValue = useSignal(item.intent);
-
-  const config = COMPONENT_CONFIG[item.type];
-
-  const handleEdit = $(() => {
-    isEditing.value = true;
-    editValue.value = item.intent;
-  });
-
-  const handleSave = $(() => {
-    onUpdate(editValue.value);
-    isEditing.value = false;
-  });
-
-  const handleCancel = $(() => {
-    isEditing.value = false;
-    editValue.value = item.intent;
-  });
-
-  return (
-    <div class="rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
-      <div class="mb-3 flex items-center justify-between">
-        <div class="flex items-center gap-2">
-          <span class="text-xl">{config.icon}</span>
-          <h3 class="font-semibold text-gray-700">{config.label} - Intent</h3>
-        </div>
-        {!isEditing.value ? (
-          <button
-            onClick$={handleEdit}
-            class="rounded bg-blue-500 px-3 py-1 text-sm text-white hover:bg-blue-600"
-          >
-            ✏️ Edit
-          </button>
-        ) : (
-          <div class="space-x-2">
-            <button
-              onClick$={handleSave}
-              class="rounded bg-green-500 px-3 py-1 text-sm text-white hover:bg-green-600"
-            >
-              ✓ Save
-            </button>
-            <button
-              onClick$={handleCancel}
-              class="rounded bg-gray-500 px-3 py-1 text-sm text-white hover:bg-gray-600"
-            >
-              ✗ Cancel
-            </button>
-          </div>
-        )}
-      </div>
-
-      {isEditing.value ? (
-        <textarea
-          value={editValue.value}
-          onInput$={(e) =>
-            (editValue.value = (e.target as HTMLTextAreaElement).value)
-          }
-          class="w-full rounded border border-gray-300 p-3 font-mono text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none"
-          rows={4}
-          placeholder="Enter your intent here..."
-        />
-      ) : (
-        <div class="rounded bg-gray-50 p-3">
-          <code class="block font-mono text-sm whitespace-pre-wrap text-gray-800">
-            {item.intent}
-          </code>
-        </div>
-      )}
-    </div>
-  );
-});
-
-const CodeDisplay = component$<{ item: AIItem }>(({ item }) => {
-  const copied = useSignal(false);
-  const config = COMPONENT_CONFIG[item.type];
-
-  const handleCopy = $(() => {
-    const code = `<${config.name} intent="${item.intent}" data={PRODUCTS[0]} />`;
-    navigator.clipboard.writeText(code);
-    copied.value = true;
-    setTimeout(() => (copied.value = false), 2000);
-  });
-
-  return (
-    <div class="rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
-      <div class="mb-3 flex items-center justify-between">
-        <h3 class="font-semibold text-gray-700">Generated Code</h3>
-        <button
-          onClick$={handleCopy}
-          class="rounded bg-gray-700 px-3 py-1 text-sm text-white hover:bg-gray-800"
-        >
-          {copied.value ? "✓ Copied!" : "📋 Copy"}
-        </button>
-      </div>
-      <pre class="overflow-x-auto rounded bg-gray-900 p-4">
-        <code class="text-sm text-gray-100">
-          <span class="text-pink-400">&lt;{config.name}</span>
-          {"\n  "}
-          <span class="text-blue-300">intent</span>
-          <span class="text-white">=</span>
-          <span class="text-green-300">"{item.intent}"</span>
-          {"\n  "}
-          <span class="text-blue-300">data</span>
-          <span class="text-white">=</span>
-          <span class="text-yellow-300">{"{"}</span>
-          <span class="text-white">PRODUCTS[0]</span>
-          <span class="text-yellow-300">{"}"}</span>
-          {"\n"}
-          <span class="text-pink-400">/&gt;</span>
-        </code>
-      </pre>
-    </div>
-  );
-});
-
-const PreviewComponent = component$<{ item: AIItem }>(({ item }) => {
-  const key = `${item.id}-${item.intent}`;
-
-  switch (item.type) {
-    case "component":
-      return <AIComponent key={key} intent={item.intent} data={PRODUCTS[0]} />;
-    case "text":
-      return <AIText key={key} intent={item.intent} of={PRODUCTS[0]} />;
-    case "chart":
-      return (
-        <div class="rounded-lg border-2 border-dashed border-purple-300 bg-purple-50 p-8 text-center">
-          <span class="text-4xl">📊</span>
-          <p class="mt-2 text-purple-600">AIChart component coming soon...</p>
-        </div>
-      );
-    default:
-      return <div>Unknown component type</div>;
-  }
-});
-
-const FloatingSettings = component$(() => {
-  const { language, changeLanguage, setUserMood } = useAIContext();
-  const isOpen = useSignal(false);
-
-  const handleLanguageChange = $((_: Event, element: HTMLSelectElement) => {
-    changeLanguage(element.value);
-  });
-
-  const handleMoodChange = $((_: Event, element: HTMLSelectElement) => {
-    setUserMood(element.value as UserMood);
-  });
-
-  const togglePanel = $(() => {
-    isOpen.value = !isOpen.value;
-  });
-
-  return (
-    <div class="fixed right-6 bottom-6 z-50">
-      {isOpen.value && (
-        <div class="mb-3 w-72 rounded-lg border border-gray-200 bg-white p-4 shadow-xl">
-          <div class="mb-4 flex items-center justify-between border-b border-gray-200 pb-3">
-            <h3 class="text-lg font-bold text-gray-800">Settings</h3>
-            <button
-              onClick$={togglePanel}
-              class="text-gray-400 hover:text-gray-600"
-            >
-              ✕
-            </button>
-          </div>
-
-          <div class="mb-4">
-            <label class="mb-2 block text-sm font-semibold text-gray-700">
-              🌐 Language
-            </label>
-            <select
-              class="w-full cursor-pointer rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none"
-              onChange$={handleLanguageChange}
-            >
-              <option value="en-US" selected={language.value === "en-US"}>
-                English
-              </option>
-              <option value="es-ES" selected={language.value === "es-ES"}>
-                Spanish
-              </option>
-              <option value="fr" selected={language.value === "fr"}>
-                French
-              </option>
-              <option value="de" selected={language.value === "de"}>
-                German
-              </option>
-            </select>
-          </div>
-
-          <div>
-            <label class="mb-2 block text-sm font-semibold text-gray-700">
-              😊 User Mood
-            </label>
-            <select
-              class="w-full cursor-pointer rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none"
-              onChange$={handleMoodChange}
-            >
-              <option value="neutral">😐 Neutral</option>
-              <option value="happy">😊 Happy</option>
-              <option value="sad">😢 Sad</option>
-              <option value="angry">😠 Angry</option>
-              <option value="excited">🤩 Excited</option>
-              <option value="bored">😑 Bored</option>
-              <option value="curious">🤔 Curious</option>
-              <option value="focused">🎯 Focused</option>
-              <option value="tired">😴 Tired</option>
-              <option value="stressed">😰 Stressed</option>
-            </select>
-          </div>
-        </div>
-      )}
-
-      <button
-        onClick$={togglePanel}
-        class="flex h-14 w-14 items-center justify-center rounded-full bg-blue-600 text-2xl text-white shadow-lg transition-transform hover:scale-110 hover:bg-blue-700"
-      >
-        ⚙️
-      </button>
-    </div>
-  );
-});
 
 export default component$(() => {
-  const session = useSession();
-  const store = useStore<Store>({
-    items: [],
+  const FAKE_DATA = {
+    title: "Pro Plan",
+    price: "$29/month",
+    features: [
+      "Unlimited projects",
+      "AI-generated components",
+      "Priority support",
+    ],
+  };
+
+  const components = [
+    {
+      id: "ai-component",
+      title: "AIComponent",
+      icon: "📊",
+      template: `<AIComponent
+  intent="Show product card"
+  data={data}
+/>
+
+`,
+    },
+    {
+      id: "ai-text",
+      title: "AIText",
+      icon: "✍️",
+      template: `<AIText
+  intent="Summarize product features"
+  of={data}
+/>
+
+`,
+    },
+  ];
+
+  const editorRef = useSignal<HTMLElement>();
+  const monacoInstance = useSignal<any>();
+
+  const state = useStore({
+    code: `<div class="p-8 rounded-lg text-white">
+  <h1 class="text-3xl font-bold mb-4">Welcome to Neurify!</h1>
+  <p class="mb-6">Try adding some AI components below:</p>
+  
+  <AIComponent
+    intent="Show product card"
+    data={data}
+  />
+
+  <AIText
+    intent="Summarize product features"
+    of={data}
+  />
+</div>`,
+    error: null as string | null,
+    renderedContent: null as any,
   });
-  const isLoaded = useSignal(false);
 
-  useVisibleTask$(({ track }) => {
-    track(() => session.value);
+  const parseAndRender = $(() => {
+    try {
+      state.error = null;
 
-    if (!isLoaded.value && session.value?.sessionId) {
-      const storageKey = `neurify_components_${session.value.sessionId}`;
-      const saved = localStorage.getItem(storageKey);
+      // Crear un array de elementos a renderizar
+      const elements: any[] = [];
+      let htmlContent = state.code;
+      let lastIndex = 0;
 
-      if (saved) {
-        try {
-          const parsed = JSON.parse(saved);
-          store.items = parsed.items || [];
-          console.log(
-            "✅ Loaded from localStorage:",
-            store.items.length,
-            "items",
-          );
-        } catch (e) {
-          console.error("❌ Error loading from localStorage:", e);
+      // Encontrar todos los componentes AIComponent
+      const aiComponentRegex = /<AIComponent\s+([^>]*?)\/>/g;
+      let match;
+
+      const allMatches: Array<{
+        type: string;
+        index: number;
+        length: number;
+        props: any;
+      }> = [];
+
+      // Buscar AIComponent
+      while ((match = aiComponentRegex.exec(state.code)) !== null) {
+        const propsString = match[1];
+        const intentMatch = propsString.match(/intent="([^"]+)"/);
+        const classMatch = propsString.match(/class="([^"]+)"/);
+
+        allMatches.push({
+          type: "AIComponent",
+          index: match.index,
+          length: match[0].length,
+          props: {
+            intent: intentMatch ? intentMatch[1] : "Display component",
+            className: classMatch ? classMatch[1] : "",
+            data: FAKE_DATA,
+          },
+        });
+      }
+
+      // Buscar AIText
+      const aiTextRegex = /<AIText\s+([^>]*?)\/>/g;
+      while ((match = aiTextRegex.exec(state.code)) !== null) {
+        const propsString = match[1];
+        const intentMatch = propsString.match(/intent="([^"]+)"/);
+        const classMatch = propsString.match(/class="([^"]+)"/);
+
+        allMatches.push({
+          type: "AIText",
+          index: match.index,
+          length: match[0].length,
+          props: {
+            intent: intentMatch ? intentMatch[1] : "Generate text",
+            className: classMatch ? classMatch[1] : "",
+            of: FAKE_DATA,
+          },
+        });
+      }
+
+      // Ordenar matches por índice
+      allMatches.sort((a, b) => a.index - b.index);
+
+      // Construir el contenido mezclando HTML y componentes AI
+      lastIndex = 0;
+      allMatches.forEach((match, idx) => {
+        // Agregar HTML antes del componente
+        if (match.index > lastIndex) {
+          const htmlBefore = state.code.substring(lastIndex, match.index);
+          if (htmlBefore.trim()) {
+            elements.push({
+              type: "html",
+              content: htmlBefore,
+              key: `html-${idx}`,
+            });
+          }
+        }
+
+        // Agregar el componente AI
+        elements.push({
+          type: match.type,
+          props: match.props,
+          key: `${match.type}-${idx}`,
+        });
+
+        lastIndex = match.index + match.length;
+      });
+
+      // Agregar HTML restante después del último componente
+      if (lastIndex < state.code.length) {
+        const htmlAfter = state.code.substring(lastIndex);
+        if (htmlAfter.trim()) {
+          elements.push({
+            type: "html",
+            content: htmlAfter,
+            key: `html-end`,
+          });
         }
       }
-      isLoaded.value = true;
-    }
-  });
 
-  const saveToStorage = $(() => {
-    if (session.value?.sessionId) {
-      const storageKey = `neurify_components_${session.value.sessionId}`;
-      try {
-        localStorage.setItem(
-          storageKey,
-          JSON.stringify({
-            items: store.items,
-            lastUpdated: new Date().toISOString(),
-          }),
-        );
-        console.log("💾 Saved to localStorage");
-      } catch (e) {
-        console.error("❌ Error saving to localStorage:", e);
+      if (allMatches.length === 0 && state.code.trim()) {
+        elements.push({
+          type: "html",
+          content: state.code,
+          key: "html-all",
+        });
       }
+
+      state.renderedContent = elements;
+    } catch (error: any) {
+      state.error = error.message;
+      state.renderedContent = null;
     }
   });
 
-  const addAIComponent = $((type: ComponentType) => {
-    const id = `item-${Date.now()}`;
-    store.items.push({
-      id,
-      intent: DEFAULT_INTENT[type],
-      type,
+  useVisibleTask$(() => {
+    if (!document.querySelector("#tailwind-runtime")) {
+      const script = document.createElement("script");
+      script.id = "tailwind-runtime";
+      script.src = "https://cdn.tailwindcss.com";
+
+      document.head.appendChild(script);
+    }
+  });
+
+  useVisibleTask$(({ cleanup }) => {
+    const script = document.createElement("script");
+    script.src =
+      "https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs/loader.min.js";
+    script.async = true;
+
+    script.onload = () => {
+      // @ts-ignore
+      window.require.config({
+        paths: {
+          vs: "https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs",
+        },
+      });
+
+      // @ts-ignore
+      window.require(["vs/editor/editor.main"], () => {
+        if (editorRef.value) {
+          // @ts-ignore
+          const monaco = window.monaco;
+
+          // Registrar snippets y autocompletado para HTML
+          monaco.languages.registerCompletionItemProvider("html", {
+            provideCompletionItems: (model: any, position: any) => {
+              const word = model.getWordUntilPosition(position);
+              const range = {
+                startLineNumber: position.lineNumber,
+                endLineNumber: position.lineNumber,
+                startColumn: word.startColumn,
+                endColumn: word.endColumn,
+              };
+
+              const suggestions = [
+                {
+                  label: "AIComponent",
+                  kind: monaco.languages.CompletionItemKind.Snippet,
+                  documentation:
+                    "AI-powered component that adapts its UI based on intent and data",
+                  insertText:
+                    'AIComponent\n  intent="${1:Show product card}"\n  data={data}\n/>',
+                  insertTextRules:
+                    monaco.languages.CompletionItemInsertTextRule
+                      .InsertAsSnippet,
+                  range: range,
+                },
+                {
+                  label: "AIText",
+                  kind: monaco.languages.CompletionItemKind.Snippet,
+                  documentation: "AI-powered text generation component",
+                  insertText:
+                    'AIText\n  intent="${1:Summarize features}"\n  of={data}\n/>',
+                  insertTextRules:
+                    monaco.languages.CompletionItemInsertTextRule
+                      .InsertAsSnippet,
+                  range: range,
+                },
+                {
+                  label: "AILayout",
+                  kind: monaco.languages.CompletionItemKind.Snippet,
+                  documentation:
+                    "AI-powered layout component for adaptive structures",
+                  insertText:
+                    'AILayout\n  intent="${1:Create grid layout}"\n>\n  $0\n</AILayout>',
+                  insertTextRules:
+                    monaco.languages.CompletionItemInsertTextRule
+                      .InsertAsSnippet,
+                  range: range,
+                },
+              ];
+
+              return { suggestions: suggestions };
+            },
+          });
+
+          // @ts-ignore
+          const editor = monaco.editor.create(editorRef.value, {
+            value: state.code,
+            language: "html",
+            theme: "vs-dark",
+            automaticLayout: true,
+            minimap: { enabled: false },
+            fontSize: 14,
+            lineNumbers: "on",
+            scrollBeyondLastLine: false,
+            wordWrap: "on",
+            tabSize: 2,
+            quickSuggestions: {
+              other: true,
+              comments: false,
+              strings: true,
+            },
+            suggestOnTriggerCharacters: true,
+            acceptSuggestionOnEnter: "on",
+          });
+
+          monacoInstance.value = editor;
+
+          // Actualizar el código cuando cambia en el editor con debounce
+          let timeoutId: any;
+          editor.onDidChangeModelContent(() => {
+            const newCode = editor.getValue();
+            state.code = newCode;
+
+            // Debounce para no actualizar en cada tecla
+            clearTimeout(timeoutId);
+            timeoutId = setTimeout(() => {
+              parseAndRender();
+            }, 300);
+          });
+
+          // Render inicial
+          setTimeout(() => parseAndRender(), 100);
+        }
+      });
+    };
+
+    document.head.appendChild(script);
+
+    cleanup(() => {
+      if (monacoInstance.value) {
+        monacoInstance.value.dispose();
+      }
     });
-    saveToStorage();
   });
 
-  const updateIntent = $((id: string, newIntent: string) => {
-    const item = store.items.find((i) => i.id === id);
-    if (item) {
-      item.intent = newIntent;
-      saveToStorage();
-    }
-  });
-
-  const deleteItem = $((id: string) => {
-    store.items = store.items.filter((i) => i.id !== id);
-    saveToStorage();
-  });
-
-  const clearAll = $(() => {
-    if (
-      confirm("¿Estás seguro de que quieres eliminar todos los componentes?")
-    ) {
-      store.items = [];
-      saveToStorage();
+  const addComponent = $((componentId: string) => {
+    const component = components.find((c) => c.id === componentId);
+    if (component && monacoInstance.value) {
+      const currentValue = monacoInstance.value.getValue();
+      const newValue = currentValue + component.template;
+      monacoInstance.value.setValue(newValue);
+      state.code = newValue;
+      parseAndRender();
     }
   });
 
   return (
-    <>
-      <div class="flex h-screen bg-gray-100">
-        <aside class="w-64 bg-slate-800 p-6 text-white shadow-lg">
-          <div class="mb-8">
-            <h1 class="mb-2 text-2xl font-bold">Neurify</h1>
-            <p class="text-sm text-slate-300">AI Components Builder</p>
+    <div class="flex h-screen bg-[#1E1E1E]">
+      <aside class="bg-primary w-64 border-r border-gray-700 p-6">
+        <h2 class="text-2xl font-bold text-white">Components</h2>
+
+        <div class="h-52 space-y-2">RESERVED</div>
+
+        <div class="space-y-2">
+          {components.map((component) => (
+            <button
+              key={component.id}
+              onClick$={() => addComponent(component.id)}
+              class="w-full rounded-lg border border-transparent bg-[#484848] p-3 text-left text-white transition-all duration-200 hover:border-green-300"
+            >
+              <div class="font-semibold">{component.title}</div>
+            </button>
+          ))}
+        </div>
+      </aside>
+
+      {/* Main Content - 2 Columns */}
+      <div class="flex flex-1">
+        {/* Editor Column */}
+        <div class="flex w-1/2 flex-col border-r border-gray-700">
+          <div class="border-b border-gray-700 px-6 py-3">
+            <h3 class="text-lg font-semibold text-white">Code Editor</h3>
+            <p class="text-xs text-gray-400">HTML + AI Components</p>
           </div>
+          <div ref={editorRef} class="flex-1" />
+        </div>
 
-          <nav class="flex w-full flex-col space-y-2">
-            <button
-              onClick$={() => addAIComponent("component")}
-              class="rounded-lg bg-blue-600 px-4 py-3 text-left font-medium transition-colors hover:bg-blue-700"
-            >
-              {COMPONENT_CONFIG.component.icon}{" "}
-              {COMPONENT_CONFIG.component.label}
-            </button>
-            <button
-              onClick$={() => addAIComponent("text")}
-              class="rounded-lg bg-green-600 px-4 py-3 text-left font-medium transition-colors hover:bg-green-700"
-            >
-              {COMPONENT_CONFIG.text.icon} {COMPONENT_CONFIG.text.label}
-            </button>
-            <button
-              onClick$={() => addAIComponent("chart")}
-              class="rounded-lg bg-purple-600 px-4 py-3 text-left font-medium transition-colors hover:bg-purple-700"
-            >
-              {COMPONENT_CONFIG.chart.icon} {COMPONENT_CONFIG.chart.label}
-            </button>
-          </nav>
-
-          {store.items.length > 0 && (
-            <div class="mt-6 space-y-3">
-              <div class="rounded-lg bg-slate-700 p-3">
-                <div class="flex items-center justify-between text-sm">
-                  <span class="text-slate-300">Components:</span>
-                  <span class="font-bold">{store.items.length}</span>
-                </div>
+        {/* Preview Column */}
+        <div class="flex w-1/2 flex-col">
+          <div class="border-b border-gray-700 px-6 py-3">
+            <h3 class="text-lg font-semibold text-white">Live Preview</h3>
+            <p class="text-xs text-gray-400">Real-time rendering</p>
+          </div>
+          <div class="flex-1 overflow-y-auto bg-gradient-to-br from-gray-900 to-gray-800 p-8">
+            {state.error ? (
+              <div class="rounded-lg border border-red-500 bg-red-900/20 p-6 text-red-400">
+                <p class="mb-2 font-semibold">⚠️ Error</p>
+                <p class="text-sm">{state.error}</p>
               </div>
-
-              <button
-                onClick$={clearAll}
-                class="w-full rounded-lg bg-red-600 px-4 py-2 text-sm font-medium transition-colors hover:bg-red-700"
-              >
-                🗑️ Clear All
-              </button>
-            </div>
-          )}
-        </aside>
-
-        <main class="flex flex-1 overflow-hidden">
-          <div class="m-4 flex flex-1 flex-col overflow-auto rounded-lg bg-gray-50 p-6">
-            <div class="mb-4 flex items-center justify-between">
-              <h2 class="text-2xl font-bold text-gray-800">Editor</h2>
-              {store.items.length > 0 && (
-                <span class="rounded-full bg-blue-100 px-3 py-1 text-sm font-medium text-blue-800">
-                  {store.items.length} component
-                  {store.items.length !== 1 ? "s" : ""}
-                </span>
-              )}
-            </div>
-
-            {store.items.length > 0 ? (
-              <div class="space-y-6">
-                {store.items.map((item, index) => (
-                  <div
-                    key={item.id}
-                    class="space-y-4 rounded-lg border-2 border-gray-300 bg-white p-4"
-                  >
-                    <div class="flex items-center justify-between border-b border-gray-200 pb-3">
-                      <h3 class="font-semibold text-gray-700">
-                        Component #{index + 1}
-                      </h3>
-                      <button
-                        onClick$={() => deleteItem(item.id)}
-                        class="rounded bg-red-500 px-3 py-1 text-sm text-white hover:bg-red-600"
-                      >
-                        🗑️ Delete
-                      </button>
-                    </div>
-                    <IntentEditor
-                      item={item}
-                      onUpdate={(intent) => updateIntent(item.id, intent)}
-                    />
-                    <CodeDisplay item={item} />
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div class="flex flex-1 items-center justify-center text-gray-400">
+            ) : !state.renderedContent || state.renderedContent.length === 0 ? (
+              <div class="flex h-full items-center justify-center text-gray-400">
                 <div class="text-center">
-                  <p class="text-xl">👈 Start by adding components</p>
-                  <p class="mt-2 text-sm">
-                    Click any button in the sidebar to begin
+                  <p class="mb-2 text-6xl">✨</p>
+                  <p class="text-lg">Start coding!</p>
+                  <p class="text-sm opacity-70">
+                    Write HTML and add AI components
                   </p>
                 </div>
               </div>
-            )}
-          </div>
-
-          <div class="m-4 ml-0 flex flex-1 flex-col overflow-auto rounded-lg bg-white p-6 shadow-md">
-            <div class="mb-4 flex items-center justify-between">
-              <h2 class="text-2xl font-bold text-gray-800">Preview</h2>
-              {store.items.length > 0 && (
-                <span class="rounded-full bg-green-100 px-3 py-1 text-sm font-medium text-green-800">
-                  Live Preview
-                </span>
-              )}
-            </div>
-
-            {store.items.length > 0 ? (
-              <div class="space-y-6">
-                {store.items.map((item, index) => (
-                  <div
-                    key={`${item.id}-${item.intent}`}
-                    class="rounded-lg border border-gray-200 p-4"
-                  >
-                    <div class="mb-3 flex items-center gap-2 border-b border-gray-200 pb-2">
-                      <span class="text-lg">
-                        {COMPONENT_CONFIG[item.type].icon}
-                      </span>
-                      <span class="text-sm font-medium text-gray-600">
-                        {COMPONENT_CONFIG[item.type].label} #{index + 1}
-                      </span>
-                    </div>
-                    <PreviewComponent item={item} />
-                  </div>
-                ))}
-              </div>
             ) : (
-              <div class="flex flex-1 items-center justify-center text-gray-400">
-                <div class="text-center">
-                  <p class="text-xl">No components yet</p>
-                  <p class="mt-2 text-sm">Preview will appear here</p>
-                </div>
+              <div class="space-y-0">
+                {state.renderedContent.map((element: any) => {
+                  if (element.type === "html") {
+                    return (
+                      <div
+                        key={element.key}
+                        dangerouslySetInnerHTML={element.content}
+                      />
+                    );
+                  } else if (element.type === "AIComponent") {
+                    return (
+                      <div key={element.key} class={element.props.className}>
+                        <AIComponent
+                          intent={element.props.intent}
+                          data={element.props.data}
+                        />
+                      </div>
+                    );
+                  } else if (element.type === "AIText") {
+                    return (
+                      <div key={element.key} class={element.props.className}>
+                        <AIText
+                          intent={element.props.intent}
+                          of={element.props.of}
+                        />
+                      </div>
+                    );
+                  }
+                  return null;
+                })}
               </div>
             )}
           </div>
-        </main>
+        </div>
       </div>
-
-      <FloatingSettings />
-    </>
+    </div>
   );
 });

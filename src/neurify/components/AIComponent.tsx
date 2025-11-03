@@ -1,27 +1,28 @@
-import { component$, PropsOf } from "@builder.io/qwik";
+import { component$, HTMLAttributes, PropsOf } from "@builder.io/qwik";
 import { useGenerateComponent } from "~/neurify/ai/generate-component";
 import { AIGenerating } from "~/neurify/components/AIGenerating";
 
-type AIComponentProps = {
+interface AIComponentProps extends HTMLAttributes<HTMLElement> {
   intent: string;
   data: any;
-} & PropsOf<"div">;
+}
 
-export const AIComponent = component$<AIComponentProps>((props) => {
-  const { intent, data, ...rest } = props;
-  const { generating, error, html } = useGenerateComponent(intent, data);
+export const AIComponent = component$<AIComponentProps>(
+  ({ data, intent, ...rest }) => {
+    const { generating, error, html } = useGenerateComponent(intent, data);
 
-  if (generating.value) {
-    return <AIGenerating />;
-  }
+    if (generating.value) {
+      return <AIGenerating />;
+    }
 
-  if (error.value) {
-    return (
-      <div {...rest} class="text-red-600">
-        Error: {error.value}
-      </div>
-    );
-  }
+    if (error.value) {
+      return (
+        <div {...rest} class="text-red-600">
+          Error: {error.value}
+        </div>
+      );
+    }
 
-  return <div {...rest} dangerouslySetInnerHTML={html.value} />;
-});
+    return <div {...rest} dangerouslySetInnerHTML={html.value} />;
+  },
+);
