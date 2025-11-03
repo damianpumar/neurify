@@ -12,7 +12,7 @@ export const AIComponent = component$<AIComponentProps>(
     const { generating, error, html } = useGenerateComponent(intent, data);
 
     if (generating.value) {
-      return <AIGenerating />;
+      return <AIGenerating {...rest} />;
     }
 
     if (error.value) {

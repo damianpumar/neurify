@@ -7,6 +7,7 @@ import {
 } from "@builder.io/qwik";
 import { AIComponent } from "~/neurify/components/AIComponent";
 import { AIText } from "~/neurify/components/AIText";
+import { useAIContext, UserMood } from "~/neurify/context/context";
 
 export default component$(() => {
   const FAKE_DATA = {
@@ -48,20 +49,19 @@ export default component$(() => {
   const monacoInstance = useSignal<any>();
 
   const state = useStore({
-    code: `<div class="p-8 rounded-lg text-white">
-  <h1 class="text-3xl font-bold mb-4">Welcome to Neurify!</h1>
-  <p class="mb-6">Try adding some AI components below:</p>
-  
-  <AIComponent
-    intent="Show product card"
-    data={data}
-  />
+    code: `<h1 class="text-white text-3xl font-bold mb-4">Welcome to Neurify!</h1>
+<p class="text-white mb-6">Try adding some AI components below:</p>
 
-  <AIText
-    intent="Summarize product features"
-    of={data}
-  />
-</div>`,
+<AIComponent
+  intent="Show product card"
+  data={data}
+/>
+
+<AIText
+  class="text-white"
+  intent="Summarize product features"
+  of={data}
+/>`,
     error: null as string | null,
     renderedContent: null as any,
   });
@@ -72,7 +72,6 @@ export default component$(() => {
 
       // Crear un array de elementos a renderizar
       const elements: any[] = [];
-      let htmlContent = state.code;
       let lastIndex = 0;
 
       // Encontrar todos los componentes AIComponent
@@ -172,6 +171,7 @@ export default component$(() => {
       }
 
       state.renderedContent = elements;
+      console.log(state.renderedContent);
     } catch (error: any) {
       state.error = error.message;
       state.renderedContent = null;
@@ -284,20 +284,17 @@ export default component$(() => {
 
           monacoInstance.value = editor;
 
-          // Actualizar el código cuando cambia en el editor con debounce
           let timeoutId: any;
           editor.onDidChangeModelContent(() => {
             const newCode = editor.getValue();
-            state.code = newCode;
 
-            // Debounce para no actualizar en cada tecla
             clearTimeout(timeoutId);
             timeoutId = setTimeout(() => {
+              state.code = newCode;
               parseAndRender();
-            }, 300);
+            }, 500);
           });
 
-          // Render inicial
           setTimeout(() => parseAndRender(), 100);
         }
       });
@@ -323,12 +320,48 @@ export default component$(() => {
     }
   });
 
+  const { language, changeLanguage, setUserMood } = useAIContext();
+
   return (
     <div class="flex h-screen bg-[#1E1E1E]">
       <aside class="bg-primary w-64 border-r border-gray-700 p-6">
         <h2 class="text-2xl font-bold text-white">Components</h2>
 
-        <div class="h-52 space-y-2">RESERVED</div>
+        <div class="h-52 space-y-2">
+          <select
+            class="w-full cursor-pointer rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none"
+            onChange$={(_, element) => changeLanguage(element.value)}
+          >
+            <option value="en-US" selected={language.value === "en-US"}>
+              English
+            </option>
+            <option value="es-ES" selected={language.value === "es-ES"}>
+              Spanish
+            </option>
+            <option value="fr" selected={language.value === "fr"}>
+              French
+            </option>
+            <option value="de" selected={language.value === "de"}>
+              German
+            </option>
+          </select>
+
+          <select
+            class="w-full cursor-pointer rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none"
+            onChange$={(_, element) => setUserMood(element.value as UserMood)}
+          >
+            <option value="neutral">Neutral</option>
+            <option value="happy">Happy</option>
+            <option value="sad">Sad</option>
+            <option value="angry">Angry</option>
+            <option value="excited">cited</option>
+            <option value="bored">Bored</option>
+            <option value="curious">rious</option>
+            <option value="focused">cused</option>
+            <option value="tired">Tired</option>
+            <option value="stressed">essed</option>
+          </select>
+        </div>
 
         <div class="space-y-2">
           {components.map((component) => (
@@ -377,18 +410,21 @@ export default component$(() => {
                 </div>
               </div>
             ) : (
-              <div class="space-y-0">
+              <div class="space-y-4">
                 {state.renderedContent.map((element: any) => {
                   if (element.type === "html") {
                     return (
                       <div
-                        key={element.key}
+                        key={element.content}
                         dangerouslySetInnerHTML={element.content}
                       />
                     );
                   } else if (element.type === "AIComponent") {
                     return (
-                      <div key={element.key} class={element.props.className}>
+                      <div
+                        key={element.props.intent}
+                        class={element.props.className}
+                      >
                         <AIComponent
                           intent={element.props.intent}
                           data={element.props.data}
@@ -397,7 +433,10 @@ export default component$(() => {
                     );
                   } else if (element.type === "AIText") {
                     return (
-                      <div key={element.key} class={element.props.className}>
+                      <div
+                        key={element.props.intent}
+                        class={element.props.className}
+                      >
                         <AIText
                           intent={element.props.intent}
                           of={element.props.of}

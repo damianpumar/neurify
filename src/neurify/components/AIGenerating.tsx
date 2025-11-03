@@ -1,8 +1,10 @@
-import { component$ } from "@builder.io/qwik";
+import { component$, HTMLAttributes } from "@builder.io/qwik";
 
-export const AIGenerating = component$(() => {
+interface AIGeneratingProps extends HTMLAttributes<HTMLElement> {}
+
+export const AIGenerating = component$<AIGeneratingProps>((props) => {
   return (
-    <div class="flex items-center gap-2">
+    <div class="flex items-center gap-2 text-white" {...props}>
       <svg
         class="h-6 w-6 animate-pulse"
         viewBox="0 0 24 24"

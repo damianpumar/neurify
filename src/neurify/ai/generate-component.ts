@@ -4,13 +4,12 @@ import { $, useSignal, useTask$, useVisibleTask$ } from "@builder.io/qwik";
 import { useAIContext, UserMood } from "~/neurify/context/context";
 import { hashString } from "~/neurify/cache/hash";
 import { useAskToAI } from "~/neurify/ai/ask-to-ai";
-import { useNeurifyConfig } from "~/neurify/config/use-neurify-config";
 import { server$ } from "@builder.io/qwik-city";
 import { nextTick } from "~/neurify/utils/tick";
 import { useComponentPrompt, useTextPrompt } from "~/neurify/ai/prompt";
 
 export const useGenerateComponent = (intent: string, data: any, cacheTTL?: number) => {
-  const { userMood } = useAIContext()
+  const { userMood, language } = useAIContext()
 
   const generating = useSignal<boolean>(false);
   const html = useSignal<string>();
@@ -18,7 +17,7 @@ export const useGenerateComponent = (intent: string, data: any, cacheTTL?: numbe
 
   const generateComponent = server$(async (intent: string, data: any) => {
     const ask = useAskToAI()
-    const cacheHash = await hashString(`MOOD:${userMood.value}-INTENT:${intent}`)
+    const cacheHash = await hashString(`MOOD:${userMood.value}-INTENT:${intent}-LANGUAGE:${language.value}`)
 
     if (cache.has(cacheHash)) {
       const template = await cache.getOrWait(cacheHash);
