@@ -8,6 +8,7 @@ import {
 import { AIComponent } from "~/neurify/components/AIComponent";
 import { AIText } from "~/neurify/components/AIText";
 import { useAIContext, UserMood } from "~/neurify/context/context";
+import * as monaco from "monaco-editor";
 
 export default component$(() => {
   const FAKE_DATA = {
@@ -46,11 +47,11 @@ export default component$(() => {
   ];
 
   const editorRef = useSignal<HTMLElement>();
-  const monacoInstance = useSignal<any>();
+  const monacoInstance = useSignal<monaco.editor.IStandaloneCodeEditor>();
 
   const state = useStore({
-    code: `<h1 class="text-white text-3xl font-bold mb-4">Welcome to Neurify!</h1>
-<p class="text-white mb-6">Try adding some AI components below:</p>
+    code: `<h1 class="text-3xl font-bold mb-4">Welcome to Neurify!</h1>
+<p class="mb-6">Try adding some AI components below:</p>
 
 <AIComponent
   intent="Show product card"
@@ -58,7 +59,6 @@ export default component$(() => {
 />
 
 <AIText
-  class="text-white"
   intent="Summarize product features"
   of={data}
 />`,
@@ -70,13 +70,10 @@ export default component$(() => {
     try {
       state.error = null;
 
-      // Crear un array de elementos a renderizar
       const elements: any[] = [];
-      let lastIndex = 0;
 
-      // Encontrar todos los componentes AIComponent
       const aiComponentRegex = /<AIComponent\s+([^>]*?)\/>/g;
-      let match;
+      const aiTextRegex = /<AIText\s+([^>]*?)\/>/g;
 
       const allMatches: Array<{
         type: string;
@@ -84,6 +81,8 @@ export default component$(() => {
         length: number;
         props: any;
       }> = [];
+
+      let match;
 
       // Buscar AIComponent
       while ((match = aiComponentRegex.exec(state.code)) !== null) {
@@ -104,7 +103,6 @@ export default component$(() => {
       }
 
       // Buscar AIText
-      const aiTextRegex = /<AIText\s+([^>]*?)\/>/g;
       while ((match = aiTextRegex.exec(state.code)) !== null) {
         const propsString = match[1];
         const intentMatch = propsString.match(/intent="([^"]+)"/);
@@ -122,11 +120,25 @@ export default component$(() => {
         });
       }
 
+      // Si no hay componentes AI, solo renderizar el HTML
+      if (allMatches.length === 0) {
+        if (state.code.trim()) {
+          elements.push({
+            type: "html",
+            content: state.code,
+            key: "html-all",
+          });
+        }
+        state.renderedContent = elements;
+        console.log("Rendered (no AI components):", elements);
+        return;
+      }
+
       // Ordenar matches por índice
       allMatches.sort((a, b) => a.index - b.index);
 
       // Construir el contenido mezclando HTML y componentes AI
-      lastIndex = 0;
+      let lastIndex = 0;
       allMatches.forEach((match, idx) => {
         // Agregar HTML antes del componente
         if (match.index > lastIndex) {
@@ -135,7 +147,7 @@ export default component$(() => {
             elements.push({
               type: "html",
               content: htmlBefore,
-              key: `html-${idx}`,
+              key: `html-before-${idx}`,
             });
           }
         }
@@ -157,21 +169,13 @@ export default component$(() => {
           elements.push({
             type: "html",
             content: htmlAfter,
-            key: `html-end`,
+            key: "html-after",
           });
         }
       }
 
-      if (allMatches.length === 0 && state.code.trim()) {
-        elements.push({
-          type: "html",
-          content: state.code,
-          key: "html-all",
-        });
-      }
-
       state.renderedContent = elements;
-      console.log(state.renderedContent);
+      console.log("Rendered:", elements);
     } catch (error: any) {
       state.error = error.message;
       state.renderedContent = null;
@@ -183,124 +187,104 @@ export default component$(() => {
       const script = document.createElement("script");
       script.id = "tailwind-runtime";
       script.src = "https://cdn.tailwindcss.com";
-
       document.head.appendChild(script);
     }
   });
 
   useVisibleTask$(({ cleanup }) => {
-    const script = document.createElement("script");
-    script.src =
-      "https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs/loader.min.js";
-    script.async = true;
+    const initMonaco = async () => {
+      if (editorRef.value) {
+        monaco.editor.defineTheme("neurify-dark", {
+          base: "vs-dark",
+          inherit: true,
+          rules: [],
+          colors: {
+            "editor.background": "#141F19",
+            "editor.foreground": "#ffffff",
+            "editorLineNumber.foreground": "#4a5a4e",
+            "editorLineNumber.activeForeground": "#8fbc8f",
+            "editor.selectionBackground": "#2a3a2f",
+            "editor.inactiveSelectionBackground": "#1f2f24",
+          },
+        });
 
-    script.onload = () => {
-      // @ts-ignore
-      window.require.config({
-        paths: {
-          vs: "https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs",
-        },
-      });
+        monaco.languages.registerCompletionItemProvider("html", {
+          provideCompletionItems: (model, position) => {
+            const word = model.getWordUntilPosition(position);
+            const range = {
+              startLineNumber: position.lineNumber,
+              endLineNumber: position.lineNumber,
+              startColumn: word.startColumn,
+              endColumn: word.endColumn,
+            };
 
-      // @ts-ignore
-      window.require(["vs/editor/editor.main"], () => {
-        if (editorRef.value) {
-          // @ts-ignore
-          const monaco = window.monaco;
+            const suggestions = [
+              {
+                label: "AIComponent",
+                kind: monaco.languages.CompletionItemKind.Snippet,
+                documentation:
+                  "AI-powered component that adapts its UI based on intent and data",
+                insertText:
+                  'AIComponent\n  intent="${1:Show product card}"\n  data={data}\n/>',
+                insertTextRules:
+                  monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+                range: range,
+              },
+              {
+                label: "AIText",
+                kind: monaco.languages.CompletionItemKind.Snippet,
+                documentation: "AI-powered text generation component",
+                insertText:
+                  'AIText\n  intent="${1:Summarize features}"\n  of={data}\n/>',
+                insertTextRules:
+                  monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+                range: range,
+              },
+            ];
 
-          // Registrar snippets y autocompletado para HTML
-          monaco.languages.registerCompletionItemProvider("html", {
-            provideCompletionItems: (model: any, position: any) => {
-              const word = model.getWordUntilPosition(position);
-              const range = {
-                startLineNumber: position.lineNumber,
-                endLineNumber: position.lineNumber,
-                startColumn: word.startColumn,
-                endColumn: word.endColumn,
-              };
+            return { suggestions: suggestions };
+          },
+        });
 
-              const suggestions = [
-                {
-                  label: "AIComponent",
-                  kind: monaco.languages.CompletionItemKind.Snippet,
-                  documentation:
-                    "AI-powered component that adapts its UI based on intent and data",
-                  insertText:
-                    'AIComponent\n  intent="${1:Show product card}"\n  data={data}\n/>',
-                  insertTextRules:
-                    monaco.languages.CompletionItemInsertTextRule
-                      .InsertAsSnippet,
-                  range: range,
-                },
-                {
-                  label: "AIText",
-                  kind: monaco.languages.CompletionItemKind.Snippet,
-                  documentation: "AI-powered text generation component",
-                  insertText:
-                    'AIText\n  intent="${1:Summarize features}"\n  of={data}\n/>',
-                  insertTextRules:
-                    monaco.languages.CompletionItemInsertTextRule
-                      .InsertAsSnippet,
-                  range: range,
-                },
-                {
-                  label: "AILayout",
-                  kind: monaco.languages.CompletionItemKind.Snippet,
-                  documentation:
-                    "AI-powered layout component for adaptive structures",
-                  insertText:
-                    'AILayout\n  intent="${1:Create grid layout}"\n>\n  $0\n</AILayout>',
-                  insertTextRules:
-                    monaco.languages.CompletionItemInsertTextRule
-                      .InsertAsSnippet,
-                  range: range,
-                },
-              ];
+        // Crear editor
+        const editor = monaco.editor.create(editorRef.value, {
+          value: state.code,
+          language: "html",
+          theme: "neurify-dark",
+          automaticLayout: true,
+          minimap: { enabled: false },
+          fontSize: 14,
+          lineNumbers: "on",
+          scrollBeyondLastLine: false,
+          wordWrap: "on",
+          tabSize: 2,
+          quickSuggestions: {
+            other: true,
+            comments: false,
+            strings: true,
+          },
+          suggestOnTriggerCharacters: true,
+          acceptSuggestionOnEnter: "on",
+        });
 
-              return { suggestions: suggestions };
-            },
-          });
+        monacoInstance.value = editor;
 
-          // @ts-ignore
-          const editor = monaco.editor.create(editorRef.value, {
-            value: state.code,
-            language: "html",
-            theme: "vs-dark",
-            automaticLayout: true,
-            minimap: { enabled: false },
-            fontSize: 14,
-            lineNumbers: "on",
-            scrollBeyondLastLine: false,
-            wordWrap: "on",
-            tabSize: 2,
-            quickSuggestions: {
-              other: true,
-              comments: false,
-              strings: true,
-            },
-            suggestOnTriggerCharacters: true,
-            acceptSuggestionOnEnter: "on",
-          });
+        let timeoutId: any;
+        editor.onDidChangeModelContent(() => {
+          const newCode = editor.getValue();
 
-          monacoInstance.value = editor;
+          clearTimeout(timeoutId);
+          timeoutId = setTimeout(() => {
+            state.code = newCode;
+            parseAndRender();
+          }, 1000);
+        });
 
-          let timeoutId: any;
-          editor.onDidChangeModelContent(() => {
-            const newCode = editor.getValue();
-
-            clearTimeout(timeoutId);
-            timeoutId = setTimeout(() => {
-              state.code = newCode;
-              parseAndRender();
-            }, 500);
-          });
-
-          setTimeout(() => parseAndRender(), 100);
-        }
-      });
+        setTimeout(() => parseAndRender(), 100);
+      }
     };
 
-    document.head.appendChild(script);
+    initMonaco();
 
     cleanup(() => {
       if (monacoInstance.value) {
@@ -313,9 +297,12 @@ export default component$(() => {
     const component = components.find((c) => c.id === componentId);
     if (component && monacoInstance.value) {
       const currentValue = monacoInstance.value.getValue();
-      const newValue = currentValue + component.template;
-      monacoInstance.value.setValue(newValue);
-      state.code = newValue;
+      const newValue = currentValue.trim()
+        ? `${currentValue}\n\n${component.template}`
+        : component.template;
+      monacoInstance.value.setValue(newValue.trim());
+      state.code = newValue.trim();
+
       parseAndRender();
     }
   });
@@ -323,8 +310,8 @@ export default component$(() => {
   const { language, changeLanguage, setUserMood } = useAIContext();
 
   return (
-    <div class="flex h-screen bg-[#1E1E1E]">
-      <aside class="bg-primary w-64 border-r border-gray-700 p-6">
+    <div class="flex h-screen bg-[#141F19]">
+      <aside class="w-64 border-r border-gray-700 p-6">
         <h2 class="text-2xl font-bold text-white">Components</h2>
 
         <div class="mt-6 flex flex-col gap-4">
@@ -378,9 +365,7 @@ export default component$(() => {
         </div>
       </aside>
 
-      {/* Main Content - 2 Columns */}
       <div class="flex flex-1">
-        {/* Editor Column */}
         <div class="flex w-1/2 flex-col border-r border-gray-700">
           <div class="border-b border-gray-700 px-6 py-3">
             <h3 class="text-lg font-semibold text-white">Code Editor</h3>
@@ -389,13 +374,12 @@ export default component$(() => {
           <div ref={editorRef} class="flex-1" />
         </div>
 
-        {/* Preview Column */}
         <div class="flex w-1/2 flex-col">
           <div class="border-b border-gray-700 px-6 py-3">
             <h3 class="text-lg font-semibold text-white">Live Preview</h3>
             <p class="text-xs text-gray-400">Real-time rendering</p>
           </div>
-          <div class="flex-1 overflow-y-auto bg-gradient-to-br from-gray-900 to-gray-800 p-8">
+          <div class="flex-1 overflow-y-auto p-8">
             {state.error ? (
               <div class="rounded-lg border border-red-500 bg-red-900/20 p-6 text-red-400">
                 <p class="mb-2 font-semibold">⚠️ Error</p>
@@ -417,6 +401,7 @@ export default component$(() => {
                   if (element.type === "html") {
                     return (
                       <div
+                        class="text-white"
                         key={element.content}
                         dangerouslySetInnerHTML={element.content}
                       />
@@ -440,6 +425,7 @@ export default component$(() => {
                         class={element.props.className}
                       >
                         <AIText
+                          class="text-white"
                           intent={element.props.intent}
                           of={element.props.of}
                         />

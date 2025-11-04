@@ -46,6 +46,7 @@
   "dependencies": {
     "@huggingface/inference": "^4.11.1",
     "@types/mustache": "^4.2.6",
+    "monaco-editor": "^0.54.0",
     "mustache": "^4.2.0"
   }
 }
