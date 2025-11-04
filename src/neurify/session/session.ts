@@ -1,10 +1,5 @@
 import { isBrowser, isDev } from "@builder.io/qwik";
 import { RequestEvent, RequestEventBase, routeLoader$ } from "@builder.io/qwik-city";
-import { PlatformNode } from "@builder.io/qwik-city/middleware/node";
-
-declare global {
-  interface QwikCityPlatform extends PlatformNode { }
-}
 
 export const checkSession = (event: RequestEvent) => {
   const { cookie, sharedMap } = event;

@@ -1,4 +1,4 @@
-import { component$, HTMLAttributes, PropsOf } from "@builder.io/qwik";
+import { component$, HTMLAttributes } from "@builder.io/qwik";
 import { useGenerateComponent } from "~/neurify/ai/generate-component";
 import { AIGenerating } from "~/neurify/components/AIGenerating";
 

@@ -1,7 +1,7 @@
 import { cache } from "~/neurify/cache/cache"
 import Mustache from "mustache"
-import { $, useSignal, useTask$, useVisibleTask$ } from "@builder.io/qwik";
-import { useAIContext, UserMood } from "~/neurify/context/context";
+import { $, useSignal, useVisibleTask$ } from "@builder.io/qwik";
+import { useAIContext } from "~/neurify/context/context";
 import { hashString } from "~/neurify/cache/hash";
 import { useAskToAI } from "~/neurify/ai/ask-to-ai";
 import { server$ } from "@builder.io/qwik-city";

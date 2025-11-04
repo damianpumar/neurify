@@ -1,4 +1,3 @@
-import { $, isServer } from "@builder.io/qwik";
 import { server$ } from "@builder.io/qwik-city";
 import { chatCompletion } from "@huggingface/inference";
 import { useNeurifyConfig } from "~/neurify/config/use-neurify-config";

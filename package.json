@@ -11,6 +11,7 @@
     "build": "qwik build",
     "build.client": "vite build",
     "build.preview": "vite build --ssr src/entry.preview.tsx",
+    "build.server": "qwik check-client src dist && vite build -c adapters/express/vite.config.ts",
     "build.types": "tsc --incremental --noEmit",
     "deploy": "echo 'Run \"npm run qwik add\" to install a server adapter'",
     "dev": "vite --mode ssr",
@@ -19,6 +20,7 @@
     "fmt.check": "prettier --check .",
     "lint": "eslint \"src/**/*.ts*\"",
     "preview": "qwik build preview && vite preview --open",
+    "serve": "node server/entry.express",
     "start": "vite --open --mode ssr",
     "qwik": "qwik"
   },
@@ -29,7 +31,11 @@
     "@qwik-ui/utils": "^0.3.3",
     "@qwikest/icons": "^0.0.13",
     "@tailwindcss/vite": "^4.1.4",
+    "@types/compression": "^1.7.2",
+    "@types/express": "^4.17.19",
     "@types/node": "20.19.0",
+    "compression": "^1.7.4",
+    "dotenv": "^16.3.2",
     "eslint": "9.32.0",
     "eslint-plugin-qwik": "^1.17.0",
     "globals": "16.3.0",
@@ -46,6 +52,7 @@
   "dependencies": {
     "@huggingface/inference": "^4.11.1",
     "@types/mustache": "^4.2.6",
+    "express": "4.20.0",
     "monaco-editor": "^0.54.0",
     "mustache": "^4.2.0"
   }
