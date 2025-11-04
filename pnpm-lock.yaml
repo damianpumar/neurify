@@ -14,6 +14,9 @@ importers:
       '@types/mustache':
         specifier: ^4.2.6
         version: 4.2.6
+      dotenv:
+        specifier: ^16.3.2
+        version: 16.6.1
       express:
         specifier: 4.20.0
         version: 4.20.0
@@ -23,6 +26,9 @@ importers:
       mustache:
         specifier: ^4.2.0
         version: 4.2.0
+      undici:
+        specifier: '*'
+        version: 7.16.0
     devDependencies:
       '@builder.io/qwik':
         specifier: ^1.17.0
@@ -54,9 +60,6 @@ importers:
       compression:
         specifier: ^1.7.4
         version: 1.8.1
-      dotenv:
-        specifier: ^16.3.2
-        version: 16.6.1
       eslint:
         specifier: 9.32.0
         version: 9.32.0(jiti@2.6.1)
@@ -84,9 +87,6 @@ importers:
       typescript-plugin-css-modules:
         specifier: latest
         version: 5.2.0(typescript@5.4.5)
-      undici:
-        specifier: '*'
-        version: 7.16.0
       vite:
         specifier: 7.1.7
         version: 7.1.7(@types/node@20.19.0)(jiti@2.6.1)(less@4.4.2)(lightningcss@1.30.1)(sass@1.93.2)(stylus@0.62.0)
