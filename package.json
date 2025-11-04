@@ -55,5 +55,6 @@
     "express": "4.20.0",
     "monaco-editor": "^0.54.0",
     "mustache": "^4.2.0"
-  }
+  },
+  "version": "0.0.1"
 }

@@ -13,7 +13,7 @@ export const AIText = component$<AITextProps>(
     const { generating, error, text } = useGenerateText(intent, of, cacheTTL);
 
     if (generating.value) {
-      return <AIGenerating {...rest} />;
+      return <AIGenerating />;
     }
 
     if (error.value) {

@@ -45,7 +45,8 @@ export const useGenerateComponent = (intent: string, data: any, cacheTTL?: numbe
     try {
       html.value = await generateComponent(intent, data);
     } catch (err) {
-      error.value = (err as Error).message || 'Error generating component'
+      console.error(err)
+      error.value = (err as Error).message || 'Error generating AIComponent'
     } finally {
       await nextTick(() => {
         generating.value = false;
@@ -98,7 +99,8 @@ export const useGenerateText = (intent: string, data: any, cacheTTL?: number) =>
     try {
       text.value = await generateText(intent, data);
     } catch (err) {
-      error.value = (err as Error).message || 'Error generating text'
+      console.error(err)
+      error.value = (err as Error).message || 'Error generating AIText'
     } finally {
       await nextTick(() => {
         generating.value = false;

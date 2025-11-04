@@ -12,13 +12,13 @@ export const AIComponent = component$<AIComponentProps>(
     const { generating, error, html } = useGenerateComponent(intent, data);
 
     if (generating.value) {
-      return <AIGenerating {...rest} />;
+      return <AIGenerating />;
     }
 
     if (error.value) {
       return (
         <div {...rest} class="text-red-600">
-          Error: {error.value}
+          {error.value}
         </div>
       );
     }
