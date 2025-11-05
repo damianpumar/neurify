@@ -378,9 +378,12 @@ export default component$(() => {
   return (
     <div class="flex h-screen bg-[#141F19]">
       <aside class="w-64 border-r border-gray-700 p-6">
-        <div class="font-mono text-xl tracking-tight text-[#B9E1AD] uppercase">
+        <a
+          href="/"
+          class="font-mono text-xl tracking-tight text-[#B9E1AD] uppercase"
+        >
           Adaptive UI
-        </div>
+        </a>
 
         <div class="mt-6 flex flex-col gap-4 font-mono">
           <div class="space-y-2">
