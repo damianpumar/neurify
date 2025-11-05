@@ -391,6 +391,7 @@ export default component$(() => {
             >
               {USES_CASES.map((useCase) => (
                 <option
+                  key={useCase.topic}
                   value={useCase.topic}
                   selected={state.selected.topic === useCase.topic}
                 >
@@ -404,7 +405,9 @@ export default component$(() => {
               onChange$={(_, element) => setUserMood(element.value as UserMood)}
             >
               {state.selected.extras.map((extra) => (
-                <option value={extra.prompt}>{extra.label}</option>
+                <option key={extra.prompt} value={extra.prompt}>
+                  {extra.label}
+                </option>
               ))}
             </select>
 
