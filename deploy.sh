@@ -23,6 +23,8 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
+docker login
+
 # Build Docker
 echo -e "${BLUE}Building Docker image for linux/amd64...${NC}"
 docker buildx build --platform linux/amd64 -t $IMAGE_NAME .
