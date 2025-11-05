@@ -27,7 +27,7 @@ export default component$(() => {
         <link
           rel="preconnect"
           href="https://fonts.gstatic.com"
-          crossorigin=""
+          crossOrigin="anonymous"
         />
 
         <link
