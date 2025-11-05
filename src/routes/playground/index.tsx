@@ -11,21 +11,87 @@ import { useAIContext, UserMood } from "~/neurify/context/context";
 import * as monaco from "monaco-editor";
 
 export default component$(() => {
-  const FAKE_DATA = {
-    title: "Pro Plan",
-    price: "$29/month",
-    features: [
-      "Unlimited projects",
-      "AI-generated components",
-      "Priority support",
-    ],
-  };
+  const USES_CASES = [
+    {
+      topic: "E-commerce",
+      code: `<h1 class="text-3xl font-bold mb-4">Welcome to Neurify!</h1>
+<p class="mb-6">Try adding some AI components below:</p>
+
+<AIComponent
+  intent="Show title and price"
+  data={data}
+/>
+
+<AIText
+  intent="Summarize product features"
+  of={data}
+/>`,
+      data: {
+        productName: "Smartphone XYZ",
+        description:
+          "A cutting-edge smartphone with a stunning display and powerful performance.",
+        price: "$799",
+        features: [
+          "6.5-inch OLED display",
+          "Triple-lens camera system",
+          "5G connectivity",
+          "128GB storage",
+        ],
+      },
+      extras: [
+        {
+          label: "Evening",
+          prompt: "Suggest quiet evening activities for a relaxing time.",
+        },
+        {
+          label: "Weekend",
+          prompt: "Recommend fun weekend activities for outdoor enthusiasts.",
+        },
+      ],
+    },
+    {
+      topic: "Travel",
+      code: `<h1 class="text-3xl font-bold mb-4">Welcome to Neurify!</h1>
+<p class="mb-6">Try adding some AI components below:</p>
+
+<AIComponent
+  intent="Card to show trip details"
+  data={data}
+/>
+
+<AIText
+  intent="Explain trip highlights"
+  of={data}
+/>`,
+      data: {
+        productName: "Disneyland Paris Trip",
+        description:
+          "Experience the magic of Disneyland Paris with a 5-day all-inclusive trip.",
+        price: "$1,499",
+        features: [
+          "5-day park access",
+          "4-star hotel accommodation",
+          "Daily breakfast included",
+          "Shuttle service to and from the park",
+        ],
+      },
+      extras: [
+        {
+          label: "Relax",
+          prompt: "Relaxing activities for a calm mood.",
+        },
+        {
+          label: "Adventure",
+          prompt: "Thrilling activities for an adventurous mood.",
+        },
+      ],
+    },
+  ];
 
   const components = [
     {
       id: "ai-component",
       title: "AIComponent",
-      icon: "📊",
       template: `<AIComponent
   intent="Show product card"
   data={data}
@@ -36,7 +102,6 @@ export default component$(() => {
     {
       id: "ai-text",
       title: "AIText",
-      icon: "✍️",
       template: `<AIText
   intent="Summarize product features"
   of={data}
@@ -46,24 +111,34 @@ export default component$(() => {
     },
   ];
 
+  const { language, changeLanguage, setUserMood } = useAIContext();
   const editorRef = useSignal<HTMLElement>();
   const monacoInstance = useSignal<monaco.editor.IStandaloneCodeEditor>();
 
-  const state = useStore({
-    code: `<h1 class="text-3xl font-bold mb-4">Welcome to Neurify!</h1>
-<p class="mb-6">Try adding some AI components below:</p>
-
-<AIComponent
-  intent="Show product card"
-  data={data}
-/>
-
-<AIText
-  intent="Summarize product features"
-  of={data}
-/>`,
+  const state = useStore<{
+    code: string;
+    selected: (typeof USES_CASES)[0];
+    error: string | null;
+    renderedContent: any;
+  }>({
+    code: USES_CASES[0].code,
+    selected: USES_CASES[0],
     error: null as string | null,
     renderedContent: null as any,
+  });
+
+  const changeUseCase = $((topic: string) => {
+    const useCase = USES_CASES.find((uc) => uc.topic === topic);
+    if (useCase) {
+      state.selected = useCase;
+      state.code = useCase.code;
+
+      if (monacoInstance.value) {
+        monacoInstance.value.setValue(useCase.code);
+      }
+
+      parseAndRender();
+    }
   });
 
   const parseAndRender = $(() => {
@@ -97,12 +172,11 @@ export default component$(() => {
           props: {
             intent: intentMatch ? intentMatch[1] : "Display component",
             className: classMatch ? classMatch[1] : "",
-            data: FAKE_DATA,
+            data: state.selected.data,
           },
         });
       }
 
-      // Buscar AIText
       while ((match = aiTextRegex.exec(state.code)) !== null) {
         const propsString = match[1];
         const intentMatch = propsString.match(/intent="([^"]+)"/);
@@ -115,12 +189,11 @@ export default component$(() => {
           props: {
             intent: intentMatch ? intentMatch[1] : "Generate text",
             className: classMatch ? classMatch[1] : "",
-            of: FAKE_DATA,
+            of: state.selected.data,
           },
         });
       }
 
-      // Si no hay componentes AI, solo renderizar el HTML
       if (allMatches.length === 0) {
         if (state.code.trim()) {
           elements.push({
@@ -134,13 +207,10 @@ export default component$(() => {
         return;
       }
 
-      // Ordenar matches por índice
       allMatches.sort((a, b) => a.index - b.index);
 
-      // Construir el contenido mezclando HTML y componentes AI
       let lastIndex = 0;
       allMatches.forEach((match, idx) => {
-        // Agregar HTML antes del componente
         if (match.index > lastIndex) {
           const htmlBefore = state.code.substring(lastIndex, match.index);
           if (htmlBefore.trim()) {
@@ -152,7 +222,6 @@ export default component$(() => {
           }
         }
 
-        // Agregar el componente AI
         elements.push({
           type: match.type,
           props: match.props,
@@ -162,7 +231,6 @@ export default component$(() => {
         lastIndex = match.index + match.length;
       });
 
-      // Agregar HTML restante después del último componente
       if (lastIndex < state.code.length) {
         const htmlAfter = state.code.substring(lastIndex);
         if (htmlAfter.trim()) {
@@ -307,8 +375,6 @@ export default component$(() => {
     }
   });
 
-  const { language, changeLanguage, setUserMood } = useAIContext();
-
   return (
     <div class="flex h-screen bg-[#141F19]">
       <aside class="w-64 border-r border-gray-700 p-6">
@@ -316,6 +382,29 @@ export default component$(() => {
 
         <div class="mt-6 flex flex-col gap-4">
           <div class="space-y-2">
+            <select
+              class="w-full cursor-pointer rounded-lg border border-gray-700 bg-[#2A2A2A] px-4 py-2 text-sm text-gray-200 transition-all duration-200 hover:border-green-300 focus:border-green-400 focus:ring-2 focus:ring-green-300/30 focus:outline-none"
+              onChange$={(_, element) => changeUseCase(element.value)}
+            >
+              {USES_CASES.map((useCase) => (
+                <option
+                  value={useCase.topic}
+                  selected={state.selected.topic === useCase.topic}
+                >
+                  {useCase.topic}
+                </option>
+              ))}
+            </select>
+
+            <select
+              class="w-full cursor-pointer rounded-lg border border-gray-700 bg-[#2A2A2A] px-4 py-2 text-sm text-gray-200 transition-all duration-200 hover:border-green-300 focus:border-green-400 focus:ring-2 focus:ring-green-300/30 focus:outline-none"
+              onChange$={(_, element) => setUserMood(element.value as UserMood)}
+            >
+              {state.selected.extras.map((extra) => (
+                <option value={extra.prompt}>{extra.label}</option>
+              ))}
+            </select>
+
             <select
               class="w-full cursor-pointer rounded-lg border border-gray-700 bg-[#2A2A2A] px-4 py-2 text-sm text-gray-200 transition-all duration-200 hover:border-green-300 focus:border-green-400 focus:ring-2 focus:ring-green-300/30 focus:outline-none"
               onChange$={(_, element) => changeLanguage(element.value)}
@@ -351,7 +440,7 @@ export default component$(() => {
             </select>
           </div>
 
-          <div class="space-y-2">
+          <div class="mt-6 space-y-2">
             {components.map((component) => (
               <button
                 key={component.id}
