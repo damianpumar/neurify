@@ -10,7 +10,7 @@ export default component$(() => {
         backgroundImage: `url("data:image/svg+xml,%3Csvg version='1.1' xmlns='http://www.w3.org/2000/svg' width='24' height='32'%3E%3Crect x='20' y='16' width='4' height='12' rx='2' ry='2' fill='%230A160E'/%3E%3Crect x='8' y='0' width='4' height='12' rx='2' ry='2' fill='%230A160E'/%3E%3C/svg%3E")`,
       }}
     >
-      <div class="absolute top-14 left-14 z-10 font-mono text-xl tracking-tight text-[#B9E1AD] uppercase">
+      <div class="absolute top-14 left-14 z-10 font-[antonio] text-xl tracking-tight text-[#B9E1AD] uppercase">
         Adaptive UI
       </div>
 
@@ -21,7 +21,7 @@ export default component$(() => {
           </span>
         </div>
 
-        <h1 class="mb-8 text-center text-5xl font-bold md:text-7xl">
+        <h1 class="dm-serif-display-regular mb-8 text-center text-5xl font-bold md:text-7xl">
           <span class="text-[#EAEAEA]">One UI, </span>
           <span class="bg-gradient-to-r from-[#B7C7BC] to-[#364D2D] bg-clip-text text-transparent">
             Endless Forms
@@ -35,7 +35,7 @@ export default component$(() => {
 
         <Link
           href="playground"
-          class="group flex items-center gap-2 rounded-lg bg-[#D7FFCB] px-4 py-2 font-medium text-slate-900 shadow-md shadow-[#4c554b] transition-all duration-300 hover:scale-105 hover:bg-[#7C8F7B]"
+          class="group dm-serif-display-regular flex items-center gap-2 rounded-lg bg-[#D7FFCB] px-4 py-2 font-medium text-slate-900 shadow-md shadow-[#4c554b] transition-all duration-300 hover:scale-105 hover:bg-[#7C8F7B]"
         >
           <span>Playground</span>
           <svg

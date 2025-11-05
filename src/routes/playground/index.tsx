@@ -380,12 +380,12 @@ export default component$(() => {
       <aside class="w-64 border-r border-gray-700 p-6">
         <a
           href="/"
-          class="font-mono text-xl tracking-tight text-[#B9E1AD] uppercase"
+          class="font-[antonio] text-xl tracking-tight text-[#B9E1AD] uppercase"
         >
           Adaptive UI
         </a>
 
-        <div class="mt-6 flex flex-col gap-4 font-mono">
+        <div class="mt-6 flex flex-col gap-4">
           <div class="space-y-2">
             <h2 class="text-md text-white">Extra configuration</h2>
             <select
@@ -465,7 +465,7 @@ export default component$(() => {
 
       <div class="flex flex-1">
         <div class="flex w-1/2 flex-col border-r border-gray-700">
-          <div class="border-b border-gray-700 px-6 py-3 font-mono">
+          <div class="border-b border-gray-700 px-6 py-3">
             <h3 class="text-lg font-semibold text-white">Code Editor</h3>
             <p class="text-xs text-gray-400">HTML + AI Components</p>
           </div>
@@ -473,7 +473,7 @@ export default component$(() => {
         </div>
 
         <div class="flex w-1/2 flex-col">
-          <div class="border-b border-gray-700 px-6 py-3 font-mono">
+          <div class="border-b border-gray-700 px-6 py-3">
             <h3 class="text-lg font-semibold text-white">Live Preview</h3>
             <p class="text-xs text-gray-400">Real-time rendering</p>
           </div>
