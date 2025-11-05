@@ -293,7 +293,7 @@ export default component$(() => {
                 documentation:
                   "AI-powered component that adapts its UI based on intent and data",
                 insertText:
-                  'AIComponent\n  intent="${1:Show product card}"\n  data={data}\n/>',
+                  '<AIComponent\n  intent="${1:Show product card}"\n  data={data}\n/>',
                 insertTextRules:
                   monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
                 range: range,
@@ -303,7 +303,7 @@ export default component$(() => {
                 kind: monaco.languages.CompletionItemKind.Snippet,
                 documentation: "AI-powered text generation component",
                 insertText:
-                  'AIText\n  intent="${1:Summarize features}"\n  of={data}\n/>',
+                  '<AIText\n  intent="${1:Summarize features}"\n  of={data}\n/>',
                 insertTextRules:
                   monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
                 range: range,
