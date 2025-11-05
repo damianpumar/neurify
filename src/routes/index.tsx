@@ -11,29 +11,31 @@ export default component$(() => {
       }}
     >
       <div class="absolute top-14 left-14 z-10 font-mono text-xl tracking-tight text-[#B9E1AD] uppercase">
-        XXX
+        Adaptive UI
       </div>
 
       <div class="relative z-10 flex max-w-4xl flex-col items-center">
-        <div class="mb-8 rounded-full border border-green-100 bg-white/5 px-4 py-0 backdrop-blur-sm">
+        <div class="mb-8 rounded-full border border-[#2C5C1E] bg-[#11190F] px-4 py-1 text-sm text-white backdrop-blur-sm">
           <span class="text-sm text-white/70">
-            AI powered argument sentence
+            Built for front-end developers
           </span>
         </div>
 
         <h1 class="mb-8 text-center text-5xl font-bold md:text-7xl">
-          <span class="text-white">One UI, </span>
-          <span class="text-[#758873]">Endless Forms</span>
+          <span class="text-[#EAEAEA]">One UI, </span>
+          <span class="bg-gradient-to-r from-[#B7C7BC] to-[#364D2D] bg-clip-text text-transparent">
+            Endless Forms
+          </span>
         </h1>
 
         <p class="mb-12 max-w-2xl text-center text-lg leading-relaxed text-white/60 md:text-xl">
-          Variant is a framework to create adaptive interface automatically
+          An experimental framework for automatically adapting interfaces by
           adjusting layouts and components based on user context.
         </p>
 
         <Link
           href="playground"
-          class="group flex items-center gap-2 rounded-lg bg-[#D7FFCB] px-4 py-2 font-medium text-slate-900 shadow-lg shadow-emerald-500/20 transition-all duration-300 hover:scale-105 hover:bg-emerald-300 hover:shadow-emerald-500/30"
+          class="group flex items-center gap-2 rounded-lg bg-[#D7FFCB] px-4 py-2 font-medium text-slate-900 shadow-md shadow-[#4c554b] transition-all duration-300 hover:scale-105 hover:bg-[#7C8F7B]"
         >
           <span>Playground</span>
           <svg

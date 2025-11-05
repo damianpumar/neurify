@@ -378,10 +378,13 @@ export default component$(() => {
   return (
     <div class="flex h-screen bg-[#141F19]">
       <aside class="w-64 border-r border-gray-700 p-6">
-        <h2 class="text-2xl font-bold text-white">Components</h2>
+        <div class="font-mono text-xl tracking-tight text-[#B9E1AD] uppercase">
+          Adaptive UI
+        </div>
 
-        <div class="mt-6 flex flex-col gap-4">
+        <div class="mt-6 flex flex-col gap-4 font-mono">
           <div class="space-y-2">
+            <h2 class="text-md text-white">Extra configuration</h2>
             <select
               class="w-full cursor-pointer rounded-lg border border-gray-700 bg-[#2A2A2A] px-4 py-2 text-sm text-gray-200 transition-all duration-200 hover:border-green-300 focus:border-green-400 focus:ring-2 focus:ring-green-300/30 focus:outline-none"
               onChange$={(_, element) => changeUseCase(element.value)}
@@ -456,7 +459,7 @@ export default component$(() => {
 
       <div class="flex flex-1">
         <div class="flex w-1/2 flex-col border-r border-gray-700">
-          <div class="border-b border-gray-700 px-6 py-3">
+          <div class="border-b border-gray-700 px-6 py-3 font-mono">
             <h3 class="text-lg font-semibold text-white">Code Editor</h3>
             <p class="text-xs text-gray-400">HTML + AI Components</p>
           </div>
@@ -464,7 +467,7 @@ export default component$(() => {
         </div>
 
         <div class="flex w-1/2 flex-col">
-          <div class="border-b border-gray-700 px-6 py-3">
+          <div class="border-b border-gray-700 px-6 py-3 font-mono">
             <h3 class="text-lg font-semibold text-white">Live Preview</h3>
             <p class="text-xs text-gray-400">Real-time rendering</p>
           </div>
