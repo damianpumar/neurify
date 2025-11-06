@@ -111,7 +111,12 @@ export default component$(() => {
     },
   ];
 
-  const { language, changeLanguage, setUserMood } = useAIContext();
+  const {
+    language,
+    changeLanguage,
+    changeUserMood: setUserMood,
+    addExtraPrompts,
+  } = useAIContext();
   const editorRef = useSignal<HTMLElement>();
   const monacoInstance = useSignal<monaco.editor.IStandaloneCodeEditor>();
 
@@ -405,7 +410,7 @@ export default component$(() => {
 
             <select
               class="w-full cursor-pointer rounded-lg border border-gray-700 bg-[#2A2A2A] px-4 py-2 text-sm text-gray-200 transition-all duration-200 hover:border-green-300 focus:border-green-400 focus:ring-2 focus:ring-green-300/30 focus:outline-none"
-              onChange$={(_, element) => setUserMood(element.value as UserMood)}
+              onChange$={(_, element) => addExtraPrompts(element.value)}
             >
               {state.selected.extras.map((extra) => (
                 <option key={extra.prompt} value={extra.prompt}>

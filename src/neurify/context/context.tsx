@@ -29,6 +29,7 @@ interface Context {
   language: string;
   sessionId: string;
   userMood: UserMood;
+  extraPrompts?: string[];
 }
 
 const aiContext = createContextId<Signal<Context>>("ai-context");
@@ -39,16 +40,26 @@ export const useAIContext = () => {
   const language = useComputed$(() => context.value.language);
   const sessionId = useComputed$(() => context.value.sessionId);
   const userMood = useComputed$(() => context.value.userMood);
+  const extraPrompts = useComputed$(() => context.value.extraPrompts || []);
 
   return {
     language,
     sessionId,
     userMood,
-    setUserMood: $((mood: UserMood) => {
+    extraPrompts,
+    changeUserMood: $((mood: UserMood) => {
       context.value = { ...context.value, userMood: mood };
     }),
     changeLanguage: $((language: string) => {
       context.value = { ...context.value, language };
+    }),
+    addExtraPrompts: $((extraPrompt: string) => {
+      const existingPrompts = context.value.extraPrompts || [];
+
+      context.value = {
+        ...context.value,
+        extraPrompts: [...existingPrompts, extraPrompt],
+      };
     }),
   };
 };
