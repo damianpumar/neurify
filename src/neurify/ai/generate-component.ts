@@ -59,10 +59,12 @@ export const useGenerateComponent = (intent: string, data: any, cacheTTL?: numbe
     generating.value = true;
 
     try {
-      const baseTemplate = await generateBaseComponent(intent, data, allContext.value);
-      const dataTranslated = await translateObject(data, allContext.value);
+      const [template, dataTranslated] = await Promise.all([
+        generateBaseComponent(intent, data, allContext.value),
+        translateObject(data, allContext.value)
+      ]);
 
-      html.value = Mustache.render(baseTemplate, {
+      html.value = Mustache.render(template, {
         ...dataTranslated,
       });
 
