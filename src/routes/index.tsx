@@ -28,14 +28,14 @@ export default component$(() => {
           </span>
         </h1>
 
-        <p class="mb-12 max-w-2xl text-center text-lg leading-relaxed text-white/60 md:text-xl">
+        <p class="mb-12 max-w-2xl text-center text-lg leading-relaxed text-white/60">
           An experimental framework for automatically adapting interfaces by
           adjusting layouts and components based on user context.
         </p>
 
         <Link
           href="playground"
-          class="group dm-serif-display-regular flex items-center gap-2 rounded-lg bg-[#D7FFCB] px-4 py-2 font-medium text-slate-900 shadow-md shadow-[#4c554b] transition-all duration-300 hover:scale-105 hover:bg-[#7C8F7B]"
+          class="group flex items-center gap-2 rounded-lg bg-[#D7FFCB] px-4 py-2 font-medium text-slate-900 shadow-md shadow-[#4c554b] transition-all duration-300 hover:scale-105 hover:bg-[#7C8F7B]"
         >
           <span>Playground</span>
           <svg
