@@ -7,9 +7,7 @@ interface NeurifyConfig {
   user: {
     mood: UserMood;
   }
-  ui: {
-    theme: 'tailwind' | 'material' | 'bootstrap';
-  },
+  guidelines: string;
   cache: {
     ttl: number;
   }

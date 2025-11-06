@@ -37,6 +37,11 @@ export default component$(() => {
           "5G connectivity",
           "128GB storage",
         ],
+        images: [
+          { nightly: ["https://example.com/images/smartphone_xyz_front.jpg"] },
+          { afternoon: ["https://example.com/images/smartphone_xyz_back.jpg"] },
+          { morning: "https://example.com/images/smartphone_xyz_side.jpg" },
+        ],
       },
       extras: [
         {
@@ -115,7 +120,6 @@ export default component$(() => {
     language,
     changeLanguage,
     changeUserMood: setUserMood,
-    addExtraPrompts,
   } = useAIContext();
   const editorRef = useSignal<HTMLElement>();
   const monacoInstance = useSignal<monaco.editor.IStandaloneCodeEditor>();
@@ -408,10 +412,7 @@ export default component$(() => {
               ))}
             </select>
 
-            <select
-              class="w-full cursor-pointer rounded-lg border border-gray-700 bg-[#2A2A2A] px-4 py-2 text-sm text-gray-200 transition-all duration-200 hover:border-green-300 focus:border-green-400 focus:ring-2 focus:ring-green-300/30 focus:outline-none"
-              onChange$={(_, element) => addExtraPrompts(element.value)}
-            >
+            <select class="w-full cursor-pointer rounded-lg border border-gray-700 bg-[#2A2A2A] px-4 py-2 text-sm text-gray-200 transition-all duration-200 hover:border-green-300 focus:border-green-400 focus:ring-2 focus:ring-green-300/30 focus:outline-none">
               {state.selected.extras.map((extra) => (
                 <option key={extra.prompt} value={extra.prompt}>
                   {extra.label}
@@ -434,6 +435,9 @@ export default component$(() => {
               </option>
               <option value="de" selected={language.value === "de"}>
                 German
+              </option>
+              <option value="zh" selected={language.value === "zh"}>
+                Chinese
               </option>
             </select>
 

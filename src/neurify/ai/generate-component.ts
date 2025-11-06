@@ -1,7 +1,7 @@
 import { cache } from "~/neurify/cache/cache"
 import Mustache from "mustache"
 import { $, useSignal, useVisibleTask$ } from "@builder.io/qwik";
-import { useAIContext } from "~/neurify/context/context";
+import { Context, useAIContext } from "~/neurify/context/context";
 import { hashString } from "~/neurify/cache/hash";
 import { useAskToAI } from "~/neurify/ai/ask-to-ai";
 import { server$ } from "@builder.io/qwik-city";
@@ -9,32 +9,48 @@ import { nextTick } from "~/neurify/utils/tick";
 import { useComponentPrompt, useTextPrompt } from "~/neurify/ai/prompt";
 
 export const useGenerateComponent = (intent: string, data: any, cacheTTL?: number) => {
-  const { userMood, language } = useAIContext()
+  const { allContext, language, userMood } = useAIContext()
 
   const generating = useSignal<boolean>(false);
   const html = useSignal<string>();
   const error = useSignal<string>();
 
-  const generateComponent = server$(async (intent: string, data: any) => {
+  const generateBaseComponent = server$(async (intent: string, data: any, context: Context) => {
     const ask = useAskToAI()
-    const cacheHash = await hashString(`MOOD:${userMood.value}-INTENT:${intent}-LANGUAGE:${language.value}`)
 
-    if (cache.has(cacheHash)) {
-      const template = await cache.getOrWait(cacheHash);
+    const componentCacheKey = await hashString(`INTENT:${intent}-CONTEXT:${context.sessionId}-${context.userMood}`)
 
-      return Mustache.render(template, data);
+    if (cache.has(componentCacheKey)) {
+      return await cache.getOrWait(componentCacheKey);
     }
 
     const generationPromise = (async () => {
-      const prompt = useComponentPrompt(intent, data, userMood.value)
+      const prompt = useComponentPrompt(intent, data, context)
 
       const responseText = await ask(prompt);
       return responseText.replace(/```html|```/g, '').trim();
     })();
 
-    const template = await cache.setPromise(cacheHash, generationPromise, cacheTTL);
+    return await cache.setPromise(componentCacheKey, generationPromise, cacheTTL);
+  })
 
-    return Mustache.render(template, data);
+  const translateObject = server$(async (data: any, context: Context) => {
+    const ask = useAskToAI()
+
+    const translationCacheKey = await hashString(`DATA:${JSON.stringify(data)}-LANG:${context.language}-MOOD:${context.userMood}`)
+
+    if (cache.has(translationCacheKey)) {
+      return await cache.getOrWait(translationCacheKey);
+    }
+
+    const translationPromise = (async () => {
+      const prompt = `Translate the following JSON object to ${context.language}:\n\n${JSON.stringify(data)}\n\nReturn only the translated JSON object.`;
+
+      const responseText = await ask(prompt);
+      return JSON.parse(responseText);
+    })();
+
+    return await cache.setPromise(translationCacheKey, translationPromise, cacheTTL);
   })
 
   const onGenerate = $(async () => {
@@ -43,7 +59,13 @@ export const useGenerateComponent = (intent: string, data: any, cacheTTL?: numbe
     generating.value = true;
 
     try {
-      html.value = await generateComponent(intent, data);
+      const baseTemplate = await generateBaseComponent(intent, data, allContext.value);
+      const dataTranslated = await translateObject(data, allContext.value);
+
+      html.value = Mustache.render(baseTemplate, {
+        ...dataTranslated,
+      });
+
     } catch (err) {
       console.error(err)
       error.value = (err as Error).message || 'Error generating AIComponent'
@@ -56,6 +78,7 @@ export const useGenerateComponent = (intent: string, data: any, cacheTTL?: numbe
 
   useVisibleTask$(async ({ track }) => {
     track(userMood)
+    track(language)
 
     await onGenerate()
   });
@@ -64,8 +87,7 @@ export const useGenerateComponent = (intent: string, data: any, cacheTTL?: numbe
 }
 
 export const useGenerateText = (intent: string, data: any, cacheTTL?: number) => {
-  const { userMood } = useAIContext()
-  const { language } = useAIContext()
+  const { allContext, language, userMood } = useAIContext()
 
   const generating = useSignal<boolean>(false);
   const text = useSignal<string>();
@@ -82,7 +104,7 @@ export const useGenerateText = (intent: string, data: any, cacheTTL?: number) =>
       return cached
     }
 
-    const prompt = useTextPrompt(intent, data, userMood.value, language.value)
+    const prompt = useTextPrompt(intent, data, allContext.value)
 
     const responseText = await ask(prompt)
 
