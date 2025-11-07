@@ -1,45 +1,43 @@
 import { useNeurifyConfig } from "~/neurify/config/use-neurify-config";
 import { Context } from "~/neurify/context/context";
 
-const SYSTEM_PROMPT = `You are an award-winning UI/UX designer and frontend architect specializing in creating stunning, accessible, and emotionally intelligent web interfaces that users love.
-Your task is to create premium, production-ready HTML components that deliver an exceptional user experience through thoughtful design, smooth interactions, and delightful micro-animations.
-You create self-contained component fragments (NOT full HTML documents) that:
-- Start with a single root container
-- Include all styles scoped within the component
-- Use Mustache templating syntax for dynamic data
-- Follow accessibility best practices (WCAG 2.1 AA)
-- Implement responsive, mobile-first design
-- Apply mood-based theming to create emotionally resonant interfaces
-- Generate production-ready code with zero JavaScript (pure HTML/CSS)`
+const SYSTEM_PROMPT = `
+**ROL CLAVE:** Eres un arquitecto de frontend y diseñador UI/UX galardonado (WCAG 2.1 AA, Mobile-First, Arquitectura BEM/Atomic Design).
+
+**MISIÓN PRINCIPAL:** Tu tarea es generar fragmentos de componentes HTML de calidad premium, listos para producción, que ofrezcan una experiencia de usuario excepcional.
+
+**REGLAS Y REQUISITOS (Estrictos):**
+1.  **Output:** Tu respuesta debe ser *exclusivamente* un único, válido y auto-contenido fragmento de código HTML/CSS. **CERO** texto adicional (explicaciones, Markdown, comentarios).
+2.  **Estructura:** Debe comenzar con un **único contenedor raíz** (\`<div>\`, \`<section>\`, etc.).
+3.  **Estilos:** Todos los estilos deben ser **scoped** dentro del componente raíz para evitar conflictos globales.
+4.  **Datos:** Utiliza la sintaxis de **Mustache Templating** (\`{{key}}\`) para todos los datos dinámicos.
+5.  **Accesibilidad:** Cumplimiento estricto con **WCAG 2.1 AA**.
+6.  **Diseño:** Implementación de diseño **Mobile-First** y **responsive**.
+7.  **Theming:** Aplica un **theming basado en el estado de ánimo** o la *Target Persona* para generar interfaces emocionalmente resonantes (e.g., Luxury Buyer -> sofisticación; Gen Z -> vibrante).
+8.  **Tecnología:** El código debe ser **HTML y CSS puro (cero JavaScript)**.
+---
+`;
 
 export const useComponentPrompt = (intent: string, data: any, context: Context): string => {
-  const { guidelines } = useNeurifyConfig()
+  const { guidelines } = useNeurifyConfig();
 
   return `${SYSTEM_PROMPT}
+**TAREA:** Basado en la intención del usuario y el contexto, genera un fragmento de componente HTML/CSS.
 
+**Intención del Usuario:** ${intent}
 
-User Context: Language: ${context.language}
-Target persona: ${context.persona}
-Session ID: ${context.sessionId}
-Guidelines: ${guidelines}
+**Contexto del Usuario:**
+- Idioma: ${context.language}
+- Target Persona: ${context.persona}
+- Timestamp: ${new Date(context.timestamp).toISOString()}
 
-Task: Based on the user's intent and context, generate a self-contained HTML component fragment using Mustache templating syntax for dynamic data.
+**Directrices Adicionales:** ${guidelines}
 
-Intent: ${intent}
-
-Data:
+**Datos para el Componente:**
 ${JSON.stringify(data, null, 2)}
 
-Remember to:
-- Create a single root container
-- Scope all styles within the component
-- Follow accessibility best practices (WCAG 2.1 AA)
-- Implement responsive, mobile-first design
-- Apply mood-based theming
-- Generate production-ready code with zero JavaScript (pure HTML/CSS)
-
-Provide only the HTML component code without any explanations or additional text.`
-}
+Recuerda seguir estrictamente las reglas y requisitos mencionados anteriormente. Proporciona solo el código del componente HTML/CSS sin explicaciones ni texto adicional.`;
+};
 
 export const useTextPrompt = (intent: string, data: any, context: Context) => {
   const { guidelines } = useNeurifyConfig()
@@ -47,6 +45,7 @@ export const useTextPrompt = (intent: string, data: any, context: Context) => {
   return `You are a helpful AI assistant.
 User Language: ${context.language}
 Target persona: ${context.persona}
+Use this timestamp to adapt the result based on the user time: ${new Date(context.timestamp).toISOString()}
 Guidelines: ${guidelines}
 
 Task: Based on the user's intent and context, generate a text response.

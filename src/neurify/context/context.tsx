@@ -9,7 +9,6 @@ import {
   useContextProvider,
   useSignal,
 } from "@builder.io/qwik";
-import { useNeurifyConfig } from "~/neurify/config/use-neurify-config";
 import { useSession } from "~/neurify/session/session";
 
 export interface Context {

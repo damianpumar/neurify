@@ -18,7 +18,7 @@ export const useGenerateComponent = (intent: string, data: any, cacheTTL?: numbe
   const generateBaseComponent = server$(async (intent: string, data: any, context: Context) => {
     const ask = useAskToAI()
 
-    const componentCacheKey = await hashString(`INTENT:${intent}-CONTEXT:${context.sessionId}-TARGET:${context.persona}`)
+    const componentCacheKey = await hashString(`INTENT:${intent}-CONTEXT:${context.sessionId}-TARGET:${context.persona}-TIMESTAMP:${context.timestamp}}`)
 
     if (cache.has(componentCacheKey)) {
       return await cache.getOrWait(componentCacheKey);
