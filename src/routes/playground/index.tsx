@@ -38,9 +38,19 @@ export default component$(() => {
           "128GB storage",
         ],
         images: [
-          { nightly: ["https://example.com/images/smartphone_xyz_front.jpg"] },
-          { afternoon: ["https://example.com/images/smartphone_xyz_back.jpg"] },
-          { morning: "https://example.com/images/smartphone_xyz_side.jpg" },
+          {
+            nightly: ["https://www.nextpit.com/img/Eggnog.jpg?class=560x420r"],
+          },
+          {
+            afternoon: [
+              "https://www.shutterstock.com/image-photo/young-man-use-smartphone-afternoon-260nw-666823558.jpg",
+            ],
+          },
+          {
+            morning: [
+              "https://img.freepik.com/premium-photo/young-asian-man-using-smartphone-bed-after-waking-up-morning_126277-1381.jpg",
+            ],
+          },
         ],
       },
     },
@@ -68,6 +78,23 @@ export default component$(() => {
           "4-star hotel accommodation",
           "Daily breakfast included",
           "Shuttle service to and from the park",
+        ],
+        images: [
+          {
+            nightly: [
+              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRa4RoR-K3jx294gQ3qccDxCA6FnkvtJNCadQ&s",
+            ],
+          },
+          {
+            afternoon: [
+              "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiNKmJudzjIn6-G2cbgHiv0YpM3_sNXJMHenobntMy-qurI1_qGzM0SvUQgvKMYqBzxNSP6tUh0rUCRfe2xnywmk812dhyphenhyphend63aNEeWId7z3eZGkZ2XisqVbWEW8f_TCSuwA_KvkFHJw1MY/s1600/2019-05-30_0019.jpg",
+            ],
+          },
+          {
+            morning: [
+              "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEimw40tC8VxCEuBML91EkTDzIS-NQWFepc8FSE3hGNX3tvMSjthEvUyJJlYkzbcusyEFAhsMKWCd3C7anSVOabJM5SBZeBX1YON_b55cuBBb2-EZdMU4z0tWQTWX-bpR2ZqpzmlWXCmTa4/s1600/DSC_9204-9208HDR.jpg",
+            ],
+          },
         ],
       },
     },

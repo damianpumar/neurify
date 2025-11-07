@@ -1,10 +1,13 @@
 export default {
-  model: "meta-llama/Llama-3.3-70B-Instruct",
+  model: "moonshotai/Kimi-K2-Instruct-0905",
   token: process.env.TOKEN,
   guidelines: `
-1. Target Audience / Public Target
+  Select the images based on timestamp if its morning use morning images, if its afternoon use afternoon images and if its night use night images.
+
+  1. Target Audience / Public Target
 A. Core Customer Segments
 Audiophiles and high‑fidelity enthusiasts: Those who deeply care about sound quality, component upgrades, and home audio systems. The emphasis on high-performance gear and system design suggests this.
+
 
 Home-theater / premium home entertainment consumers: Our brand offers home theater, immersive audio/video, multi-zone systems, and smart home integration.
 
@@ -13,6 +16,8 @@ Affluent, design-conscious homeowners: Given the premium brands, custom integrat
 
 
 Professionals / installers / system integrators: Our brand also serves commercial and installation markets, showing relevance to business and professional users.
+
+
 
 B. Demographic & Psychographic Profile
 Based on these segments, a composite “persona” might include:
@@ -76,17 +81,128 @@ Experiential value (not just product specifications)
 
 Trust and reliability
 
+
+
 2. Visual Identity 
 Persona: Luxury buyer
-A. Visual Identity
+
+Overall Mood & Philosophy
+The design embodies sophistication, exclusivity, and timeless elegance. The aesthetic is deliberately minimal, allowing the products to speak for themselves. Every element exudes craftsmanship, precision, and refinement—evoking haute couture, fine jewelry, and bespoke manufacturing. The visual language whispers rather than shouts, confident in its superiority.
 From website cues and branding:
-Clean, modern, high‑quality visuals: large product imagery 
+
 Use of professional tone: emphasising “expertise and experience”, “premium brands & performance”, “over 50 years of industry experience” in site copy.
-
-
 The colour palette & typography likely lean towards sophistication, with dark backgrounds or monochrome elements paired with accent colours (standard in premium audio sites). 
-
 Imagery emphasises environments (home theatres, integrated spaces), not just isolated products — brands the experience rather than commodity.
+A. Visual Identity
+Color Palette
+Primary Colors:
+Deep Black (#0a0a0a): Ultra-dark background, more refined than pure black. Creates depth and drama, like a premium showroom with dimmed lighting.
+Champagne Gold (#c9a063): The signature luxury accent. Warm, precious metal tone suggesting exclusivity and craftsmanship.
+Warm Bronze (#8b7355): Secondary accent for subtle variation, earthy sophistication.
+Neutral Tones:
+Off-White (#fafafa): Primary text color, soft and easy on eyes against dark background.
+Pearl Gray (#e8e8e8): Secondary text, maintains hierarchy without harshness.
+Charcoal (#2a2a2a): Mid-tone gray for interactive elements.
+Near Black (#151515): Card backgrounds, slightly lighter than body for subtle elevation.
+Border & Accent:
+Translucent Gold (rgba(201, 160, 99, 0.15)): Extremely subtle borders that catch light, like fine metalwork.
+Typography
+Font Families:
+Cormorant Garamond: Elegant serif for all headings. Evokes luxury magazines, fine wine labels, and heritage brands. Light weights (300-400) suggest refinement over boldness.
+Inter: Modern, clean sans-serif for body text. Ultra-light weight (300) creates an airy, sophisticated reading experience without sacrificing legibility.
+Hierarchy & Details:
+H1: 2.5rem, weight 300, letter-spacing 1.5px—grand but restrained
+H2: 0.875rem, weight 500, letter-spacing 3px, UPPERCASE—acts as discrete section labels, architectural in nature
+H3: 1.5rem, weight 400, letter-spacing 0.5px—product names with presence
+Body: 0.95rem, weight 300, line-height 1.8, letter-spacing 0.3px—breathable, luxurious reading
+Character:
+Extremely generous letter-spacing throughout (1.5-3px on headings, 2px on buttons)
+Light font weights exclusively—nothing heavier than 500
+Uppercase used sparingly for section headers only
+Serif for emotion and heritage, sans-serif for clarity and modernity
+Border Radius
+Philosophy: Architectural precision with minimal softening.
+Buttons: 0px—sharp, decisive rectangles suggesting precision engineering
+Cards: 2px—barely perceptible rounding, just enough to avoid harshness
+Badges: 0px—pure rectangles, like metal nameplates
+Form Inputs: 0px—no radius, pure lines with only bottom border visible
+Overall: Never exceeds 2px
+Approach: Sharp corners dominate, suggesting precision manufacturing and architectural design. The 2px on cards is the only concession to softness, preventing the design from feeling cold.
+Spacing & Layout
+Padding Philosophy: Lavish whitespace as a luxury indicator.
+Body padding: 3rem top/bottom, 2rem sides—generous margins frame content like museum pieces
+Card padding: 2.5rem—extremely spacious interiors, products "breathe"
+Button padding: 0.875rem vertical, 2.5rem horizontal—substantial, dignified click targets
+Input padding: 0.875rem vertical only, 0 horizontal—minimalist, just the underline
+Margins & Gaps:
+H1 bottom: 0.5rem only—tight, confident
+H2 top: 3rem—creates clear chapter breaks
+H2 bottom: 1.5rem—space before content begins
+H3 bottom: 0.75rem—close to description
+Card spacing: 2rem between cards—each product gets individual stage
+Badge top margin: 1rem—separated from text, like jewelry detail
+Philosophy: Space is deliberately excessive. Empty areas communicate "we can afford to waste space" which paradoxically signals luxury and confidence.
+Visual Effects & Interactions
+Shadows:
+Default state: None—pure form, no artificial depth
+Card hover: 0 16px 48px rgba(0, 0, 0, 0.4)—dramatic elevation, theatrical lighting effect
+Button hover: 0 8px 24px rgba(201, 160, 99, 0.25)—gold-tinted glow, precious metal catching light
+Transitions:
+Duration: 0.4-0.5s—deliberately slower than standard, creating languid, luxurious movement
+Easing: cubic-bezier(0.4, 0, 0.2, 1)—sophisticated ease-out, not linear
+Properties: Transform, border-color, background, box-shadow, color
+Hover States:
+Cards: Rise 8px (substantial lift), border glows gold, deep shadow appears—product elevated to spotlight
+Buttons: Fill with gold, text inverts to black, slight lift (2px), gold glow shadow—becoming the precious metal
+Links: Gold color intensifies to off-white, gold underline appears—refined indication
+Inputs: Bottom border intensifies to solid gold—focused attention
+Philosophy: Movements are slow, deliberate, and dramatic. Nothing snaps or jerks. Everything glides like silk or flows like honey.
+Component Characteristics
+Buttons:
+Transparent background with gold outline (1px)
+Sharp 0px corners—architectural precision
+Extensive letter-spacing (2px) and uppercase
+Hover fills with gold, inverts text to black
+Substantial horizontal padding (2.5rem) suggests importance
+Cards:
+Near-black (#151515) on deep-black (#0a0a0a) background—subtle elevation
+Barely visible borders (rgba gold at 15% opacity)
+2px radius—almost sharp but not quite
+Hover creates dramatic 8px lift with theatrical shadow
+Extremely generous 2.5rem internal padding
+Border glows gold on hover—product becomes "selected"
+Badges:
+Pure outline style, never filled
+Gold border (1px) with gold text
+Sharp 0px corners like engraved metal plates
+Uppercase with 2px letter-spacing
+Small font (0.75rem) but perfectly legible
+Acts as certification marks or quality seals
+Forms:
+Completely transparent backgrounds
+No visible borders except bottom line
+Bottom border is subtle gold (rgba 15%)
+Focus state makes border solid gold
+Zero border radius—pure horizontal lines
+Placeholder text is ghostly (rgba 40% opacity)
+Minimalist to the extreme—just a line to type on
+Links:
+Gold color matching accent
+Invisible underline until hover
+Hover brings underline in gold and text to off-white
+2px padding-bottom for underline spacing
+Smooth color transitions
+Overall Design Principles
+Minimalism over decoration: Remove everything unnecessary, what remains must be perfect
+Darkness over brightness: Dark backgrounds are dramatic, sophisticated, and reduce eye strain
+Metal over color: Gold as the only "color," everything else is monochrome
+Space over density: Generous whitespace is the ultimate luxury
+Light over bold: Thin fonts suggest refinement, boldness is gauche
+Sharp over round: Angular precision suggests engineering excellence
+Slow over fast: Leisurely transitions suggest confidence and permanence
+Whisper over shout: Subtle effects for discerning eyes only
+
+
 
 
 Persona: Gen Z Buyer
@@ -115,7 +231,7 @@ Colour palette & typography: Soft, nature-inspired colors (forest green, beige, 
 
 
 Imagery emphasizes responsible lifestyles and community impact: Showcases products in real-life sustainable contexts, people engaging in eco-conscious activities, or community initiatives. The goal is to make the brand feel responsible, relatable, and purpose-driven rather than purely aesthetic.
-  `,
+`,
   cache: {
     ttl: 3600,
   },

@@ -2,19 +2,22 @@ import { useNeurifyConfig } from "~/neurify/config/use-neurify-config";
 import { Context } from "~/neurify/context/context";
 
 const SYSTEM_PROMPT = `
-**ROL CLAVE:** Eres un arquitecto de frontend y diseñador UI/UX galardonado (WCAG 2.1 AA, Mobile-First, Arquitectura BEM/Atomic Design).
+**KEY ROLE:** You are an award-winning Frontend Architect and UI/UX Designer (WCAG 2.1 AA, Mobile-First, BEM/Atomic Design Architecture).
 
-**MISIÓN PRINCIPAL:** Tu tarea es generar fragmentos de componentes HTML de calidad premium, listos para producción, que ofrezcan una experiencia de usuario excepcional.
+**MAIN MISSION:** Your task is to generate premium quality, production-ready HTML component fragments that deliver an exceptional user experience.
 
-**REGLAS Y REQUISITOS (Estrictos):**
-1.  **Output:** Tu respuesta debe ser *exclusivamente* un único, válido y auto-contenido fragmento de código HTML/CSS. **CERO** texto adicional (explicaciones, Markdown, comentarios).
-2.  **Estructura:** Debe comenzar con un **único contenedor raíz** (\`<div>\`, \`<section>\`, etc.).
-3.  **Estilos:** Todos los estilos deben ser **scoped** dentro del componente raíz para evitar conflictos globales.
-4.  **Datos:** Utiliza la sintaxis de **Mustache Templating** (\`{{key}}\`) para todos los datos dinámicos.
-5.  **Accesibilidad:** Cumplimiento estricto con **WCAG 2.1 AA**.
-6.  **Diseño:** Implementación de diseño **Mobile-First** y **responsive**.
-7.  **Theming:** Aplica un **theming basado en el estado de ánimo** o la *Target Persona* para generar interfaces emocionalmente resonantes (e.g., Luxury Buyer -> sofisticación; Gen Z -> vibrante).
-8.  **Tecnología:** El código debe ser **HTML y CSS puro (cero JavaScript)**.
+**RULES AND REQUIREMENTS (Strict):**
+1.  **Output:** Your response must *exclusively* be a single, valid, and self-contained HTML/CSS code fragment. **ZERO** additional text (explanations, Markdown, comments).
+2.  **Structure:** Must start with a **single root container** (\`<div>\`, \`<section>\`, etc.).
+3.  **Styles:** All styles must be **scoped** within the root component to prevent global conflicts.
+4.  **Data:** Use **Mustache Templating** syntax (\`{{key}}\`) for all dynamic data.
+5.  **Accessibility:** Strict compliance with **WCAG 2.1 AA**.
+6.  **Design:** Implementation of **Mobile-First** and **responsive** design.
+7.  **Theming:** Apply **mood-based theming** or *Target Persona* to generate emotionally resonant interfaces (e.g., Luxury Buyer -> sophistication; Gen Z -> vibrant).
+8.  **Technology:** The code must be **pure HTML and CSS (zero JavaScript)**
+
+ERROR-FREE HTML
+.
 ---
 `;
 
@@ -22,21 +25,21 @@ export const useComponentPrompt = (intent: string, data: any, context: Context):
   const { guidelines } = useNeurifyConfig();
 
   return `${SYSTEM_PROMPT}
-**TAREA:** Basado en la intención del usuario y el contexto, genera un fragmento de componente HTML/CSS.
+**TASK:** Based on the user's intention and context, generate an HTML/CSS component fragment.
 
-**Intención del Usuario:** ${intent}
+**User Intent:** ${intent}
 
-**Contexto del Usuario:**
-- Idioma: ${context.language}
+**User Context:**
+- Language: ${context.language}
 - Target Persona: ${context.persona}
 - Timestamp: ${new Date(context.timestamp).toISOString()}
 
-**Directrices Adicionales:** ${guidelines}
+**Additional Guidelines:** ${guidelines}
 
-**Datos para el Componente:**
+**Data for the Component:**
 ${JSON.stringify(data, null, 2)}
 
-Recuerda seguir estrictamente las reglas y requisitos mencionados anteriormente. Proporciona solo el código del componente HTML/CSS sin explicaciones ni texto adicional.`;
+Remember to strictly follow the rules and requirements mentioned above. Provide only the HTML/CSS component code without explanations or additional text.`;
 };
 
 export const useTextPrompt = (intent: string, data: any, context: Context) => {
