@@ -2,7 +2,7 @@ export default {
   model: "moonshotai/Kimi-K2-Instruct-0905",
   token: process.env.TOKEN,
   guidelines: `
-  Select the images based on timestamp if its morning use morning images, if its afternoon use afternoon images and if its night use night images.
+  If Timestamp is after 9PM use nighly images, if its 9 AM use morning images, if its 3PM use afternoon images.
 
   1. Target Audience / Public Target
 A. Core Customer Segments
