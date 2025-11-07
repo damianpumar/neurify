@@ -27,28 +27,38 @@ export default component$(() => {
   of={data}
 />`,
       data: {
-        productName: "Smartphone XYZ",
+        productName: "SonicWave Portable Bluetooth Speaker",
         description:
-          "A cutting-edge smartphone with a stunning display and powerful performance.",
-        price: "$799",
+          "Premium portable speaker delivering rich, 360-degree sound with deep bass. Perfect for outdoor adventures and intimate gatherings.",
+        price: "$249",
         features: [
-          "6.5-inch OLED display",
-          "Triple-lens camera system",
-          "5G connectivity",
-          "128GB storage",
+          "360-degree sound with dual drivers",
+          "20-hour battery life",
+          "IPX7 waterproof rating",
+          "Bluetooth 5.2 with 100ft range",
+          "USB-C fast charging",
+          "Built-in microphone for calls",
         ],
+        specs: {
+          power: "30W RMS",
+          frequency: "60Hz - 20kHz",
+          weight: "1.8 lbs",
+          dimensions: "7.5 x 3.2 x 3.2 inches",
+        },
         images: [
           {
-            nightly: ["https://www.nextpit.com/img/Eggnog.jpg?class=560x420r"],
-          },
-          {
-            afternoon: [
-              "https://www.shutterstock.com/image-photo/young-man-use-smartphone-afternoon-260nw-666823558.jpg",
+            morning: [
+              "https://m.media-amazon.com/images/I/71fdnxHSFDL._UF894,1000_QL80_.jpg",
             ],
           },
           {
-            morning: [
-              "https://img.freepik.com/premium-photo/young-asian-man-using-smartphone-bed-after-waking-up-morning_126277-1381.jpg",
+            afternoon: [
+              "https://m.media-amazon.com/images/I/71fT3aVAtLL._UF894,1000_QL80_.jpg",
+            ],
+          },
+          {
+            nightly: [
+              "https://m.media-amazon.com/images/I/719FRiY9HvL._UF894,1000_QL80_.jpg",
             ],
           },
         ],
