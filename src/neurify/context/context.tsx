@@ -12,23 +12,12 @@ import {
 import { useNeurifyConfig } from "~/neurify/config/use-neurify-config";
 import { useSession } from "~/neurify/session/session";
 
-export type UserMood =
-  | "happy"
-  | "sad"
-  | "neutral"
-  | "angry"
-  | "excited"
-  | "bored"
-  | "curious"
-  | "focused"
-  | "tired"
-  | "stressed";
-
 export interface Context {
+  sessionId: string;
   /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Navigator/language) */
   language: string;
-  sessionId: string;
-  userMood: UserMood;
+  timestamp: number;
+  persona: string;
 }
 
 const aiContext = createContextId<Signal<Context>>("ai-context");
@@ -38,15 +27,20 @@ export const useAIContext = () => {
 
   const language = useComputed$(() => allContext.value.language);
   const sessionId = useComputed$(() => allContext.value.sessionId);
-  const userMood = useComputed$(() => allContext.value.userMood);
+  const persona = useComputed$(() => allContext.value.persona);
+  const timestamp = useComputed$(() => allContext.value.timestamp);
 
   return {
     allContext,
     language,
     sessionId,
-    userMood,
-    changeUserMood: $((mood: UserMood) => {
-      allContext.value = { ...allContext.value, userMood: mood };
+    persona,
+    timestamp,
+    changeTimestamp: $((timestamp: number) => {
+      allContext.value = { ...allContext.value, timestamp };
+    }),
+    changePersona: $((persona: string) => {
+      allContext.value = { ...allContext.value, persona };
     }),
     changeLanguage: $((language: string) => {
       allContext.value = { ...allContext.value, language };
@@ -55,13 +49,13 @@ export const useAIContext = () => {
 };
 
 export const AIContextProvider = component$(() => {
-  const config = useNeurifyConfig();
   const session = useSession();
 
   const state = useSignal<Context>({
-    language: "en-US",
     sessionId: session.value.sessionId,
-    userMood: config.user.mood,
+    language: "en-US",
+    timestamp: Date.now(),
+    persona: "Luxury buyer",
   });
 
   useContextProvider(aiContext, state);

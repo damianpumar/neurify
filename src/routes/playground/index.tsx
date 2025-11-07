@@ -7,7 +7,7 @@ import {
 } from "@builder.io/qwik";
 import { AIComponent } from "~/neurify/components/AIComponent";
 import { AIText } from "~/neurify/components/AIText";
-import { useAIContext, UserMood } from "~/neurify/context/context";
+import { useAIContext } from "~/neurify/context/context";
 import * as monaco from "monaco-editor";
 
 export default component$(() => {
@@ -43,16 +43,6 @@ export default component$(() => {
           { morning: "https://example.com/images/smartphone_xyz_side.jpg" },
         ],
       },
-      extras: [
-        {
-          label: "Evening",
-          prompt: "Suggest quiet evening activities for a relaxing time.",
-        },
-        {
-          label: "Weekend",
-          prompt: "Recommend fun weekend activities for outdoor enthusiasts.",
-        },
-      ],
     },
     {
       topic: "Travel",
@@ -80,20 +70,10 @@ export default component$(() => {
           "Shuttle service to and from the park",
         ],
       },
-      extras: [
-        {
-          label: "Relax",
-          prompt: "Relaxing activities for a calm mood.",
-        },
-        {
-          label: "Adventure",
-          prompt: "Thrilling activities for an adventurous mood.",
-        },
-      ],
     },
   ];
 
-  const components = [
+  const COMPONENTS = [
     {
       id: "ai-component",
       title: "AIComponent",
@@ -116,10 +96,30 @@ export default component$(() => {
     },
   ];
 
+  const TARGETS_PERSONAS = ["Luxury buyer", "Gen Z Buyer", "Eco Consumer"];
+
+  const TIMESTAMPS = [
+    {
+      label: "Morning",
+      value: new Date().setHours(9, 0, 0, 0),
+    },
+    {
+      label: "Afternoon",
+      value: new Date().setHours(15, 0, 0, 0),
+    },
+    {
+      label: "Nightly",
+      value: new Date().setHours(21, 0, 0, 0),
+    },
+  ];
+
   const {
+    timestamp,
+    persona,
     language,
+    changeTimestamp,
     changeLanguage,
-    changeUserMood: setUserMood,
+    changePersona,
   } = useAIContext();
   const editorRef = useSignal<HTMLElement>();
   const monacoInstance = useSignal<monaco.editor.IStandaloneCodeEditor>();
@@ -371,7 +371,7 @@ export default component$(() => {
   });
 
   const addComponent = $((componentId: string) => {
-    const component = components.find((c) => c.id === componentId);
+    const component = COMPONENTS.find((c) => c.id === componentId);
     if (component && monacoInstance.value) {
       const currentValue = monacoInstance.value.getValue();
       const newValue = currentValue.trim()
@@ -412,10 +412,21 @@ export default component$(() => {
               ))}
             </select>
 
-            <select class="w-full cursor-pointer rounded-lg border border-gray-700 bg-[#2A2A2A] px-4 py-2 text-sm text-gray-200 transition-all duration-200 hover:border-green-300 focus:border-green-400 focus:ring-2 focus:ring-green-300/30 focus:outline-none">
-              {state.selected.extras.map((extra) => (
-                <option key={extra.prompt} value={extra.prompt}>
-                  {extra.label}
+            <select
+              class="w-full cursor-pointer rounded-lg border border-gray-700 bg-[#2A2A2A] px-4 py-2 text-sm text-gray-200 transition-all duration-200 hover:border-green-300 focus:border-green-400 focus:ring-2 focus:ring-green-300/30 focus:outline-none"
+              onChange$={(_, element) => changeTimestamp(Number(element.value))}
+            >
+              {TIMESTAMPS.map((ts) => (
+                <option
+                  key={ts.label}
+                  value={ts.value}
+                  selected={
+                    state.selected &&
+                    new Date(timestamp.value).getHours() ===
+                      new Date(ts.value).getHours()
+                  }
+                >
+                  {ts.label}
                 </option>
               ))}
             </select>
@@ -443,23 +454,18 @@ export default component$(() => {
 
             <select
               class="w-full cursor-pointer rounded-lg border border-gray-700 bg-[#2A2A2A] px-4 py-2 text-sm text-gray-200 transition-all duration-200 hover:border-green-300 focus:border-green-400 focus:ring-2 focus:ring-green-300/30 focus:outline-none"
-              onChange$={(_, element) => setUserMood(element.value as UserMood)}
+              onChange$={(_, element) => changePersona(element.value)}
             >
-              <option value="neutral">Neutral</option>
-              <option value="happy">Happy</option>
-              <option value="sad">Sad</option>
-              <option value="angry">Angry</option>
-              <option value="excited">Excited</option>
-              <option value="bored">Bored</option>
-              <option value="curious">Curious</option>
-              <option value="focused">Focused</option>
-              <option value="tired">Tired</option>
-              <option value="stressed">Stressed</option>
+              {TARGETS_PERSONAS.map((p) => (
+                <option key={p} value={p} selected={p === persona.value}>
+                  {p}
+                </option>
+              ))}
             </select>
           </div>
 
           <div class="mt-6 space-y-2">
-            {components.map((component) => (
+            {COMPONENTS.map((component) => (
               <button
                 key={component.id}
                 onClick$={() => addComponent(component.id)}

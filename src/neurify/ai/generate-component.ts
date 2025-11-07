@@ -9,7 +9,7 @@ import { nextTick } from "~/neurify/utils/tick";
 import { useComponentPrompt, useTextPrompt } from "~/neurify/ai/prompt";
 
 export const useGenerateComponent = (intent: string, data: any, cacheTTL?: number) => {
-  const { allContext, language, userMood } = useAIContext()
+  const { allContext, language, persona } = useAIContext()
 
   const generating = useSignal<boolean>(false);
   const html = useSignal<string>();
@@ -18,7 +18,7 @@ export const useGenerateComponent = (intent: string, data: any, cacheTTL?: numbe
   const generateBaseComponent = server$(async (intent: string, data: any, context: Context) => {
     const ask = useAskToAI()
 
-    const componentCacheKey = await hashString(`INTENT:${intent}-CONTEXT:${context.sessionId}-${context.userMood}`)
+    const componentCacheKey = await hashString(`INTENT:${intent}-CONTEXT:${context.sessionId}-TARGET:${context.persona}`)
 
     if (cache.has(componentCacheKey)) {
       return await cache.getOrWait(componentCacheKey);
@@ -37,7 +37,7 @@ export const useGenerateComponent = (intent: string, data: any, cacheTTL?: numbe
   const translateObject = server$(async (data: any, context: Context) => {
     const ask = useAskToAI()
 
-    const translationCacheKey = await hashString(`DATA:${JSON.stringify(data)}-LANG:${context.language}-MOOD:${context.userMood}`)
+    const translationCacheKey = await hashString(`DATA:${JSON.stringify(data)}-LANG:${context.language}-MOOD:${context.persona}`)
 
     if (cache.has(translationCacheKey)) {
       return await cache.getOrWait(translationCacheKey);
@@ -79,7 +79,7 @@ export const useGenerateComponent = (intent: string, data: any, cacheTTL?: numbe
   })
 
   useVisibleTask$(async ({ track }) => {
-    track(userMood)
+    track(persona)
     track(language)
 
     await onGenerate()
@@ -89,16 +89,16 @@ export const useGenerateComponent = (intent: string, data: any, cacheTTL?: numbe
 }
 
 export const useGenerateText = (intent: string, data: any, cacheTTL?: number) => {
-  const { allContext, language, userMood } = useAIContext()
+  const { allContext, language, persona } = useAIContext()
 
   const generating = useSignal<boolean>(false);
   const text = useSignal<string>();
   const error = useSignal<string>();
 
-  const generateText = server$(async (intent: string, data: any) => {
+  const generateText = server$(async (intent: string, data: any, context: Context) => {
     const ask = useAskToAI()
 
-    const cacheHash = await hashString(`MOOD:${userMood}-INTENT:${intent}-LANG:${language}-DATA:${JSON.stringify(data)}`)
+    const cacheHash = await hashString(`TARGET:${context.persona}-INTENT:${intent}-LANG:${context.language}-DATA:${JSON.stringify(data)}`)
 
     const cached = cache.get(cacheHash)
 
@@ -121,7 +121,7 @@ export const useGenerateText = (intent: string, data: any, cacheTTL?: number) =>
     generating.value = true;
 
     try {
-      text.value = await generateText(intent, data);
+      text.value = await generateText(intent, data, allContext.value);
     } catch (err) {
       console.error(err)
       error.value = (err as Error).message || 'Error generating AIText'
@@ -134,7 +134,7 @@ export const useGenerateText = (intent: string, data: any, cacheTTL?: number) =>
 
   useVisibleTask$(async ({ track }) => {
     track(language)
-    track(userMood)
+    track(persona)
 
     await onGenerateText()
   })
