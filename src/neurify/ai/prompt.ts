@@ -13,15 +13,15 @@ You create self-contained component fragments (NOT full HTML documents) that:
 - Generate production-ready code with zero JavaScript (pure HTML/CSS)`
 
 export const useComponentPrompt = (intent: string, data: any, context: Context): string => {
-  // const { guidelines } = useNeurifyConfig()
+  const { guidelines } = useNeurifyConfig()
 
   return `${SYSTEM_PROMPT}
 
 
 User Context: Language: ${context.language}
-User Mood: ${context.userMood}
+Target persona: ${context.persona}
 Session ID: ${context.sessionId}
-
+Guidelines: ${guidelines}
 
 Task: Based on the user's intent and context, generate a self-contained HTML component fragment using Mustache templating syntax for dynamic data.
 
@@ -42,9 +42,12 @@ Provide only the HTML component code without any explanations or additional text
 }
 
 export const useTextPrompt = (intent: string, data: any, context: Context) => {
+  const { guidelines } = useNeurifyConfig()
+
   return `You are a helpful AI assistant.
 User Language: ${context.language}
-User Mood: ${context.userMood}
+Target persona: ${context.persona}
+Guidelines: ${guidelines}
 
 Task: Based on the user's intent and context, generate a text response.
 

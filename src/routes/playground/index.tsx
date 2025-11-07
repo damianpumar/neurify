@@ -18,7 +18,7 @@ export default component$(() => {
 <p class="mb-6">Try adding some AI components below:</p>
 
 <AIComponent
-  intent="Show title and price"
+  intent="Show product card"
   data={data}
 />
 

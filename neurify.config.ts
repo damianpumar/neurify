@@ -116,9 +116,6 @@ Colour palette & typography: Soft, nature-inspired colors (forest green, beige, 
 
 Imagery emphasizes responsible lifestyles and community impact: Showcases products in real-life sustainable contexts, people engaging in eco-conscious activities, or community initiatives. The goal is to make the brand feel responsible, relatable, and purpose-driven rather than purely aesthetic.
   `,
-  user: {
-    mood: "neutral",
-  },
   cache: {
     ttl: 3600,
   },
