@@ -56,5 +56,5 @@
     "monaco-editor": "^0.54.0",
     "mustache": "^4.2.0"
   },
-  "version": "0.0.16"
+  "version": "0.0.18"
 }

@@ -139,7 +139,7 @@ export default component$(() => {
       value: new Date().setHours(15, 0, 0, 0),
     },
     {
-      label: "Night",
+      label: "Evening",
       value: new Date().setHours(21, 0, 0, 0),
     },
   ];

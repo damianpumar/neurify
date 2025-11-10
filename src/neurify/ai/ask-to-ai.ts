@@ -1,12 +1,17 @@
 import { server$ } from "@builder.io/qwik-city";
-import { chatCompletion } from "@huggingface/inference";
+import { InferenceClient } from "@huggingface/inference";
 import { useNeurifyConfig } from "~/neurify/config/use-neurify-config";
 
 export const useAskToAI = () => {
   const ask = server$(async (prompt: string) => {
     const config = useNeurifyConfig();
 
-    const response = await chatCompletion({
+    const client = new InferenceClient(config.token, {
+      billTo: "huggingface"
+    })
+
+
+    const response = await client.chatCompletion({
       messages: [
         {
           role: "user",
