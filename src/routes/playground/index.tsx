@@ -14,10 +14,7 @@ export default component$(() => {
   const USES_CASES = [
     {
       topic: "E-commerce",
-      code: `<h1 class="text-3xl font-bold mb-4">Welcome to Neurify!</h1>
-<p class="mb-6">Try adding some AI components below:</p>
-
-<AIComponent
+      code: `<AIComponent
   intent="Show product card"
   data={data}
 />
@@ -57,7 +54,7 @@ export default component$(() => {
             ],
           },
           {
-            nightly: [
+            night: [
               "https://m.media-amazon.com/images/I/719FRiY9HvL._UF894,1000_QL80_.jpg",
             ],
           },
@@ -66,10 +63,7 @@ export default component$(() => {
     },
     {
       topic: "Travel",
-      code: `<h1 class="text-3xl font-bold mb-4">Welcome to Neurify!</h1>
-<p class="mb-6">Try adding some AI components below:</p>
-
-<AIComponent
+      code: `<AIComponent
   intent="Card to show trip details"
   data={data}
 />
@@ -91,8 +85,8 @@ export default component$(() => {
         ],
         images: [
           {
-            nightly: [
-              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRa4RoR-K3jx294gQ3qccDxCA6FnkvtJNCadQ&s",
+            night: [
+              "https://news.disneylandparis.com//app/uploads/2025/01/DisneyTalesofMagic-_Cinderella_Fireworks_PressVisual_6-1.jpg",
             ],
           },
           {
@@ -145,7 +139,7 @@ export default component$(() => {
       value: new Date().setHours(15, 0, 0, 0),
     },
     {
-      label: "Nightly",
+      label: "Night",
       value: new Date().setHours(21, 0, 0, 0),
     },
   ];
@@ -249,7 +243,7 @@ export default component$(() => {
           });
         }
         state.renderedContent = elements;
-        console.log("Rendered (no AI components):", elements);
+
         return;
       }
 
@@ -431,9 +425,9 @@ export default component$(() => {
           Adaptive UI
         </a>
 
-        <div class="mt-6 flex flex-col gap-4">
+        <div class="mt-6 flex flex-col gap-6">
           <div class="space-y-2">
-            <h2 class="text-md text-white">Extra configuration</h2>
+            <h2 class="text-md text-white">Market</h2>
             <select
               class="w-full cursor-pointer rounded-lg border border-gray-700 bg-[#2A2A2A] px-4 py-2 text-sm text-gray-200 transition-all duration-200 hover:border-green-300 focus:border-green-400 focus:ring-2 focus:ring-green-300/30 focus:outline-none"
               onChange$={(_, element) => changeUseCase(element.value)}
@@ -448,7 +442,10 @@ export default component$(() => {
                 </option>
               ))}
             </select>
+          </div>
 
+          <div class="space-y-2">
+            <h2 class="text-md text-white">Context parameters</h2>
             <select
               class="w-full cursor-pointer rounded-lg border border-gray-700 bg-[#2A2A2A] px-4 py-2 text-sm text-gray-200 transition-all duration-200 hover:border-green-300 focus:border-green-400 focus:ring-2 focus:ring-green-300/30 focus:outline-none"
               onChange$={(_, element) => changeTimestamp(Number(element.value))}
@@ -501,14 +498,16 @@ export default component$(() => {
             </select>
           </div>
 
-          <div class="mt-6 space-y-2">
+          <div class="space-y-2">
+            <h2 class="text-md text-white">Components</h2>
             {COMPONENTS.map((component) => (
               <button
                 key={component.id}
                 onClick$={() => addComponent(component.id)}
-                class="w-full rounded-lg border border-transparent bg-[#484848] p-3 text-left text-white transition-all duration-200 hover:border-green-300"
+                class="flex w-full items-center justify-between rounded-lg border border-transparent bg-[#484848] p-3 px-5 text-white transition-all duration-200 hover:border-green-300"
               >
-                <div class="font-semibold">{component.title}</div>
+                {component.title}
+                <PlusIcon />
               </button>
             ))}
           </div>
@@ -590,5 +589,43 @@ export default component$(() => {
         </div>
       </div>
     </div>
+  );
+});
+
+const PlusIcon = component$(() => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="16"
+      height="16"
+      viewBox="0 0 16 16"
+      fill="none"
+    >
+      <g clip-path="url(#clip0_36_36)">
+        <path
+          d="M8 14.6666C11.6819 14.6666 14.6667 11.6818 14.6667 7.99992C14.6667 4.31802 11.6819 1.33325 8 1.33325C4.3181 1.33325 1.33333 4.31802 1.33333 7.99992C1.33333 11.6818 4.3181 14.6666 8 14.6666Z"
+          stroke="white"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+        <path
+          d="M5.33333 8H10.6667"
+          stroke="white"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+        <path
+          d="M8 5.33325V10.6666"
+          stroke="white"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </g>
+      <defs>
+        <clipPath id="clip0_36_36">
+          <rect width="16" height="16" fill="white" />
+        </clipPath>
+      </defs>
+    </svg>
   );
 });
