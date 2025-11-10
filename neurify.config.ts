@@ -2,8 +2,6 @@ export default {
   model: "moonshotai/Kimi-K2-Instruct-0905",
   token: process.env.TOKEN,
   guidelines: `
-  If Timestamp is after 9PM use nighly images, if its 9 AM use morning images, if its 3PM use afternoon images.
-
   1. Target Audience / Public Target
 A. Core Customer Segments
 Audiophiles and high‑fidelity enthusiasts: Those who deeply care about sound quality, component upgrades, and home audio systems. The emphasis on high-performance gear and system design suggests this.

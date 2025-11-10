@@ -20,44 +20,114 @@ export default component$(() => {
 />
 
 <AIText
-  intent="Summarize product features"
-  of={data}
+  intent=Summarize product features"
+  of={dat"a}
 />`,
       data: {
-        productName: "SonicWave Portable Bluetooth Speaker",
+        brand: "Sony",
+        model: "NW-A306",
+        series: "Walkman A Series",
+        category: "Digital Media Player",
+        price: "$349.99",
+        productUrl:
+          "https://listenup.com/products/sony-nw-a306-walkman-a-series",
         description:
-          "Premium portable speaker delivering rich, 360-degree sound with deep bass. Perfect for outdoor adventures and intimate gatherings.",
-        price: "$249",
-        features: [
-          "360-degree sound with dual drivers",
-          "20-hour battery life",
-          "IPX7 waterproof rating",
-          "Bluetooth 5.2 with 100ft range",
-          "USB-C fast charging",
-          "Built-in microphone for calls",
-        ],
-        specs: {
-          power: "30W RMS",
-          frequency: "60Hz - 20kHz",
-          weight: "1.8 lbs",
-          dimensions: "7.5 x 3.2 x 3.2 inches",
+          "The Sony NW-A306 Digital Media Player seamlessly combines cutting-edge technology, sleek design, and unmatched connectivity to deliver a harmonious oasis of sound and a truly immersive listening experience.",
+        features: {
+          audioTechnology: {
+            amplifier: "S-Master HX™ digital amp technology",
+            highResAudio: true,
+            dsdPlayback: "Up to 11.2MHz",
+            nativeDSDSupport: true,
+            wirelessHiRes: "LDAC technology",
+            immersiveAudio: "360 Reality Audio",
+            audioEnhancement: "DSEE Ultimate™ powered by Edge-AI",
+            vinylProcessor: true,
+          },
+          batteryLife: {
+            playback44_1kHzFLAC: "Up to 36 hours",
+          },
+          display: {
+            size: "3.6-inch",
+            customizable: true,
+            interface: "Walkman® Home Screen with cassette tape UI",
+          },
+          connectivity: {
+            wifi: true,
+            bluetooth: true,
+            bluetoothCodecs: ["aptX™ HD"],
+            android: true,
+            usbPort: "USB Type-C™",
+            headphoneJack: "Stereo mini-jack",
+            usbDACMode: true,
+          },
+          storage: {
+            internal: "32GB",
+            expandable: true,
+            expansionType: "SD card slot",
+          },
+          design: {
+            style: "Rippled wave design",
+            grip: "Secure grip design",
+          },
         },
-        images: [
+        software: {
+          operatingSystem: "Android 12",
+        },
+        documentation: {
+          operatingInstructions:
+            "https://storage.googleapis.com/lupublic/SonyNW-A306OperatingInstructions.pdf",
+        },
+        images: {
+          "morning-genZBuyer":
+            "https://www.fujiya-avic.co.jp/img/goods/D4/200000064646_d4.jpg",
+          "morning-ecoConsumerBuyer":
+            "https://listenup.com/cdn/shop/products/50c74004-3acd-4fd5-8004-69f9dcfda320.jpg?v=1704215399&width=480",
+          "morning-luxuryBuyer":
+            "https://cdn.mos.cms.futurecdn.net/n3BvFSg8ppVnwRPD2YN7wE-1920-80.jpg.webp",
+
+          "afternoon-genZBuyer":
+            "https://mercular.s3.ap-southeast-1.amazonaws.com/images/products/2020/01/sony-nw-a105-03.jpg",
+          "afternoon-ecoConsumerBuyer":
+            "https://images.crutchfieldonline.com/ImageHandler/trim/750/457/products/2020/1/158/g158NWA55B-o_other0.jpg",
+          "afternoon-luxuryBuyer":
+            "https://listenup.com/cdn/shop/products/9233aa5e-b74c-4362-888d-01d94811d269.jpg?v=1704215397&width=2000",
+
+          "evening-genZBuyer":
+            "https://www.digitaltrends.com/wp-content/uploads/2022/06/sony-WM1AM2-feature.jpeg",
+          "evening-ecoConsumerBuyer":
+            "https://listenup.com/cdn/shop/products/50c74004-3acd-4fd5-8004-69f9dcfda320.jpg?v=1704215399&width=480",
+          "evening-luxuryBuyer":
+            "https://francoischarron.com/datascontent/SonyWalkmanZX2.jpg",
+        },
+        targetAudiences: [
           {
-            morning: [
-              "https://m.media-amazon.com/images/I/71fdnxHSFDL._UF894,1000_QL80_.jpg",
-            ],
+            segment: "Gen Z Buyer",
+            appeal:
+              "Modern Android integration, streaming capability, and cutting-edge wireless audio technology",
           },
           {
-            afternoon: [
-              "https://m.media-amazon.com/images/I/71fT3aVAtLL._UF894,1000_QL80_.jpg",
-            ],
+            segment: "Eco Consumer Buyer",
+            appeal:
+              "Long battery life (36 hours), efficient power performance, durable design",
           },
           {
-            night: [
-              "https://m.media-amazon.com/images/I/719FRiY9HvL._UF894,1000_QL80_.jpg",
-            ],
+            segment: "Luxury Buyer",
+            appeal:
+              "Premium S-Master HX™ technology, High-Resolution Audio, 360 Reality Audio, sophisticated design",
           },
+        ],
+        keyBenefits: [
+          "High-Resolution Audio and DSD playback up to 11.2MHz",
+          "Up to 36 hours battery life on FLAC playback",
+          "Wi-Fi compatibility for direct music download and streaming",
+          "Android 12 operating system",
+          "32GB integrated memory with SD card expansion",
+          "USB Type-C port for quick charging",
+          "360 Reality Audio for immersive listening",
+          "DSEE Ultimate™ AI-powered audio enhancement",
+          "Bluetooth with aptX™ HD and LDAC support",
+          "Vintage-inspired cassette tape UI",
         ],
       },
     },
@@ -73,33 +143,163 @@ export default component$(() => {
   of={data}
 />`,
       data: {
-        productName: "Disneyland Paris Trip",
-        description:
-          "Experience the magic of Disneyland Paris with a 5-day all-inclusive trip.",
-        price: "$1,499",
-        features: [
-          "5-day park access",
-          "4-star hotel accommodation",
-          "Daily breakfast included",
-          "Shuttle service to and from the park",
-        ],
-        images: [
-          {
-            night: [
-              "https://news.disneylandparis.com//app/uploads/2025/01/DisneyTalesofMagic-_Cinderella_Fireworks_PressVisual_6-1.jpg",
-            ],
+        destination: {
+          brand: "Disney",
+          name: "Disneyland Paris",
+          location: "Marne-la-Vallée, France",
+          category: "Theme Park Resort",
+          destinationUrl: "https://www.disneylandparis.com",
+          description:
+            "Disneyland Paris seamlessly combines magical storytelling, iconic attractions, and European charm to deliver an enchanting escape and a truly immersive Disney experience for the whole family.",
+          features: {
+            parks: {
+              disneylandPark: "Classic Disney magic with iconic lands",
+              waltDisneyStudios:
+                "Movie-themed attractions and Marvel Avengers Campus",
+              totalAttractions: "Over 50 rides and attractions",
+              iconicCastle:
+                "Sleeping Beauty Castle (Le Château de la Belle au Bois Dormant)",
+              castleHeight: "50 meters (164 feet)",
+              castleFeatures: [
+                "Walkthrough gallery",
+                "Stained glass windows",
+                "27-meter animatronic dragon in dungeon",
+              ],
+              parades: "Disney Stars on Parade",
+              nighttimeShow: "Disney Illuminations",
+              characterMeetings: true,
+              seasonalEvents: [
+                "Halloween Festival",
+                "Christmas Season",
+                "Summer Festival",
+              ],
+            },
+            marvelExperience: {
+              avengersCampus: "First Marvel-themed land in Europe",
+              opened: "July 2022",
+              attractions: [
+                "Spider-Man W.E.B. Adventure (interactive web-slinging)",
+                "Avengers Assemble: Flight Force (high-speed rollercoaster)",
+              ],
+              flightForceFeatures:
+                "0-60 mph in 3 seconds, three inversions, exclusive to Disneyland Paris",
+              characterEncounters: [
+                "Iron Man",
+                "Captain Marvel",
+                "Spider-Man",
+                "Black Panther",
+                "Thor",
+                "Doctor Strange",
+              ],
+              heroTrainingCenter: true,
+            },
+            experience: {
+              operatingHours:
+                "Typically 9:30 AM to 11:00 PM (seasonal variations)",
+              fastPass: "Premier Access available for select attractions",
+            },
+            dining: {
+              restaurants: "Over 50 dining locations",
+              cuisineTypes: ["French", "Italian", "American", "International"],
+              characterDining: true,
+              marvelDining: ["Stark Factory", "PYM Kitchen", "WEB Food Truck"],
+            },
+            accommodation: {
+              onSiteHotels: 6,
+              hotelCategories: ["Value", "Moderate", "Deluxe"],
+              featuredHotels: [
+                "Disney Hotel New York – The Art of Marvel (350+ Marvel artworks)",
+                "Disneyland Hotel",
+                "Disney's Sequoia Lodge",
+              ],
+              disneyVillage: "Entertainment and shopping district",
+            },
+            accessibility: {
+              fromParis: "35 minutes by RER A train",
+              rerStation: "Marne-la-Vallée/Chessy",
+              cdgAirport: "Direct TGV train connection",
+              parking: true,
+              wheelchairAccessible: true,
+              multilingual: [
+                "French",
+                "English",
+                "Spanish",
+                "German",
+                "Italian",
+              ],
+            },
+            shopping: {
+              disneyVillage: true,
+              inParkBoutiques: "Over 40 shops",
+              exclusiveMerchandise: "European-exclusive Disney products",
+              marvelShops: ["Mission Equipment", "WEB Tech accessories"],
+            },
+            design: {
+              style: "European Disney architecture with French influences",
+              landscaping:
+                "Beautifully manicured gardens and themed environments",
+              castleInspiration:
+                "Mont Saint-Michel, Loire Valley castles, Les Très Riches Heures du Duc de Berry",
+            },
           },
-          {
-            afternoon: [
-              "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiNKmJudzjIn6-G2cbgHiv0YpM3_sNXJMHenobntMy-qurI1_qGzM0SvUQgvKMYqBzxNSP6tUh0rUCRfe2xnywmk812dhyphenhyphend63aNEeWId7z3eZGkZ2XisqVbWEW8f_TCSuwA_KvkFHJw1MY/s1600/2019-05-30_0019.jpg",
+          practicalities: {
+            ticketTypes: [
+              "1-Day",
+              "Multi-Day",
+              "2-Park Tickets",
+              "Annual Pass",
             ],
+            seasonPass: "Magic Plus and Infinity annual passes available",
+            extraMagicHours: "Early park access for Disney hotel guests",
           },
-          {
-            morning: [
-              "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEimw40tC8VxCEuBML91EkTDzIS-NQWFepc8FSE3hGNX3tvMSjthEvUyJJlYkzbcusyEFAhsMKWCd3C7anSVOabJM5SBZeBX1YON_b55cuBBb2-EZdMU4z0tWQTWX-bpR2ZqpzmlWXCmTa4/s1600/DSC_9204-9208HDR.jpg",
-            ],
+          resources: {
+            mobileApp:
+              "Official Disneyland Paris app for wait times, reservations, and interactive map",
+            guestServices: "https://www.disneylandparis.com/help",
           },
-        ],
+          images: {
+            genZBuyer:
+              "https://news.disneylandparis.com//app/uploads/2023/10/D100-8.jpg",
+            familyBuyer:
+              "https://assets.simpleviewinc.com/simpleview/image/upload/c_fill,h_800,q_75,w_1200/v1/clients/anaheimca/disneyland_resort_family_infront_castle_8033580d-e9bf-4709-b86b-e85082618bc7.png",
+            luxuryBuyer:
+              "https://www.glassslipperconcierge.com/images/uploads/features/Walt_and_Mickey_Disneyland.jpg",
+          },
+          targetAudiences: [
+            {
+              segment: "Gen Z Buyer",
+              appeal:
+                "Marvel Avengers Campus with cutting-edge attractions, Instagram-perfect Sleeping Beauty Castle, interactive Spider-Man W.E.B. Adventure, modern app integration, social media-worthy locations",
+            },
+            {
+              segment: "Family Buyer",
+              appeal:
+                "Kid-friendly attractions for all ages, character meet-and-greets, varied dining options, on-site hotels for convenience, two theme parks, magical memories, castle dragon experience",
+            },
+            {
+              segment: "Luxury Buyer",
+              appeal:
+                "Disney Hotel New York – The Art of Marvel with 350+ artworks, VIP experiences with Premier Access, character dining, exclusive lounges, Castle Club rooms with concierge service, sophisticated European design",
+            },
+          ],
+          keyBenefits: [
+            "Two theme parks in one destination (Disneyland Park & Walt Disney Studios)",
+            "First Marvel Avengers Campus in Europe with exclusive attractions",
+            "Over 50 attractions for all ages",
+            "Iconic 50-meter Sleeping Beauty Castle with dragon dungeon",
+            "Easy access from Paris city center (35 minutes by train)",
+            "Six themed Disney hotels on property including Marvel-themed hotel",
+            "Exclusive European Disney atmosphere with French architectural charm",
+            "Year-round seasonal events and festivals",
+            "Character dining and Hero Training Center experiences",
+            "Spider-Man W.E.B. Adventure - interactive web-slinging for all ages",
+            "Avengers Assemble: Flight Force - high-speed rollercoaster (0-60 mph in 3 seconds)",
+            "Disney Illuminations nighttime spectacular",
+            "Shopping and entertainment at Disney Village",
+            "Premier Access for reduced wait times",
+            "Multilingual staff and services across European languages",
+          ],
+        },
       },
     },
   ];

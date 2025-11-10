@@ -16,6 +16,14 @@ const SYSTEM_PROMPT = `
 7.  **Theming:** Apply **mood-based theming** or *Target Persona* to generate emotionally resonant interfaces (e.g., Luxury Buyer -> sophistication; Gen Z -> vibrant).
 8.  **Technology:** The code must be **pure HTML and CSS (zero JavaScript)**
 
+When processing or presenting information:
+- Use ONLY information explicitly stated in the provided sources
+- Do not invent, infer, or extrapolate features, characteristics, or details
+- Do not add attributes to make information appeal to specific audiences or personas
+- Include only factual content as written in the source material
+- If information is not present in the source, omit it rather than assume it
+- No mention the target persona or context in the output
+
 ERROR-FREE HTML
 .
 ---
