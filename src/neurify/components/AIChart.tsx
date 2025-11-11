@@ -1,6 +1,7 @@
 import {
   component$,
   HTMLAttributes,
+  Signal,
   useSignal,
   useVisibleTask$,
 } from "@builder.io/qwik";
@@ -9,7 +10,7 @@ import { AIGenerating } from "~/neurify/components/AIGenerating";
 
 interface AIComponentProps extends HTMLAttributes<HTMLElement> {
   intent: string;
-  data: any;
+  data: Signal<any>;
 }
 
 export const AIChart = component$<AIComponentProps>(

@@ -1,6 +1,6 @@
 import { cache } from "~/neurify/cache/cache"
 import Mustache from "mustache"
-import { $, useSignal, useVisibleTask$ } from "@builder.io/qwik";
+import { $, Signal, useSignal, useVisibleTask$ } from "@builder.io/qwik";
 import { Context, useAIContext } from "~/neurify/context/context";
 import { hashString } from "~/neurify/cache/hash";
 import { useAskToAI } from "~/neurify/ai/ask-to-ai";
@@ -9,7 +9,7 @@ import { nextTick } from "~/neurify/utils/tick";
 import { useComponentPrompt, useTextPrompt } from "~/neurify/ai/prompt";
 import { useNeurifyConfig } from "~/neurify/config/use-neurify-config";
 
-export const useGenerateComponent = (intent: string, data: any, cacheTTL?: number) => {
+export const useGenerateComponent = (intent: string, data: Signal<any>, cacheTTL?: number) => {
   const { allContext, timestamp, language, persona } = useAIContext()
 
   const generating = useSignal<boolean>(false);
@@ -96,6 +96,7 @@ export const useGenerateComponent = (intent: string, data: any, cacheTTL?: numbe
     track(persona)
     track(language)
     track(timestamp)
+    track(data)
 
     await onGenerate()
   });
@@ -103,7 +104,7 @@ export const useGenerateComponent = (intent: string, data: any, cacheTTL?: numbe
   return { generating, error, html }
 }
 
-export const useGenerateText = (intent: string, data: any, cacheTTL?: number) => {
+export const useGenerateText = (intent: string, data: Signal<any>, cacheTTL?: number) => {
   const { allContext, timestamp, language, persona } = useAIContext()
 
   const generating = useSignal<boolean>(false);
@@ -136,7 +137,7 @@ export const useGenerateText = (intent: string, data: any, cacheTTL?: number) =>
     generating.value = true;
 
     try {
-      text.value = await generateText(intent, data, allContext.value);
+      text.value = await generateText(intent, data.value, allContext.value);
     } catch (err) {
       console.error(err)
       error.value = (err as Error).message || 'Error generating AIText'
@@ -151,6 +152,7 @@ export const useGenerateText = (intent: string, data: any, cacheTTL?: number) =>
     track(language)
     track(persona)
     track(timestamp)
+    track(data)
 
     await onGenerateText()
   })
@@ -162,7 +164,7 @@ export const useGenerateText = (intent: string, data: any, cacheTTL?: number) =>
   }
 }
 
-export const useGenerateChart = (intent: string, data: any, cacheTTL?: number) => {
+export const useGenerateChart = (intent: string, data: Signal<any>, cacheTTL?: number) => {
   const { allContext, timestamp, language, persona } = useAIContext();
 
   const generating = useSignal<boolean>(false);
@@ -286,8 +288,8 @@ Return ONLY the translated JSON object with the same structure, no markdown or e
     while (attempt <= maxRetries) {
       try {
         const [chartConfigStr, translatedData] = await Promise.all([
-          generateChartComponent(intent, data, allContext.value),
-          translateChartLabels(data, allContext.value)
+          generateChartComponent(intent, data.value, allContext.value),
+          translateChartLabels(data.value, allContext.value)
         ]);
 
         let chartConfigObj;
@@ -348,6 +350,7 @@ Return ONLY the translated JSON object with the same structure, no markdown or e
     track(persona);
     track(timestamp);
     track(language);
+    track(data);
 
     await onGenerate();
   });

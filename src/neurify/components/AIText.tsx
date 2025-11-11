@@ -1,16 +1,16 @@
-import { component$, HTMLAttributes } from "@builder.io/qwik";
+import { component$, HTMLAttributes, Signal } from "@builder.io/qwik";
 import { useGenerateText } from "~/neurify/ai/generate-component";
 import { AIGenerating } from "~/neurify/components/AIGenerating";
 
 interface AITextProps extends HTMLAttributes<HTMLElement> {
   intent: string;
-  of: any;
+  data: Signal<any>;
   cacheTTL?: number;
 }
 
 export const AIText = component$<AITextProps>(
-  ({ intent, of, cacheTTL, ...rest }) => {
-    const { generating, error, text } = useGenerateText(intent, of, cacheTTL);
+  ({ intent, data, cacheTTL, ...rest }) => {
+    const { generating, error, text } = useGenerateText(intent, data, cacheTTL);
 
     if (generating.value) {
       return <AIGenerating />;

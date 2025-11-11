@@ -21,8 +21,8 @@ export default component$(() => {
 />
 
 <AIText
-  intent=Summarize product features"
-  of={data}
+  intent="Summarize product features"
+  data={data}
 />
 
 <AIChart
@@ -59,7 +59,7 @@ export default component$(() => {
             reviewer: "David L.",
           },
           {
-            rating: 4,
+            rating: 2,
             comment:
               "Great device for audiophiles. The DSEE Ultimate really enhances the sound quality of my compressed files.",
             reviewer: "Emily R.",
@@ -172,7 +172,7 @@ export default component$(() => {
 
 <AIText
   intent="Explain trip highlights"
-  of={data}
+  data={data}
 />`,
       data: {
         destination: {
@@ -352,7 +352,7 @@ export default component$(() => {
       title: "AIText",
       template: `<AIText
   intent="Summarize product features"
-  of={data}
+  data={data}
 />
 
 `,
@@ -393,7 +393,11 @@ export default component$(() => {
     changePersona,
   } = useAIContext();
   const editorRef = useSignal<HTMLElement>();
+  const dataEditorRef = useSignal<HTMLElement>();
   const monacoInstance = useSignal<monaco.editor.IStandaloneCodeEditor>();
+  const dataMonacoInstance = useSignal<monaco.editor.IStandaloneCodeEditor>();
+  const isDataEditorCollapsed = useSignal(true);
+  const editableData = useSignal<any>(USES_CASES[0].data);
 
   const state = useStore<{
     code: string;
@@ -412,9 +416,16 @@ export default component$(() => {
     if (useCase) {
       state.selected = useCase;
       state.code = useCase.code;
+      editableData.value = JSON.parse(JSON.stringify(useCase.data));
 
       if (monacoInstance.value) {
         monacoInstance.value.setValue(useCase.code);
+      }
+
+      if (dataMonacoInstance.value) {
+        dataMonacoInstance.value.setValue(
+          JSON.stringify(useCase.data, null, 2),
+        );
       }
 
       parseAndRender();
@@ -440,7 +451,6 @@ export default component$(() => {
 
       let match;
 
-      // Buscar AIComponent
       while ((match = aiComponentRegex.exec(state.code)) !== null) {
         const propsString = match[1];
         const intentMatch = propsString.match(/intent="([^"]+)"/);
@@ -453,7 +463,6 @@ export default component$(() => {
           props: {
             intent: intentMatch ? intentMatch[1] : "Display component",
             className: classMatch ? classMatch[1] : "",
-            data: state.selected.data,
           },
         });
       }
@@ -470,7 +479,6 @@ export default component$(() => {
           props: {
             intent: intentMatch ? intentMatch[1] : "Generate text",
             className: classMatch ? classMatch[1] : "",
-            of: state.selected.data,
           },
         });
       }
@@ -487,7 +495,6 @@ export default component$(() => {
           props: {
             intent: intentMatch ? intentMatch[1] : "Generate chart",
             className: classMatch ? classMatch[1] : "",
-            data: state.selected.data,
           },
         });
       }
@@ -601,7 +608,7 @@ export default component$(() => {
                 kind: monaco.languages.CompletionItemKind.Snippet,
                 documentation: "AI-powered text generation component",
                 insertText:
-                  '<AIText\n  intent="${1:Summarize features}"\n  of={data}\n/>',
+                  '<AIText\n  intent="${1:Summarize features}"\n  data={data}\n/>',
                 insertTextRules:
                   monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
                 range: range,
@@ -622,7 +629,6 @@ export default component$(() => {
           },
         });
 
-        // Crear editor
         const editor = monaco.editor.create(editorRef.value, {
           value: state.code,
           language: "html",
@@ -658,6 +664,38 @@ export default component$(() => {
 
         setTimeout(() => parseAndRender(), 100);
       }
+
+      if (dataEditorRef.value) {
+        const dataEditor = monaco.editor.create(dataEditorRef.value, {
+          value: JSON.stringify(editableData.value, null, 2),
+          language: "json",
+          theme: "neurify-dark",
+          automaticLayout: true,
+          minimap: { enabled: false },
+          fontSize: 14,
+          lineNumbers: "on",
+          scrollBeyondLastLine: false,
+          wordWrap: "on",
+          tabSize: 2,
+        });
+
+        dataMonacoInstance.value = dataEditor;
+
+        let dataTimeoutId: any;
+        dataEditor.onDidChangeModelContent(() => {
+          const newData = dataEditor.getValue();
+
+          clearTimeout(dataTimeoutId);
+          dataTimeoutId = setTimeout(() => {
+            try {
+              editableData.value = JSON.parse(newData);
+              parseAndRender();
+            } catch (e) {
+              console.error("Invalid JSON in data editor");
+            }
+          }, 1000);
+        });
+      }
     };
 
     initMonaco();
@@ -665,6 +703,9 @@ export default component$(() => {
     cleanup(() => {
       if (monacoInstance.value) {
         monacoInstance.value.dispose();
+      }
+      if (dataMonacoInstance.value) {
+        dataMonacoInstance.value.dispose();
       }
     });
   });
@@ -681,6 +722,10 @@ export default component$(() => {
 
       parseAndRender();
     }
+  });
+
+  const toggleDataEditor = $(() => {
+    isDataEditorCollapsed.value = !isDataEditorCollapsed.value;
   });
 
   return (
@@ -782,92 +827,137 @@ export default component$(() => {
         </div>
       </aside>
 
-      <div class="flex flex-1">
-        <div class="flex w-1/2 flex-col border-r border-gray-700">
-          <div class="border-b border-gray-700 px-6 py-3">
-            <h3 class="text-lg font-semibold text-white">Code Editor</h3>
-            <p class="text-xs text-gray-400">HTML + AI Components</p>
+      <div class="flex flex-1 flex-col overflow-hidden">
+        <div
+          class="flex"
+          style={{
+            height: isDataEditorCollapsed.value
+              ? "100vh"
+              : "calc(100vh - 300px)",
+          }}
+        >
+          <div class="flex w-1/2 flex-col border-r border-gray-700">
+            <div class="flex-shrink-0 border-b border-gray-700 px-6 py-3">
+              <h3 class="text-lg font-semibold text-white">Code Editor</h3>
+              <p class="text-xs text-gray-400">HTML + AI Components</p>
+            </div>
+            <div ref={editorRef} class="flex-1 overflow-y-auto" />
           </div>
-          <div ref={editorRef} class="flex-1" />
+
+          <div class="flex w-1/2 flex-col">
+            <div class="flex-shrink-0 border-b border-gray-700 px-6 py-3">
+              <h3 class="text-lg font-semibold text-white">Live Preview</h3>
+              <p class="text-xs text-gray-400">Real-time rendering</p>
+            </div>
+            <div class="flex-1 overflow-y-auto p-8">
+              {state.error ? (
+                <div class="rounded-lg border border-red-500 bg-red-900/20 p-6 text-red-400">
+                  <p class="mb-2 font-semibold">⚠️ Error</p>
+                  <p class="text-sm">{state.error}</p>
+                </div>
+              ) : !state.renderedContent ||
+                state.renderedContent.length === 0 ? (
+                <div class="flex h-full items-center justify-center text-gray-400">
+                  <div class="text-center">
+                    <p class="mb-2 text-6xl">✨</p>
+                    <p class="text-lg">Start coding!</p>
+                    <p class="text-sm opacity-70">
+                      Write HTML and add AI components
+                    </p>
+                  </div>
+                </div>
+              ) : (
+                <div class="space-y-4">
+                  {state.renderedContent.map((element: any) => {
+                    if (element.type === "html") {
+                      return (
+                        <div
+                          class="text-white"
+                          key={element.content}
+                          dangerouslySetInnerHTML={element.content}
+                        />
+                      );
+                    } else if (element.type === "AIComponent") {
+                      return (
+                        <div
+                          key={element.props.intent}
+                          class={element.props.className}
+                        >
+                          <AIComponent
+                            intent={element.props.intent}
+                            data={editableData}
+                          />
+                        </div>
+                      );
+                    } else if (element.type === "AIText") {
+                      return (
+                        <div
+                          key={element.props.intent}
+                          class={element.props.className}
+                        >
+                          <AIText
+                            class="text-white"
+                            intent={element.props.intent}
+                            data={editableData}
+                          />
+                        </div>
+                      );
+                    } else if (element.type === "AIChart") {
+                      return (
+                        <div
+                          key={element.props.intent}
+                          class={element.props.className}
+                        >
+                          <AIChart
+                            class="text-white"
+                            intent={element.props.intent}
+                            data={editableData}
+                          />
+                        </div>
+                      );
+                    }
+                    return null;
+                  })}
+                </div>
+              )}
+            </div>
+          </div>
         </div>
 
-        <div class="flex w-1/2 flex-col">
-          <div class="border-b border-gray-700 px-6 py-3">
-            <h3 class="text-lg font-semibold text-white">Live Preview</h3>
-            <p class="text-xs text-gray-400">Real-time rendering</p>
+        <div
+          class={`fixed right-0 bottom-0 left-64 flex flex-col border-t border-gray-700 bg-[#141F19] transition-all duration-300 ${
+            isDataEditorCollapsed.value ? "translate-y-full" : "translate-y-0"
+          }`}
+          style={{ height: "300px" }}
+        >
+          <div class="flex items-center justify-between border-b border-gray-700 bg-[#1a2822] px-6 py-3">
+            <div>
+              <h3 class="text-lg font-semibold text-white">Data Editor</h3>
+              <p class="text-xs text-gray-400">Edit JSON data</p>
+            </div>
+            <button
+              onClick$={toggleDataEditor}
+              class="rounded p-2 transition-colors hover:bg-gray-700"
+              aria-label="Toggle data editor"
+            >
+              <ChevronIcon collapsed={isDataEditorCollapsed.value} />
+            </button>
           </div>
-          <div class="flex-1 overflow-y-auto p-8">
-            {state.error ? (
-              <div class="rounded-lg border border-red-500 bg-red-900/20 p-6 text-red-400">
-                <p class="mb-2 font-semibold">⚠️ Error</p>
-                <p class="text-sm">{state.error}</p>
-              </div>
-            ) : !state.renderedContent || state.renderedContent.length === 0 ? (
-              <div class="flex h-full items-center justify-center text-gray-400">
-                <div class="text-center">
-                  <p class="mb-2 text-6xl">✨</p>
-                  <p class="text-lg">Start coding!</p>
-                  <p class="text-sm opacity-70">
-                    Write HTML and add AI components
-                  </p>
-                </div>
-              </div>
-            ) : (
-              <div class="space-y-4">
-                {state.renderedContent.map((element: any) => {
-                  if (element.type === "html") {
-                    return (
-                      <div
-                        class="text-white"
-                        key={element.content}
-                        dangerouslySetInnerHTML={element.content}
-                      />
-                    );
-                  } else if (element.type === "AIComponent") {
-                    return (
-                      <div
-                        key={element.props.intent}
-                        class={element.props.className}
-                      >
-                        <AIComponent
-                          intent={element.props.intent}
-                          data={element.props.data}
-                        />
-                      </div>
-                    );
-                  } else if (element.type === "AIText") {
-                    return (
-                      <div
-                        key={element.props.intent}
-                        class={element.props.className}
-                      >
-                        <AIText
-                          class="text-white"
-                          intent={element.props.intent}
-                          of={element.props.of}
-                        />
-                      </div>
-                    );
-                  } else if (element.type === "AIChart") {
-                    return (
-                      <div
-                        key={element.props.intent}
-                        class={element.props.className}
-                      >
-                        <AIChart
-                          class="text-white"
-                          intent={element.props.intent}
-                          data={element.props.of}
-                        />
-                      </div>
-                    );
-                  }
-                  return null;
-                })}
-              </div>
-            )}
-          </div>
+          <div ref={dataEditorRef} class="flex-1" />
         </div>
+
+        {isDataEditorCollapsed.value && (
+          <button
+            onClick$={toggleDataEditor}
+            class="fixed bottom-0 left-1/2 z-10 -translate-x-1/2 rounded-t-lg border border-b-0 border-gray-700 bg-[#1a2822] px-6 py-2 shadow-lg transition-colors hover:bg-gray-700"
+            aria-label="Open data editor"
+          >
+            <div class="flex items-center gap-2">
+              <span class="text-sm font-medium text-white">Data Editor</span>
+              <ChevronIcon collapsed={true} />
+            </div>
+          </button>
+        )}
       </div>
     </div>
   );
@@ -907,6 +997,25 @@ const PlusIcon = component$(() => {
           <rect width="16" height="16" fill="white" />
         </clipPath>
       </defs>
+    </svg>
+  );
+});
+
+const ChevronIcon = component$<{ collapsed: boolean }>(({ collapsed }) => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      class={`text-white transition-transform ${collapsed ? "" : "rotate-180"}`}
+    >
+      <polyline points="6 9 12 15 18 9"></polyline>
     </svg>
   );
 });
