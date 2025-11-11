@@ -126,8 +126,12 @@ export const AIChart = component$<AIComponentProps>(
           async
         />
 
-        <div class="relative rounded-xl">
-          <canvas ref={canvasRef} id={chartId} class="!h-auto !w-full" />
+        <div class="flex w-full justify-center">
+          <canvas
+            ref={canvasRef}
+            id={chartId}
+            class="!h-auto max-h-[400px] !w-full text-white"
+          />
         </div>
       </>
     );

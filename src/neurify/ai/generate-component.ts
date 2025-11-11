@@ -65,8 +65,8 @@ export const useGenerateComponent = (intent: string, data: Signal<any>, cacheTTL
     while (attempt <= maxRetries) {
       try {
         const [template, dataTranslated] = await Promise.all([
-          generateBaseComponent(intent, data, allContext.value),
-          translateObject(data, allContext.value)
+          generateBaseComponent(intent, data.value, allContext.value),
+          translateObject(data.value, allContext.value)
         ]);
 
         html.value = Mustache.render(template, {
@@ -136,16 +136,29 @@ export const useGenerateText = (intent: string, data: Signal<any>, cacheTTL?: nu
     error.value = undefined;
     generating.value = true;
 
-    try {
-      text.value = await generateText(intent, data.value, allContext.value);
-    } catch (err) {
-      console.error(err)
-      error.value = (err as Error).message || 'Error generating AIText'
-    } finally {
-      await nextTick(() => {
-        generating.value = false;
-      }, 300)
+    const maxRetries = 2;
+    let attempt = 0;
+
+    while (attempt <= maxRetries) {
+      try {
+        text.value = await generateText(intent, data.value, allContext.value);
+        break;
+      } catch (err) {
+        console.error(`Attempt ${attempt + 1} failed:`, err);
+
+        attempt++;
+
+        if (attempt > maxRetries) {
+          error.value = (err as Error).message || 'Error generating AIComponent';
+        } else {
+          await new Promise(resolve => setTimeout(resolve, 1000 * attempt));
+        }
+      }
     }
+
+    await nextTick(() => {
+      generating.value = false;
+    }, 300);
   })
 
   useVisibleTask$(async ({ track }) => {
