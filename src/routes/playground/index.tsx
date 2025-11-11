@@ -548,7 +548,6 @@ export default component$(() => {
       }
 
       state.renderedContent = elements;
-      console.log("Rendered:", elements);
     } catch (error: any) {
       state.error = error.message;
       state.renderedContent = null;
@@ -690,7 +689,7 @@ export default component$(() => {
             try {
               editableData.value = JSON.parse(newData);
               parseAndRender();
-            } catch (e) {
+            } catch {
               console.error("Invalid JSON in data editor");
             }
           }, 1000);
