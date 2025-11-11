@@ -9,6 +9,7 @@ import { AIComponent } from "~/neurify/components/AIComponent";
 import { AIText } from "~/neurify/components/AIText";
 import { useAIContext } from "~/neurify/context/context";
 import * as monaco from "monaco-editor";
+import { AIChart } from "~/neurify/components/AIChart";
 
 export default component$(() => {
   const USES_CASES = [
@@ -22,6 +23,11 @@ export default component$(() => {
 <AIText
   intent=Summarize product features"
   of={data}
+/>
+
+<AIChart
+  intent="Pie chart of review ratings"
+  data={data}
 />`,
       data: {
         brand: "Sony",
@@ -33,6 +39,32 @@ export default component$(() => {
           "https://listenup.com/products/sony-nw-a306-walkman-a-series",
         description:
           "The Sony NW-A306 Digital Media Player seamlessly combines cutting-edge technology, sleek design, and unmatched connectivity to deliver a harmonious oasis of sound and a truly immersive listening experience.",
+        reviews: [
+          {
+            rating: 5,
+            comment:
+              "The sound quality is exceptional, and the battery life lasts all day. Perfect for music lovers on the go!",
+            reviewer: "Alex M.",
+          },
+          {
+            rating: 4,
+            comment:
+              "I love the high-resolution audio support and the Android OS makes it easy to use. The design is also very stylish.",
+            reviewer: "Samantha K.",
+          },
+          {
+            rating: 5,
+            comment:
+              "The 360 Reality Audio feature is a game-changer. It feels like I'm in the studio with my favorite artists!",
+            reviewer: "David L.",
+          },
+          {
+            rating: 4,
+            comment:
+              "Great device for audiophiles. The DSEE Ultimate really enhances the sound quality of my compressed files.",
+            reviewer: "Emily R.",
+          },
+        ],
         features: {
           audioTechnology: {
             amplifier: "S-Master HX™ digital amp technology",
@@ -325,6 +357,14 @@ export default component$(() => {
 
 `,
     },
+    {
+      id: "ai-chart",
+      title: "AIChart",
+      template: `<AIChart
+  intent="Pie chart of review ratings"
+  data={data}
+/>`,
+    },
   ];
 
   const TARGETS_PERSONAS = ["Luxury buyer", "Gen Z Buyer", "Eco Consumer"];
@@ -389,6 +429,7 @@ export default component$(() => {
 
       const aiComponentRegex = /<AIComponent\s+([^>]*?)\/>/g;
       const aiTextRegex = /<AIText\s+([^>]*?)\/>/g;
+      const aiCartRegex = /<AIChart\s+([^>]*?)\/>/g;
 
       const allMatches: Array<{
         type: string;
@@ -430,6 +471,23 @@ export default component$(() => {
             intent: intentMatch ? intentMatch[1] : "Generate text",
             className: classMatch ? classMatch[1] : "",
             of: state.selected.data,
+          },
+        });
+      }
+
+      while ((match = aiCartRegex.exec(state.code)) !== null) {
+        const propsString = match[1];
+        const intentMatch = propsString.match(/intent="([^"]+)"/);
+        const classMatch = propsString.match(/class="([^"]+)"/);
+
+        allMatches.push({
+          type: "AIChart",
+          index: match.index,
+          length: match[0].length,
+          props: {
+            intent: intentMatch ? intentMatch[1] : "Generate chart",
+            className: classMatch ? classMatch[1] : "",
+            data: state.selected.data,
           },
         });
       }
@@ -544,6 +602,16 @@ export default component$(() => {
                 documentation: "AI-powered text generation component",
                 insertText:
                   '<AIText\n  intent="${1:Summarize features}"\n  of={data}\n/>',
+                insertTextRules:
+                  monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+                range: range,
+              },
+              {
+                label: "AIChart",
+                kind: monaco.languages.CompletionItemKind.Snippet,
+                documentation: "AI-powered chart generation component",
+                insertText:
+                  '<AIChart\n  intent="${1:Generate pie chart}"\n  data={data}\n/>',
                 insertTextRules:
                   monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
                 range: range,
@@ -777,6 +845,19 @@ export default component$(() => {
                           class="text-white"
                           intent={element.props.intent}
                           of={element.props.of}
+                        />
+                      </div>
+                    );
+                  } else if (element.type === "AIChart") {
+                    return (
+                      <div
+                        key={element.props.intent}
+                        class={element.props.className}
+                      >
+                        <AIChart
+                          class="text-white"
+                          intent={element.props.intent}
+                          data={element.props.of}
                         />
                       </div>
                     );
