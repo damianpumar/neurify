@@ -21,7 +21,7 @@ export default component$(() => {
 
 <AIText
   intent=Summarize product features"
-  of={dat"a}
+  of={data}
 />`,
       data: {
         brand: "Sony",
