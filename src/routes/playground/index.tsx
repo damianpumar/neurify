@@ -175,163 +175,164 @@ export default component$(() => {
   data={data}
 />`,
       data: {
-        destination: {
-          brand: "Disney",
-          name: "Disneyland Paris",
-          location: "Marne-la-Vallée, France",
-          category: "Theme Park Resort",
-          destinationUrl: "https://www.disneylandparis.com",
-          description:
-            "Disneyland Paris seamlessly combines magical storytelling, iconic attractions, and European charm to deliver an enchanting escape and a truly immersive Disney experience for the whole family.",
-          features: {
-            parks: {
-              disneylandPark: "Classic Disney magic with iconic lands",
-              waltDisneyStudios:
-                "Movie-themed attractions and Marvel Avengers Campus",
-              totalAttractions: "Over 50 rides and attractions",
-              iconicCastle:
-                "Sleeping Beauty Castle (Le Château de la Belle au Bois Dormant)",
-              castleHeight: "50 meters (164 feet)",
-              castleFeatures: [
-                "Walkthrough gallery",
-                "Stained glass windows",
-                "27-meter animatronic dragon in dungeon",
-              ],
-              parades: "Disney Stars on Parade",
-              nighttimeShow: "Disney Illuminations",
-              characterMeetings: true,
-              seasonalEvents: [
-                "Halloween Festival",
-                "Christmas Season",
-                "Summer Festival",
-              ],
-            },
-            marvelExperience: {
-              avengersCampus: "First Marvel-themed land in Europe",
-              opened: "July 2022",
-              attractions: [
-                "Spider-Man W.E.B. Adventure (interactive web-slinging)",
-                "Avengers Assemble: Flight Force (high-speed rollercoaster)",
-              ],
-              flightForceFeatures:
-                "0-60 mph in 3 seconds, three inversions, exclusive to Disneyland Paris",
-              characterEncounters: [
-                "Iron Man",
-                "Captain Marvel",
-                "Spider-Man",
-                "Black Panther",
-                "Thor",
-                "Doctor Strange",
-              ],
-              heroTrainingCenter: true,
-            },
-            experience: {
-              operatingHours:
-                "Typically 9:30 AM to 11:00 PM (seasonal variations)",
-              fastPass: "Premier Access available for select attractions",
-            },
-            dining: {
-              restaurants: "Over 50 dining locations",
-              cuisineTypes: ["French", "Italian", "American", "International"],
-              characterDining: true,
-              marvelDining: ["Stark Factory", "PYM Kitchen", "WEB Food Truck"],
-            },
-            accommodation: {
-              onSiteHotels: 6,
-              hotelCategories: ["Value", "Moderate", "Deluxe"],
-              featuredHotels: [
-                "Disney Hotel New York – The Art of Marvel (350+ Marvel artworks)",
-                "Disneyland Hotel",
-                "Disney's Sequoia Lodge",
-              ],
-              disneyVillage: "Entertainment and shopping district",
-            },
-            accessibility: {
-              fromParis: "35 minutes by RER A train",
-              rerStation: "Marne-la-Vallée/Chessy",
-              cdgAirport: "Direct TGV train connection",
-              parking: true,
-              wheelchairAccessible: true,
-              multilingual: [
-                "French",
-                "English",
-                "Spanish",
-                "German",
-                "Italian",
-              ],
-            },
-            shopping: {
-              disneyVillage: true,
-              inParkBoutiques: "Over 40 shops",
-              exclusiveMerchandise: "European-exclusive Disney products",
-              marvelShops: ["Mission Equipment", "WEB Tech accessories"],
-            },
-            design: {
-              style: "European Disney architecture with French influences",
-              landscaping:
-                "Beautifully manicured gardens and themed environments",
-              castleInspiration:
-                "Mont Saint-Michel, Loire Valley castles, Les Très Riches Heures du Duc de Berry",
-            },
-          },
-          practicalities: {
-            ticketTypes: [
-              "1-Day",
-              "Multi-Day",
-              "2-Park Tickets",
-              "Annual Pass",
+        brand: "Disney",
+        name: "Disneyland Paris",
+        location: "Marne-la-Vallée, France",
+        category: "Theme Park Resort",
+        destinationUrl: "https://www.disneylandparis.com",
+        description:
+          "Disneyland Paris seamlessly combines magical storytelling, iconic attractions, and European charm to deliver an enchanting escape and a truly immersive Disney experience for the whole family.",
+        features: {
+          parks: {
+            disneylandPark: "Classic Disney magic with iconic lands",
+            waltDisneyStudios:
+              "Movie-themed attractions and Marvel Avengers Campus",
+            totalAttractions: "Over 50 rides and attractions",
+            iconicCastle:
+              "Sleeping Beauty Castle (Le Château de la Belle au Bois Dormant)",
+            castleHeight: "50 meters (164 feet)",
+            castleFeatures: [
+              "Walkthrough gallery",
+              "Stained glass windows",
+              "27-meter animatronic dragon in dungeon",
             ],
-            seasonPass: "Magic Plus and Infinity annual passes available",
-            extraMagicHours: "Early park access for Disney hotel guests",
+            parades: "Disney Stars on Parade",
+            nighttimeShow: "Disney Illuminations",
+            characterMeetings: true,
+            seasonalEvents: [
+              "Halloween Festival",
+              "Christmas Season",
+              "Summer Festival",
+            ],
           },
-          resources: {
-            mobileApp:
-              "Official Disneyland Paris app for wait times, reservations, and interactive map",
-            guestServices: "https://www.disneylandparis.com/help",
+          marvelExperience: {
+            avengersCampus: "First Marvel-themed land in Europe",
+            opened: "July 2022",
+            attractions: [
+              "Spider-Man W.E.B. Adventure (interactive web-slinging)",
+              "Avengers Assemble: Flight Force (high-speed rollercoaster)",
+            ],
+            flightForceFeatures:
+              "0-60 mph in 3 seconds, three inversions, exclusive to Disneyland Paris",
+            characterEncounters: [
+              "Iron Man",
+              "Captain Marvel",
+              "Spider-Man",
+              "Black Panther",
+              "Thor",
+              "Doctor Strange",
+            ],
+            heroTrainingCenter: true,
           },
-          images: {
-            genZBuyer:
-              "https://news.disneylandparis.com//app/uploads/2023/10/D100-8.jpg",
-            familyBuyer:
-              "https://assets.simpleviewinc.com/simpleview/image/upload/c_fill,h_800,q_75,w_1200/v1/clients/anaheimca/disneyland_resort_family_infront_castle_8033580d-e9bf-4709-b86b-e85082618bc7.png",
-            luxuryBuyer:
-              "https://www.glassslipperconcierge.com/images/uploads/features/Walt_and_Mickey_Disneyland.jpg",
+          experience: {
+            operatingHours:
+              "Typically 9:30 AM to 11:00 PM (seasonal variations)",
+            fastPass: "Premier Access available for select attractions",
           },
-          targetAudiences: [
-            {
-              segment: "Gen Z Buyer",
-              appeal:
-                "Marvel Avengers Campus with cutting-edge attractions, Instagram-perfect Sleeping Beauty Castle, interactive Spider-Man W.E.B. Adventure, modern app integration, social media-worthy locations",
-            },
-            {
-              segment: "Family Buyer",
-              appeal:
-                "Kid-friendly attractions for all ages, character meet-and-greets, varied dining options, on-site hotels for convenience, two theme parks, magical memories, castle dragon experience",
-            },
-            {
-              segment: "Luxury Buyer",
-              appeal:
-                "Disney Hotel New York – The Art of Marvel with 350+ artworks, VIP experiences with Premier Access, character dining, exclusive lounges, Castle Club rooms with concierge service, sophisticated European design",
-            },
-          ],
-          keyBenefits: [
-            "Two theme parks in one destination (Disneyland Park & Walt Disney Studios)",
-            "First Marvel Avengers Campus in Europe with exclusive attractions",
-            "Over 50 attractions for all ages",
-            "Iconic 50-meter Sleeping Beauty Castle with dragon dungeon",
-            "Easy access from Paris city center (35 minutes by train)",
-            "Six themed Disney hotels on property including Marvel-themed hotel",
-            "Exclusive European Disney atmosphere with French architectural charm",
-            "Year-round seasonal events and festivals",
-            "Character dining and Hero Training Center experiences",
-            "Spider-Man W.E.B. Adventure - interactive web-slinging for all ages",
-            "Avengers Assemble: Flight Force - high-speed rollercoaster (0-60 mph in 3 seconds)",
-            "Disney Illuminations nighttime spectacular",
-            "Shopping and entertainment at Disney Village",
-            "Premier Access for reduced wait times",
-            "Multilingual staff and services across European languages",
-          ],
+          dining: {
+            restaurants: "Over 50 dining locations",
+            cuisineTypes: ["French", "Italian", "American", "International"],
+            characterDining: true,
+            marvelDining: ["Stark Factory", "PYM Kitchen", "WEB Food Truck"],
+          },
+          accommodation: {
+            onSiteHotels: 6,
+            hotelCategories: ["Value", "Moderate", "Deluxe"],
+            featuredHotels: [
+              "Disney Hotel New York – The Art of Marvel (350+ Marvel artworks)",
+              "Disneyland Hotel",
+              "Disney's Sequoia Lodge",
+            ],
+            disneyVillage: "Entertainment and shopping district",
+          },
+          accessibility: {
+            fromParis: "35 minutes by RER A train",
+            rerStation: "Marne-la-Vallée/Chessy",
+            cdgAirport: "Direct TGV train connection",
+            parking: true,
+            wheelchairAccessible: true,
+            multilingual: ["French", "English", "Spanish", "German", "Italian"],
+          },
+          shopping: {
+            disneyVillage: true,
+            inParkBoutiques: "Over 40 shops",
+            exclusiveMerchandise: "European-exclusive Disney products",
+            marvelShops: ["Mission Equipment", "WEB Tech accessories"],
+          },
+          design: {
+            style: "European Disney architecture with French influences",
+            landscaping:
+              "Beautifully manicured gardens and themed environments",
+            castleInspiration:
+              "Mont Saint-Michel, Loire Valley castles, Les Très Riches Heures du Duc de Berry",
+          },
         },
+        practicalities: {
+          ticketTypes: ["1-Day", "Multi-Day", "2-Park Tickets", "Annual Pass"],
+          seasonPass: "Magic Plus and Infinity annual passes available",
+          extraMagicHours: "Early park access for Disney hotel guests",
+        },
+        resources: {
+          mobileApp:
+            "Official Disneyland Paris app for wait times, reservations, and interactive map",
+          guestServices: "https://www.disneylandparis.com/help",
+        },
+        images: {
+          "morning-genZBuyer":
+            "https://news.disneylandparis.com//app/uploads/2023/10/D100-8.jpg",
+          "morning-ecoConsumer":
+            "https://assets.simpleviewinc.com/simpleview/image/upload/c_fill,h_800,q_75,w_1200/v1/clients/anaheimca/disneyland_resort_family_infront_castle_8033580d-e9bf-4709-b86b-e85082618bc7.png",
+          "morning-luxuryBuyer":
+            "https://www.glassslipperconcierge.com/images/uploads/features/Walt_and_Mickey_Disneyland.jpg",
+
+          "afternoon-genZBuyer":
+            "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiNKmJudzjIn6-G2cbgHiv0YpM3_sNXJMHenobntMy-qurI1_qGzM0SvUQgvKMYqBzxNSP6tUh0rUCRfe2xnywmk812dhyphenhyphend63aNEeWId7z3eZGkZ2XisqVbWEW8f_TCSuwA_KvkFHJw1MY/s1600/2019-05-30_0019.jpg",
+          "afternoon-ecoConsumer":
+            "https://media.wdwnt.com/2022/10/D100_Castle_Rendering-scaled.jpg",
+          "afternoon-luxuryBuyer":
+            "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiNKmJudzjIn6-G2cbgHiv0YpM3_sNXJMHenobntMy-qurI1_qGzM0SvUQgvKMYqBzxNSP6tUh0rUCRfe2xnywmk812dhyphenhyphend63aNEeWId7z3eZGkZ2XisqVbWEW8f_TCSuwA_KvkFHJw1MY/s1600/2019-05-30_0019.jpg",
+
+          "evening-genZBuyer":
+            "https://www.shutterstock.com/image-photo/disneyland-paris-laser-light-show-600nw-2574537605.jpg",
+          "evening-ecoConsumer":
+            "https://d23.com/app/uploads/2016/07/1180-x-600-080116_SDR-at-night-780x440.jpg",
+          "evening-luxuryBuyer":
+            "https://guide4wdw.com/wp-content/uploads/2020/04/Product-Image-22-scaled.jpg",
+        },
+        targetAudiences: [
+          {
+            segment: "Gen Z Buyer",
+            appeal:
+              "Marvel Avengers Campus with cutting-edge attractions, Instagram-perfect Sleeping Beauty Castle, interactive Spider-Man W.E.B. Adventure, modern app integration, social media-worthy locations",
+          },
+          {
+            segment: "Family Buyer",
+            appeal:
+              "Kid-friendly attractions for all ages, character meet-and-greets, varied dining options, on-site hotels for convenience, two theme parks, magical memories, castle dragon experience",
+          },
+          {
+            segment: "Luxury Buyer",
+            appeal:
+              "Disney Hotel New York – The Art of Marvel with 350+ artworks, VIP experiences with Premier Access, character dining, exclusive lounges, Castle Club rooms with concierge service, sophisticated European design",
+          },
+        ],
+        keyBenefits: [
+          "Two theme parks in one destination (Disneyland Park & Walt Disney Studios)",
+          "First Marvel Avengers Campus in Europe with exclusive attractions",
+          "Over 50 attractions for all ages",
+          "Iconic 50-meter Sleeping Beauty Castle with dragon dungeon",
+          "Easy access from Paris city center (35 minutes by train)",
+          "Six themed Disney hotels on property including Marvel-themed hotel",
+          "Exclusive European Disney atmosphere with French architectural charm",
+          "Year-round seasonal events and festivals",
+          "Character dining and Hero Training Center experiences",
+          "Spider-Man W.E.B. Adventure - interactive web-slinging for all ages",
+          "Avengers Assemble: Flight Force - high-speed rollercoaster (0-60 mph in 3 seconds)",
+          "Disney Illuminations nighttime spectacular",
+          "Shopping and entertainment at Disney Village",
+          "Premier Access for reduced wait times",
+          "Multilingual staff and services across European languages",
+        ],
       },
     },
   ];
