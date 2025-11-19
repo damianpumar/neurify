@@ -1,0 +1,24 @@
+{
+  "name": "@adaptive-ui/server",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx watch src/server",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@adaptive-ui/core": "workspace:*",
+    "@huggingface/inference": "^4.13.3",
+    "@trpc/server": "^10.45.0",
+    "@types/cors": "^2.8.19",
+    "@types/mustache": "^4.2.6",
+    "cors": "^2.8.5",
+    "mustache": "^4.2.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.3.3"
+  }
+}

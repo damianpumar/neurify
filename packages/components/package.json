@@ -1,0 +1,67 @@
+{
+  "name": "@adaptive-ui/components",
+  "version": "0.0.1",
+  "type": "module",
+  "main": "./dist/index.cjs.js",
+  "module": "./dist/index.es.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/index.cjs.js",
+      "import": "./dist/index.es.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./vue": {
+      "require": "./dist/vue.cjs.js",
+      "import": "./dist/vue.es.js",
+      "types": "./dist/vue/index.d.ts"
+    },
+    "./react": {
+      "require": "./dist/react.cjs.js",
+      "import": "./dist/react.es.js",
+      "types": "./dist/react/index.d.ts"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "build": "tsc && vite build",
+    "start": "tsc -w",
+    "test": "jest"
+  },
+  "peerDependencies": {
+    "react": "^16.8.0 || ^17.0.0 || ^18.0.0",
+    "vue": "^3.0.0"
+  },
+  "peerDependenciesMeta": {
+    "vue": {
+      "optional": true
+    },
+    "react": {
+      "optional": true
+    },
+    "typescript": {
+      "optional": true
+    }
+  },
+  "dependencies": {
+    "@adaptive-ui/client": "workspace:*",
+    "@vitejs/plugin-vue": "^6.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.1.1",
+    "@types/react": "^19.2.2",
+    "@types/react-dom": "^19.2.2",
+    "@typescript-eslint/eslint-plugin": "^5.57.1",
+    "@typescript-eslint/parser": "^5.57.1",
+    "eslint": "^8.38.0",
+    "react": "^18.2.0",
+    "typescript": "^5.0.2",
+    "vite": "^4.3.2",
+    "vite-plugin-dts": "^3.9.1",
+    "vue": "^3.4.0"
+  }
+}

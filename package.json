@@ -1,60 +1,29 @@
 {
-  "name": "neurify",
-  "description": "Blank project with routing included",
-  "engines": {
-    "node": "^18.17.0 || ^20.3.0 || >=21.0.0"
-  },
-  "engines-annotation": "Mostly required by sharp which needs a Node-API v9 compatible runtime",
+  "name": "adaptive",
+  "version": "1.0.0",
   "private": true,
-  "type": "module",
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
-    "build": "qwik build",
-    "build.client": "vite build",
-    "build.preview": "vite build --ssr src/entry.preview.tsx",
-    "build.server": "qwik check-client src dist && vite build -c adapters/express/vite.config.ts",
-    "build.types": "tsc --incremental --noEmit",
-    "deploy": "echo 'Run \"npm run qwik add\" to install a server adapter'",
-    "dev": "vite --mode ssr",
-    "dev.debug": "node --inspect-brk ./node_modules/vite/bin/vite.js --mode ssr --force",
-    "fmt": "prettier --write .",
-    "fmt.check": "prettier --check .",
-    "lint": "eslint \"src/**/*.ts*\"",
-    "preview": "qwik build preview && vite preview --open",
-    "serve": "node server/entry.express",
-    "start": "vite --open --mode ssr",
-    "qwik": "qwik"
+    "build": "pnpm build:core && pnpm build:server && pnpm build:client && pnpm build:components",
+    "build:core": "pnpm --filter @adaptive-ui/core build",
+    "build:server": "pnpm --filter @adaptive-ui/server build",
+    "build:client": "pnpm --filter @adaptive-ui/client build",
+    "build:components": "pnpm --filter @adaptive-ui/components build",
+    "dev": "pnpm --filter @adaptive-ui/server dev & pnpm --filter @adaptive-ui/client dev",
+    "dev:server": "pnpm --filter @adaptive-ui/server dev",
+    "dev:client": "pnpm --filter @adaptive-ui/client dev",
+    "dev:playground": "pnpm dev & pnpm --filter playground dev",
+    "dev:demo-react": "pnpm dev & pnpm --filter demo-react dev",
+    "dev:demo-vue": "pnpm dev & pnpm --filter demo-vue dev"
   },
   "devDependencies": {
-    "@builder.io/qwik": "^1.17.0",
-    "@builder.io/qwik-city": "^1.17.0",
-    "@eslint/js": "latest",
-    "@qwik-ui/utils": "^0.3.3",
-    "@qwikest/icons": "^0.0.13",
-    "@tailwindcss/vite": "^4.1.4",
-    "@types/compression": "^1.7.2",
-    "@types/express": "^4.17.19",
-    "@types/node": "20.19.0",
-    "compression": "^1.7.4",
-    "eslint": "9.32.0",
-    "eslint-plugin-qwik": "^1.17.0",
-    "globals": "16.3.0",
-    "prettier": "3.6.2",
-    "prettier-plugin-tailwindcss": "^0.6.11",
-    "tailwindcss": "^4.1.4",
-    "typescript": "5.4.5",
-    "typescript-eslint": "8.38.0",
-    "typescript-plugin-css-modules": "latest",
-    "vite": "7.1.7",
-    "vite-tsconfig-paths": "^4.2.1"
+    "typescript": "^5.3.3",
+    "@types/node": "^20.10.0"
   },
-  "dependencies": {
-    "dotenv": "^16.3.2",
-    "undici": "*",
-    "@huggingface/inference": "^4.11.1",
-    "@types/mustache": "^4.2.6",
-    "express": "4.20.0",
-    "monaco-editor": "^0.54.0",
-    "mustache": "^4.2.0"
-  },
-  "version": "0.0.28"
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  }
 }
