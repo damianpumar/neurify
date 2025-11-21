@@ -10,3 +10,4 @@ const server = createHTTPServer({
 });
 
 server.listen(3000);
+console.log('🤖 AI generation server running');

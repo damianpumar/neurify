@@ -9,7 +9,7 @@ export const useAskToAI = () => {
       billTo: "huggingface"
     })
 
-
+    console.time("AI Response Time");
     const response = await client.chatCompletion({
       messages: [
         {
@@ -21,6 +21,7 @@ export const useAskToAI = () => {
       provider: "auto",
       accessToken: config.token,
     });
+    console.timeEnd("AI Response Time");
 
     const responseText = response.choices[0].message.content || '';
 

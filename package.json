@@ -17,13 +17,14 @@
     "build:server": "pnpm --filter @adaptive-ui/server build",
     "build:client": "pnpm --filter @adaptive-ui/client build",
     "build:components": "pnpm --filter @adaptive-ui/components build",
-    "dev": "pnpm -r --parallel --filter '@adaptive-ui/{core,server,client}' dev",
+    "dev": "pnpm -r --parallel --filter '@adaptive-ui/core' --filter '@adaptive-ui/server' --filter '@adaptive-ui/client' dev",
     "dev:core": "pnpm --filter @adaptive-ui/core dev",
     "dev:server": "pnpm --filter @adaptive-ui/server dev",
     "dev:client": "pnpm --filter @adaptive-ui/client dev",
-    "dev:playground": "pnpm build && pnpm dev & pnpm --filter playground dev",
-    "dev:demo-react": "pnpm build && pnpm dev & pnpm --filter demo-react dev",
-    "dev:demo-vue": "pnpm build && pnpm --filter demo-vue dev"
+    "dev:all": "pnpm -r --parallel --filter '@adaptive-ui/core' --filter '@adaptive-ui/server' --filter '@adaptive-ui/client' --filter 'playground' --filter 'demo-react' --filter 'demo-vue' dev",
+    "dev:playground": "pnpm -r --parallel --filter '@adaptive-ui/core' --filter '@adaptive-ui/server' --filter '@adaptive-ui/client' --filter 'playground' dev",
+    "dev:demo-react": "pnpm -r --parallel --filter '@adaptive-ui/core' --filter '@adaptive-ui/server' --filter '@adaptive-ui/client' --filter 'demo-react' dev",
+    "dev:demo-vue": "pnpm -r --parallel --filter '@adaptive-ui/core' --filter '@adaptive-ui/server' --filter '@adaptive-ui/client' --filter 'demo-vue' dev"
   },
   "devDependencies": {
     "typescript": "^5.3.3",
