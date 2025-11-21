@@ -1,7 +1,7 @@
 import 'dotenv/config';
 
 export default {
-  model: "moonshotai/Kimi-K2-Instruct",
+  model: "moonshotai/Kimi-K2-Instruct-0905",
   token: process.env.TOKEN,
   guidelines: `
 ## A. TRAVEL INDUSTRY CONTEXT
