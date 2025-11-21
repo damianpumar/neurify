@@ -7,7 +7,7 @@
   "scripts": {
     "build": "tsc",
     "dev": "tsx watch src/server",
-    "clean": "rm -rf dist"
+    "clean": "rm -rf dist && rm -f tsconfig.tsbuildinfo"
   },
   "dependencies": {
     "@adaptive-ui/core": "workspace:*",

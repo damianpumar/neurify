@@ -6,6 +6,12 @@
     "packages/*"
   ],
   "scripts": {
+    "clean": "pnpm clean:core && pnpm clean:server && pnpm clean:client && pnpm clean:components",
+    "clean:core": "pnpm --filter @adaptive-ui/core clean",
+    "clean:server": "pnpm --filter @adaptive-ui/server clean",
+    "clean:client": "pnpm --filter @adaptive-ui/client clean",
+    "clean:components": "pnpm --filter @adaptive-ui/components clean",
+    "prebuild": "pnpm clean",
     "build": "pnpm build:core && pnpm build:server && pnpm build:client && pnpm build:components",
     "build:core": "pnpm --filter @adaptive-ui/core build",
     "build:server": "pnpm --filter @adaptive-ui/server build",

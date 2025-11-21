@@ -13,7 +13,7 @@
     "noUncheckedSideEffectImports": true,
     "paths": {
       "@adaptive-ui/components/vue": [
-        "node_modules/@adaptive-ui/components/dist/vue"
+        "./node_modules/@adaptive-ui/components/dist/vue"
       ]
     }
   },

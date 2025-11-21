@@ -43,7 +43,6 @@ const translateContent = async (template: string, data: any, context: Context) =
 }
 
 export const generateComponent = async (intent: string, data: any, context: Context) => {
-  console.log(`Generating component for intent: ${intent} with context:`, context, data);
   let code = ''
   const maxRetries = 2;
   let attempt = 0;
