@@ -16,6 +16,7 @@
     "@types/cors": "^2.8.19",
     "@types/mustache": "^4.2.6",
     "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
     "mustache": "^4.2.0"
   },
   "devDependencies": {

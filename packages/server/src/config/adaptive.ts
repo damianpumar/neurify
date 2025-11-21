@@ -1,3 +1,5 @@
+import 'dotenv/config';
+
 export default {
   model: "moonshotai/Kimi-K2-Instruct",
   token: process.env.TOKEN,
