@@ -1,6 +1,6 @@
 export default {
   model: "moonshotai/Kimi-K2-Instruct",
-  token: "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",
+  token: process.env.TOKEN,
   guidelines: `
 ## A. TRAVEL INDUSTRY CONTEXT
 
