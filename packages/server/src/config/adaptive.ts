@@ -1,7 +1,7 @@
 export default {
-    model: "moonshotai/Kimi-K2-Instruct",
-    token: "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",
-    guidelines: `
+  model: "moonshotai/Kimi-K2-Instruct",
+  token: "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",
+  guidelines: `
 ## A. TRAVEL INDUSTRY CONTEXT
 
 **Target Audiences:**
@@ -207,8 +207,7 @@ export default {
 - Eco-friendly badges and certifications highlight
 - Real-life sustainable contexts
 - Community impact showcase`,
-    cache: {
-        ttl: 3600,
-    },
+  cache: {
+    ttl: 3600,
+  },
 };
-//# sourceMappingURL=adaptive.js.map

@@ -1,1 +1,0 @@
-{"version":3,"file":"use-adaptive-config.d.ts","sourceRoot":"","sources":["../../src/config/use-adaptive-config.ts"],"names":[],"mappings":"AAEA,UAAU,QAAQ;IAChB,KAAK,EAAE,MAAM,CAAC;IACd,KAAK,EAAE,MAAM,CAAC;IACd,UAAU,EAAE,MAAM,CAAC;IACnB,KAAK,EAAE;QACL,GAAG,EAAE,MAAM,CAAC;KACb,CAAA;CACF;AAED,eAAO,MAAM,iBAAiB,QAAmB,QAAQ,CAAA"}

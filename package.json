@@ -6,23 +6,24 @@
     "packages/*"
   ],
   "scripts": {
-    "clean": "pnpm clean:core && pnpm clean:server && pnpm clean:client && pnpm clean:components",
+    "clean": "pnpm -r --parallel clean",
     "clean:core": "pnpm --filter @adaptive-ui/core clean",
     "clean:server": "pnpm --filter @adaptive-ui/server clean",
     "clean:client": "pnpm --filter @adaptive-ui/client clean",
     "clean:components": "pnpm --filter @adaptive-ui/components clean",
     "prebuild": "pnpm clean",
-    "build": "pnpm build:core && pnpm build:server && pnpm build:client && pnpm build:components",
+    "build": "pnpm -r --filter '@adaptive-ui/*' build",
     "build:core": "pnpm --filter @adaptive-ui/core build",
     "build:server": "pnpm --filter @adaptive-ui/server build",
     "build:client": "pnpm --filter @adaptive-ui/client build",
     "build:components": "pnpm --filter @adaptive-ui/components build",
-    "dev": "pnpm --filter @adaptive-ui/server dev & pnpm --filter @adaptive-ui/client dev",
+    "dev": "pnpm -r --parallel --filter '@adaptive-ui/{core,server,client}' dev",
+    "dev:core": "pnpm --filter @adaptive-ui/core dev",
     "dev:server": "pnpm --filter @adaptive-ui/server dev",
     "dev:client": "pnpm --filter @adaptive-ui/client dev",
-    "dev:playground": "pnpm dev & pnpm --filter playground dev",
-    "dev:demo-react": "pnpm dev & pnpm --filter demo-react dev",
-    "dev:demo-vue": "pnpm dev & pnpm --filter demo-vue dev"
+    "dev:playground": "pnpm build && pnpm dev & pnpm --filter playground dev",
+    "dev:demo-react": "pnpm build && pnpm dev & pnpm --filter demo-react dev",
+    "dev:demo-vue": "pnpm build && pnpm --filter demo-vue dev"
   },
   "devDependencies": {
     "typescript": "^5.3.3",
@@ -30,6 +31,6 @@
   },
   "engines": {
     "node": ">=18.0.0",
-    "npm": ">=9.0.0"
+    "pnpm": ">=8.0.0"
   }
 }
