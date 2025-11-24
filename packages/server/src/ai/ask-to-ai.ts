@@ -18,7 +18,7 @@ export const useAskToAI = () => {
         },
       ],
       model: config.model,
-      provider: "auto",
+      provider: "groq",
       accessToken: config.token,
     });
     console.timeEnd("AI Response Time");
