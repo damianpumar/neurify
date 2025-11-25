@@ -1,0 +1,20 @@
+{
+  "name": "@adaptive-ui/client",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "clean": "rm -rf dist && rm -f tsconfig.tsbuildinfo"
+  },
+  "dependencies": {
+    "@adaptive-ui/core": "workspace:*",
+    "@adaptive-ui/server": "workspace:*",
+    "@trpc/client": "^10.45.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.3.3"
+  }
+}
