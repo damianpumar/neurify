@@ -730,7 +730,12 @@ export default component$(() => {
 
   return (
     <div class="flex h-screen bg-[#141F19]">
-      <aside class="w-64 border-r border-gray-700 p-6">
+      <aside
+        class="w-64 border-r border-[#2C5C1E] bg-[#0A160E]/30 p-6 backdrop-blur-sm"
+        style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg version='1.1' xmlns='http://www.w3.org/2000/svg' width='24' height='32'%3E%3Crect x='20' y='16' width='4' height='12' rx='2' ry='2' fill='%230A160E'/%3E%3Crect x='8' y='0' width='4' height='12' rx='2' ry='2' fill='%230A160E'/%3E%3C/svg%3E")`,
+        }}
+      >
         <a
           href="/"
           class="font-[antonio] text-xl tracking-tight text-[#B9E1AD] uppercase"
@@ -740,9 +745,9 @@ export default component$(() => {
 
         <div class="mt-6 flex flex-col gap-6">
           <div class="space-y-2">
-            <h2 class="text-md text-white">Market</h2>
+            <h2 class="text-md font-semibold text-white">Market</h2>
             <select
-              class="w-full cursor-pointer rounded-lg border border-gray-700 bg-[#2A2A2A] px-4 py-2 text-sm text-gray-200 transition-all duration-200 hover:border-green-300 focus:border-green-400 focus:ring-2 focus:ring-green-300/30 focus:outline-none"
+              class="w-full cursor-pointer rounded-lg border border-[#2C5C1E] bg-[#11190F] px-4 py-2 text-sm text-gray-200 transition-all duration-200 hover:border-[#B9E1AD]/50 focus:border-[#B9E1AD] focus:ring-2 focus:ring-[#B9E1AD]/30 focus:outline-none"
               onChange$={(_, element) => changeUseCase(element.value)}
             >
               {USES_CASES.map((useCase) => (
@@ -758,9 +763,9 @@ export default component$(() => {
           </div>
 
           <div class="space-y-2">
-            <h2 class="text-md text-white">Context parameters</h2>
+            <h2 class="text-md font-semibold text-white">Context parameters</h2>
             <select
-              class="w-full cursor-pointer rounded-lg border border-gray-700 bg-[#2A2A2A] px-4 py-2 text-sm text-gray-200 transition-all duration-200 hover:border-green-300 focus:border-green-400 focus:ring-2 focus:ring-green-300/30 focus:outline-none"
+              class="w-full cursor-pointer rounded-lg border border-[#2C5C1E] bg-[#11190F] px-4 py-2 text-sm text-gray-200 transition-all duration-200 hover:border-[#B9E1AD]/50 focus:border-[#B9E1AD] focus:ring-2 focus:ring-[#B9E1AD]/30 focus:outline-none"
               onChange$={(_, element) => changeTimestamp(Number(element.value))}
             >
               {TIMESTAMPS.map((ts) => (
@@ -779,7 +784,7 @@ export default component$(() => {
             </select>
 
             <select
-              class="w-full cursor-pointer rounded-lg border border-gray-700 bg-[#2A2A2A] px-4 py-2 text-sm text-gray-200 transition-all duration-200 hover:border-green-300 focus:border-green-400 focus:ring-2 focus:ring-green-300/30 focus:outline-none"
+              class="w-full cursor-pointer rounded-lg border border-[#2C5C1E] bg-[#11190F] px-4 py-2 text-sm text-gray-200 transition-all duration-200 hover:border-[#B9E1AD]/50 focus:border-[#B9E1AD] focus:ring-2 focus:ring-[#B9E1AD]/30 focus:outline-none"
               onChange$={(_, element) => changeLanguage(element.value)}
             >
               <option value="en-US" selected={language.value === "en-US"}>
@@ -800,7 +805,7 @@ export default component$(() => {
             </select>
 
             <select
-              class="w-full cursor-pointer rounded-lg border border-gray-700 bg-[#2A2A2A] px-4 py-2 text-sm text-gray-200 transition-all duration-200 hover:border-green-300 focus:border-green-400 focus:ring-2 focus:ring-green-300/30 focus:outline-none"
+              class="w-full cursor-pointer rounded-lg border border-[#2C5C1E] bg-[#11190F] px-4 py-2 text-sm text-gray-200 transition-all duration-200 hover:border-[#B9E1AD]/50 focus:border-[#B9E1AD] focus:ring-2 focus:ring-[#B9E1AD]/30 focus:outline-none"
               onChange$={(_, element) => changePersona(element.value)}
             >
               {TARGETS_PERSONAS.map((p) => (
@@ -812,12 +817,12 @@ export default component$(() => {
           </div>
 
           <div class="space-y-2">
-            <h2 class="text-md text-white">Components</h2>
+            <h2 class="text-md font-semibold text-white">Components</h2>
             {COMPONENTS.map((component) => (
               <button
                 key={component.id}
                 onClick$={() => addComponent(component.id)}
-                class="flex w-full items-center justify-between rounded-lg border border-transparent bg-[#484848] p-3 px-5 text-white transition-all duration-200 hover:border-green-300"
+                class="flex w-full cursor-pointer justify-between rounded-lg border border-[#2C5C1E] bg-[#11190F] px-4 py-2 text-sm text-gray-200 transition-all duration-200 hover:border-[#B9E1AD]/50 focus:border-[#B9E1AD] focus:ring-2 focus:ring-[#B9E1AD]/30 focus:outline-none"
               >
                 {component.title}
                 <PlusIcon />
@@ -836,8 +841,8 @@ export default component$(() => {
               : "calc(100vh - 300px)",
           }}
         >
-          <div class="flex w-1/2 flex-col border-r border-gray-700">
-            <div class="flex-shrink-0 border-b border-gray-700 px-6 py-3">
+          <div class="flex w-1/2 flex-col border-r border-[#2C5C1E]">
+            <div class="flex-shrink-0 border-b border-[#2C5C1E] bg-[#0A160E]/50 px-6 py-3 backdrop-blur-sm">
               <h3 class="text-lg font-semibold text-white">Code Editor</h3>
               <p class="text-xs text-gray-400">HTML + AI Components</p>
             </div>
@@ -845,13 +850,13 @@ export default component$(() => {
           </div>
 
           <div class="flex w-1/2 flex-col">
-            <div class="flex-shrink-0 border-b border-gray-700 px-6 py-3">
+            <div class="flex-shrink-0 border-b border-[#2C5C1E] bg-[#0A160E]/50 px-6 py-3 backdrop-blur-sm">
               <h3 class="text-lg font-semibold text-white">Live Preview</h3>
               <p class="text-xs text-gray-400">Real-time rendering</p>
             </div>
             <div class="flex-1 overflow-y-auto p-8">
               {state.error ? (
-                <div class="rounded-lg border border-red-500 bg-red-900/20 p-6 text-red-400">
+                <div class="rounded-lg border border-red-500/50 bg-red-900/20 p-6 text-red-400 backdrop-blur-sm">
                   <p class="mb-2 font-semibold">⚠️ Error</p>
                   <p class="text-sm">{state.error}</p>
                 </div>
@@ -925,19 +930,19 @@ export default component$(() => {
         </div>
 
         <div
-          class={`fixed right-0 bottom-0 left-64 flex flex-col border-t border-gray-700 bg-[#141F19] transition-all duration-300 ${
+          class={`fixed right-0 bottom-0 left-64 flex flex-col border-t border-[#2C5C1E] bg-[#0A160E]/95 backdrop-blur-sm transition-all duration-300 ${
             isDataEditorCollapsed.value ? "translate-y-full" : "translate-y-0"
           }`}
           style={{ height: "300px" }}
         >
-          <div class="flex items-center justify-between border-b border-gray-700 bg-[#1a2822] px-6 py-3">
+          <div class="flex items-center justify-between border-b border-[#2C5C1E] bg-[#11190F]/80 px-6 py-3 backdrop-blur-sm">
             <div>
               <h3 class="text-lg font-semibold text-white">Data Editor</h3>
               <p class="text-xs text-gray-400">Edit JSON data</p>
             </div>
             <button
               onClick$={toggleDataEditor}
-              class="rounded p-2 transition-colors hover:bg-gray-700"
+              class="rounded p-2 transition-colors hover:bg-[#2C5C1E]"
               aria-label="Toggle data editor"
             >
               <ChevronIcon collapsed={isDataEditorCollapsed.value} />
@@ -949,7 +954,7 @@ export default component$(() => {
         {isDataEditorCollapsed.value && (
           <button
             onClick$={toggleDataEditor}
-            class="fixed bottom-0 left-1/2 z-10 -translate-x-1/2 rounded-t-lg border border-b-0 border-gray-700 bg-[#1a2822] px-6 py-2 shadow-lg transition-colors hover:bg-gray-700"
+            class="fixed bottom-0 left-1/2 z-10 -translate-x-1/2 rounded-t-lg border border-b-0 border-[#2C5C1E] bg-[#11190F]/90 px-6 py-2 shadow-lg backdrop-blur-sm transition-all hover:scale-105 hover:bg-[#11190F]"
             aria-label="Open data editor"
           >
             <div class="flex items-center gap-2">
