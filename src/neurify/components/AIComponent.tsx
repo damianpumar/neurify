@@ -5,11 +5,16 @@ import { AIGenerating } from "~/neurify/components/AIGenerating";
 interface AIComponentProps extends HTMLAttributes<HTMLElement> {
   intent: string;
   data: Signal<any>;
+  cacheTTL?: number;
 }
 
 export const AIComponent = component$<AIComponentProps>(
-  ({ intent, data, ...rest }) => {
-    const { generating, error, html } = useGenerateComponent(intent, data);
+  ({ intent, data, cacheTTL, ...rest }) => {
+    const { generating, error, html } = useGenerateComponent(
+      intent,
+      data,
+      cacheTTL,
+    );
 
     if (generating.value) {
       return <AIGenerating />;
