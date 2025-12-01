@@ -52,7 +52,7 @@
     "undici": "*",
     "@huggingface/inference": "^4.11.1",
     "@types/mustache": "^4.2.6",
-    "express": "4.20.0",
+    "express": "4.22.1",
     "monaco-editor": "^0.54.0",
     "mustache": "^4.2.0"
   },
