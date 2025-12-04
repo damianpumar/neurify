@@ -48,7 +48,7 @@
     "vite-tsconfig-paths": "^4.2.1"
   },
   "dependencies": {
-    "dotenv": "^16.3.2",
+    "dotenv": "^17.0.0",
     "undici": "*",
     "@huggingface/inference": "^4.11.1",
     "@types/mustache": "^4.2.6",
