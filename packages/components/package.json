@@ -2,38 +2,38 @@
   "name": "@adaptive-ui/components",
   "version": "0.0.1",
   "type": "module",
-  "main": "./dist/index.cjs.js",
-  "module": "./dist/index.es.js",
-  "types": "./dist/index.d.ts",
   "exports": {
-    ".": {
-      "require": "./dist/index.cjs.js",
-      "import": "./dist/index.es.js",
-      "types": "./dist/index.d.ts"
-    },
     "./vue": {
-      "require": "./dist/vue.cjs.js",
+      "types": "./dist/vue/index.d.ts",
       "import": "./dist/vue.es.js",
-      "types": "./dist/vue/index.d.ts"
+      "require": "./dist/vue.cjs.js"
     },
     "./react": {
-      "require": "./dist/react.cjs.js",
+      "types": "./dist/react/index.d.ts",
       "import": "./dist/react.es.js",
-      "types": "./dist/react/index.d.ts"
+      "require": "./dist/react.cjs.js"
     },
-    "./package.json": "./package.json"
+    "./svelte": {
+      "svelte": "./dist/svelte/index.js",
+      "types": "./dist/svelte/index.d.ts",
+      "import": "./dist/svelte/index.es.js",
+      "require": "./dist/svelte/index.cjs.js"
+    }
   },
   "files": [
-    "dist",
-    "src"
+    "dist"
   ],
   "scripts": {
-    "build": "tsc && vite build",
+    "build": "pnpm clean && pnpm build:react && pnpm build:vue && pnpm build:svelte",
+    "build:react": "vite build --config vite.config.react.ts",
+    "build:vue": "vite build --config vite.config.vue.ts",
+    "build:svelte": "vite build --config vite.config.svelte.ts",
     "dev": "tsc -w",
     "clean": "rm -rf dist"
   },
   "peerDependencies": {
     "react": "^16.8.0 || ^17.0.0 || ^18.0.0",
+    "svelte": "^5.43.8",
     "vue": "^3.0.0"
   },
   "peerDependenciesMeta": {
@@ -43,24 +43,26 @@
     "react": {
       "optional": true
     },
-    "typescript": {
+    "svelte": {
       "optional": true
     }
   },
   "dependencies": {
-    "@adaptive-ui/client": "workspace:*",
-    "@vitejs/plugin-vue": "^6.0.1"
+    "@adaptive-ui/client": "workspace:*"
   },
   "devDependencies": {
+    "@sveltejs/package": "^2.5.7",
+    "@sveltejs/vite-plugin-svelte": "^6.2.1",
+    "@tsconfig/svelte": "^5.0.6",
     "@types/node": "^20.1.1",
     "@types/react": "^19.2.2",
     "@types/react-dom": "^19.2.2",
-    "@typescript-eslint/eslint-plugin": "^5.57.1",
-    "@typescript-eslint/parser": "^5.57.1",
-    "eslint": "^8.38.0",
+    "@vitejs/plugin-vue": "^6.0.1",
     "react": "^18.2.0",
+    "svelte": "^5.43.8",
+    "svelte2tsx": "^0.7.45",
     "typescript": "^5.0.2",
-    "vite": "^4.3.2",
+    "vite": "^7.2.7",
     "vite-plugin-dts": "^3.9.1",
     "vue": "^3.4.0"
   }

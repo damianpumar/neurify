@@ -24,7 +24,8 @@
 
     /* Asegúrate de que esModuleInterop esté habilitado */
     "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "types": ["svelte", "vite/client"]
   },
   "include": ["src"],
   "exclude": ["node_modules", "dist"]

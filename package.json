@@ -21,10 +21,11 @@
     "dev:core": "pnpm --filter @adaptive-ui/core dev",
     "dev:server": "pnpm --filter @adaptive-ui/server dev",
     "dev:client": "pnpm --filter @adaptive-ui/client dev",
-    "dev:all": "pnpm -r --parallel --filter '@adaptive-ui/core' --filter '@adaptive-ui/server' --filter '@adaptive-ui/client' --filter 'playground' --filter 'demo-react' --filter 'demo-vue' dev",
+    "dev:all": "pnpm -r --parallel --filter '@adaptive-ui/core' --filter '@adaptive-ui/server' --filter '@adaptive-ui/client' --filter 'playground' --filter 'demo-react' --filter 'demo-vue' --filter 'demo-svelte' dev",
     "dev:playground": "pnpm -r --parallel --filter '@adaptive-ui/core' --filter '@adaptive-ui/server' --filter '@adaptive-ui/client' --filter 'playground' dev",
     "dev:demo-react": "pnpm -r --parallel --filter '@adaptive-ui/core' --filter '@adaptive-ui/server' --filter '@adaptive-ui/client' --filter 'demo-react' dev",
-    "dev:demo-vue": "pnpm -r --parallel --filter '@adaptive-ui/core' --filter '@adaptive-ui/server' --filter '@adaptive-ui/client' --filter 'demo-vue' dev"
+    "dev:demo-vue": "pnpm -r --parallel --filter '@adaptive-ui/core' --filter '@adaptive-ui/server' --filter '@adaptive-ui/client' --filter 'demo-vue' dev",
+    "dev:demo-svelte": "pnpm -r --parallel --filter '@adaptive-ui/core' --filter '@adaptive-ui/server' --filter '@adaptive-ui/client' --filter 'demo-svelte' dev"
   },
   "devDependencies": {
     "typescript": "^5.3.3",
