@@ -1,7 +1,8 @@
 import config from "../../../neurify.config";
 
 interface NeurifyConfig {
-  model: string;
+  textModel: string;
+  videoModel: string;
   token: string;
   guidelines: string;
   cache: {
@@ -9,4 +10,4 @@ interface NeurifyConfig {
   }
 }
 
-export const useNeurifyConfig = () => config as NeurifyConfig
+export const useNeurifyConfig = () => config() as NeurifyConfig

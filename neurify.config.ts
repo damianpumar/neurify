@@ -1,5 +1,6 @@
-export default {
-  model: "moonshotai/Kimi-K2-Instruct-0905",
+export default () => ({
+  textModel: "moonshotai/Kimi-K2-Instruct-0905",
+  videoModel: "tencent/HunyuanVideo-1.5",
   token: process.env.TOKEN,
   guidelines: `
 ## A. TRAVEL INDUSTRY CONTEXT
@@ -210,4 +211,4 @@ export default {
   cache: {
     ttl: 3600,
   },
-};
+});

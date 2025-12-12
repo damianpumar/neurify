@@ -3,10 +3,10 @@ import Mustache from "mustache"
 import { $, Signal, useSignal, useVisibleTask$ } from "@builder.io/qwik";
 import { Context, useAIContext } from "~/neurify/context/context";
 import { hashString } from "~/neurify/cache/hash";
-import { useAskToAI } from "~/neurify/ai/ask-to-ai";
+import { useAskToAI, useVideoCreator } from "~/neurify/ai/ask-to-ai";
 import { server$ } from "@builder.io/qwik-city";
 import { nextTick } from "~/neurify/utils/tick";
-import { useComponentPrompt, useTextPrompt } from "~/neurify/ai/prompt";
+import { useComponentPrompt, useTextPrompt, useVideoComponentPrompt } from "~/neurify/ai/prompt";
 import { useNeurifyConfig } from "~/neurify/config/use-neurify-config";
 
 export const useGenerateComponent = (intent: string, data: Signal<any>, cacheTTL?: number) => {
@@ -374,4 +374,70 @@ Return ONLY the translated JSON object with the same structure, no markdown or e
     chartConfig,
     onGenerate
   };
+};
+
+export const useGenerateVideo = (
+  intent: string,
+  data: Signal<any>,
+  durationMS: number = 1000,
+  cacheTTL?: number
+) => {
+  const { allContext, timestamp, language, persona } = useAIContext()
+  const generating = useSignal<boolean>(false);
+  const videoUrl = useSignal<string>();
+  const error = useSignal<string>();
+
+  const generateVideo = server$(async (
+    prompt: string,
+    durationMS: number
+  ): Promise<string> => {
+    const createVideo = useVideoCreator();
+
+    const videoCacheKey = await hashString(
+      `VIDEO:${prompt}-DURATION:${durationMS}`
+    );
+
+    if (cache.has(videoCacheKey)) {
+      return await cache.getOrWait(videoCacheKey);
+    }
+
+    const generationPromise = (async () => {
+      try {
+        const video = await createVideo(prompt, durationMS);
+        return video
+      } catch (err) {
+        console.error("Error generating video:", err);
+        throw err;
+      }
+    })();
+
+    return await cache.setPromise(videoCacheKey, generationPromise, cacheTTL);
+  });
+
+  const onGenerate = $(async () => {
+    videoUrl.value = undefined;
+    error.value = undefined;
+    generating.value = true;
+
+    try {
+      const prompt = useVideoComponentPrompt(intent, data.value, allContext.value);
+      const url = await generateVideo(prompt, durationMS);
+      videoUrl.value = url;
+    } catch (err) {
+      error.value = (err as Error).message || "Error generating video";
+    }
+
+    generating.value = false;
+  });
+
+  useVisibleTask$(async ({ track }) => {
+    track(persona)
+    track(language)
+    track(timestamp)
+    track(data)
+
+    await onGenerate()
+  });
+
+  return { generating, error, videoUrl };
 };

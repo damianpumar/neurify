@@ -61,3 +61,90 @@ Data:${JSON.stringify(data, null, 2)}
 
 Provide only the text response without any explanations or additional text.`
 }
+
+export const useVideoComponentPrompt = (
+  intent: string,
+  data: any,
+  context: Context
+): string => {
+  // Mapeo de idiomas para el prompt
+  const languageInstructions: Record<string, string> = {
+    es: 'in Spanish. Use Spanish language for any text overlays or captions',
+    en: 'in English. Use English language for any text overlays or captions',
+    ca: 'in Catalan. Use Catalan language for any text overlays or captions',
+    fr: 'in French. Use French language for any text overlays or captions',
+    de: 'in German. Use German language for any text overlays or captions',
+    it: 'in Italian. Use Italian language for any text overlays or captions',
+    pt: 'in Portuguese. Use Portuguese language for any text overlays or captions',
+  };
+
+  const langInstruction = languageInstructions[context.language] || 'in English';
+
+  // Instrucciones específicas para evitar texto ilegible
+  const textGuidelines = `
+CRITICAL TEXT RULES (if text is needed):
+- Use LARGE, BOLD, SANS-SERIF fonts only
+- High contrast: white text on dark background OR dark text on light background
+- Minimal text: 3-5 words maximum per scene
+- Text should be centered and occupy at least 30% of screen height
+- Avoid small, thin, or decorative fonts
+- No handwriting or script fonts
+- Simple, clean typography only
+`;
+
+  // Prompt optimizado
+  return `
+Create a cinematic video ${langInstruction}.
+
+INTENT: ${intent}
+
+CONTEXT:
+- Target Audience: ${context.persona}
+- Language: ${context.language}
+- Data: ${JSON.stringify(data, null, 2)}
+
+VIDEO REQUIREMENTS:
+1. VISUAL STYLE:
+   - Cinematic, high-quality visuals
+   - Smooth camera movements (pans, zooms, or static shots)
+   - Professional color grading
+   - Clear focus and sharp details
+   - Modern, clean aesthetic
+
+2. CONTENT GUIDELINES:
+   - NO TEXT OVERLAYS unless absolutely necessary (text often becomes unreadable)
+   - If text is required: ${textGuidelines}
+   - Focus on visual storytelling through imagery, motion, and composition
+   - Use symbolism and metaphors instead of written words
+   - Show, don't tell
+
+3. TECHNICAL SPECS:
+   - Smooth transitions between scenes
+   - Consistent lighting and color palette
+   - Professional video quality (1080p equivalent)
+
+4. NEGATIVE PROMPTS (what to avoid):
+   - Blurry or out-of-focus footage
+   - Text overlays, captions, subtitles, or words on screen
+   - Low quality, pixelated, or grainy video
+   - Shaky camera or poor stabilization
+   - Overexposed or underexposed scenes
+   - Distorted faces or objects
+   - Watermarks or logos
+   - Static images (must be video with motion)
+
+OUTPUT FORMAT:
+Provide ONLY a single, detailed video description prompt that can be sent directly to a text-to-video AI model.
+Do NOT include:
+- Explanations
+- Scene breakdowns
+- Numbered lists
+- Storyboard descriptions
+- Meta-commentary
+
+EXAMPLE OUTPUT FORMAT:
+"A cinematic slow-motion shot of golden autumn leaves falling in a serene forest, sunlight filtering through the trees creating dramatic rays of light, professional color grading with warm tones, smooth camera pan from left to right, 4K quality"
+
+Now generate the video prompt based on the intent and context above:
+`.trim();
+};

@@ -10,12 +10,19 @@ import { AIText } from "~/neurify/components/AIText";
 import { useAIContext } from "~/neurify/context/context";
 import * as monaco from "monaco-editor";
 import { AIChart } from "~/neurify/components/AIChart";
+import { AIVideo } from "~/neurify/components/AIVideo";
 
 export default component$(() => {
   const USES_CASES = [
     {
       topic: "E-commerce",
-      code: `<AIComponent
+      code: `<AIVideo
+  intent="Show promotional video"
+  data={data}
+  durationMS={3000}
+/>
+
+<AIComponent
   intent="Show product card"
   data={data}
 />
@@ -28,7 +35,8 @@ export default component$(() => {
 <AIChart
   intent="Pie chart of review ratings"
   data={data}
-/>`,
+/>
+`,
       data: {
         brand: "Sony",
         model: "NW-A306",
@@ -165,7 +173,13 @@ export default component$(() => {
     },
     {
       topic: "Travel",
-      code: `<AIComponent
+      code: `<AIVideo
+  intent="Show promotional video"
+  data={data}
+  durationMS={3000}
+/>
+
+<AIComponent
   intent="Card to show trip details"
   data={data}
 />
@@ -366,6 +380,15 @@ export default component$(() => {
   data={data}
 />`,
     },
+    {
+      id: "ai-video",
+      title: "AIVideo",
+      template: `<AIVideo
+  intent="Show promotional video"
+  data={data}
+  durationMS={3000}
+/>`,
+    },
   ];
 
   const TARGETS_PERSONAS = ["Luxury buyer", "Gen Z Buyer", "Eco Consumer"];
@@ -441,7 +464,8 @@ export default component$(() => {
 
       const aiComponentRegex = /<AIComponent\s+([^>]*?)\/>/g;
       const aiTextRegex = /<AIText\s+([^>]*?)\/>/g;
-      const aiCartRegex = /<AIChart\s+([^>]*?)\/>/g;
+      const aiChartRegex = /<AIChart\s+([^>]*?)\/>/g;
+      const aiVideoRegex = /<AIVideo\s+([^>]*?)\/>/g;
 
       const allMatches: Array<{
         type: string;
@@ -484,7 +508,7 @@ export default component$(() => {
         });
       }
 
-      while ((match = aiCartRegex.exec(state.code)) !== null) {
+      while ((match = aiChartRegex.exec(state.code)) !== null) {
         const propsString = match[1];
         const intentMatch = propsString.match(/intent="([^"]+)"/);
         const classMatch = propsString.match(/class="([^"]+)"/);
@@ -496,6 +520,24 @@ export default component$(() => {
           props: {
             intent: intentMatch ? intentMatch[1] : "Generate chart",
             className: classMatch ? classMatch[1] : "",
+          },
+        });
+      }
+
+      while ((match = aiVideoRegex.exec(state.code)) !== null) {
+        const propsString = match[1];
+        const intentMatch = propsString.match(/intent="([^"]+)"/);
+        const classMatch = propsString.match(/class="([^"]+)"/);
+        const durationMatch = propsString.match(/durationMS=\{(\d+)\}/);
+
+        allMatches.push({
+          type: "AIVideo",
+          index: match.index,
+          length: match[0].length,
+          props: {
+            intent: intentMatch ? intentMatch[1] : "Show video",
+            className: classMatch ? classMatch[1] : "",
+            durationMS: durationMatch ? parseInt(durationMatch[1]) : 3000,
           },
         });
       }
@@ -619,6 +661,16 @@ export default component$(() => {
                 documentation: "AI-powered chart generation component",
                 insertText:
                   '<AIChart\n  intent="${1:Generate pie chart}"\n  data={data}\n/>',
+                insertTextRules:
+                  monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+                range: range,
+              },
+              {
+                label: "AIVideo",
+                kind: monaco.languages.CompletionItemKind.Snippet,
+                documentation: "AI-powered video generation component",
+                insertText:
+                  '<AIVideo\n  intent="${1:Show promotional video}"\n  data={data}\n  durationMS={3000}\n/>',
                 insertTextRules:
                   monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
                 range: range,
@@ -920,7 +972,22 @@ export default component$(() => {
                           />
                         </div>
                       );
+                    } else if (element.type === "AIVideo") {
+                      return (
+                        <div
+                          key={element.props.intent + element.props.durationMS}
+                          class={element.props.className}
+                        >
+                          <AIVideo
+                            class="text-white"
+                            durationMS={element.props.durationMS}
+                            intent={element.props.intent}
+                            data={editableData}
+                          />
+                        </div>
+                      );
                     }
+
                     return null;
                   })}
                 </div>
